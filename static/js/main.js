@@ -9,8 +9,11 @@ $(document).ready(function () {
 	},
 	{
 		source: getSuggestions,
-		displayKey: 'description'
+		displayKey: 'description',
+		highlighter: true,
 	});
+
+	$(".btn").submit(searchForSpot);
 });
 
 function getSuggestions(query, cb) {
@@ -24,4 +27,10 @@ function getSuggestions(query, cb) {
 		return cb(predictions);
 
 	});
+}
+
+function searchForSpot() {
+	var locationOne = $("#location_one").val();
+	var locationTwo = $("#location_two").val();
+	console.log("searchForSpot: ", locationOne, locationTwo);
 }
