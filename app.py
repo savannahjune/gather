@@ -10,7 +10,7 @@ def run_app():
     return render_template("main.html")
 
 @app.route("/map")
-def serach():
+def search():
     key = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
     return render_template("map.html", key=key)
 
