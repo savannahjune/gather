@@ -55,7 +55,7 @@ function searchForSpot(evt) {
 	function callback(response, status) {
 		if(status == google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;
-			var destinations = response.destinationsAdresses;
+			var destinations = response.destinationAddresses;
 			
 			for (var i = 0; i < origins.length; i++) {
 				var results = response.rows[i].elements;
@@ -67,6 +67,7 @@ function searchForSpot(evt) {
 					var to = destinations[j];
 					console.log(distance);
 				}
+			console.log(response);
 			}
 		}
 	}
