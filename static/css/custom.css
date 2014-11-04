@@ -1,7 +1,7 @@
 .transport {
     width: 45px;
     height: 45px;
-    color: red;
+    /*background-color: gray;*/
 }
 
 .twitter-typeahead {
@@ -12,4 +12,5 @@
 
 /*.btn {
 	width: 25%;
+	background-color: purple;
 }*/

@@ -8,16 +8,6 @@ app.secret_key= 'alsjksdbzuhbozsdi'
 def run_app():   
     return render_template("main.html")
 
-# @app.route("/map", methods=["POST"])
-# def get_locations(): 
-# 	print "You got here" 
-# 	location_one = request.form.get("location_one")
-# 	location_two = request.form.get("location_two")
-# 	print location_one
-# 	print location_two
-# 	return redirect("/map", location_one=location_one, 
-#     	location_two=location_two)
-
 @app.route("/map")
 def search():
     key = os.environ.get("GOOGLE_MAPS_EMBED_KEY")

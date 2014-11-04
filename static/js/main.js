@@ -36,10 +36,41 @@ function getSuggestions(query, cb) {
 
 function searchForSpot(evt) {
 	evt.preventDefault();
-	console.log("Got here");
-	var locationOne = $("#location_one");
-	locationOne = locationOne.val();
-	console.log(locationOne);
+	// console.log("Got here");
+	var locationOne = $("#location_one").val();
+	// console.log(locationOne);
 	var locationTwo = $("#location_two").val();
-	console.log("searchForSpot: ", locationOne, locationTwo);
+	// console.log("searchForSpot: ", locationOne, locationTwo);
+	
+// using distance matrix service to find time between two origins
+	origins=locationOne;
+	destinations=locationTwo;
+	var service = new google.maps.DistanceMatrixService();
+		service.getDistanceMatrix(
+		{
+			origins: [locationOne],
+			destinations: [locationTwo],
+			travelMode: google.maps.TravelMode.DRIVING,
+			durationInTraffic: true,
+		}, callback);
+	function callback(response, status) {
+		if(status == google.maps.DistanceMatrixStatus.OK) {
+			var origins = response.originAddresses;
+			var destinations = response.destinationsAdresses;
+			
+			for (var i = 0; i < origins.length; i++) {
+				var results = response.row[i].elements;
+				for (var j = 0; j < results.length; j++) {
+					var element = results[j];
+					var distance = element.distance.text;
+					var duration = element.duration.text;
+					var from = origins[i];
+					var to = destinations[j];
+					console.log(distance);
+			}
+		}
+	}
 }
+}
+
+// "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + origins + "&destinations=" + destinations + "mode=bicycling" + "&key=API_KEY"
