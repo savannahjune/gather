@@ -1,5 +1,5 @@
 
-$(document).ready(function () {
+$(document).ready(function() {
 
 	// this allows google autocomplete to display
 
@@ -43,23 +43,22 @@ function searchForSpot(evt) {
 	// console.log("searchForSpot: ", locationOne, locationTwo);
 	
 // using distance matrix service to find time between two origins
-	origins=locationOne;
-	destinations=locationTwo;
+	origins = locationOne;
+	destinations = locationTwo;
 	var service = new google.maps.DistanceMatrixService();
-		service.getDistanceMatrix(
-		{
-			origins: [locationOne],
-			destinations: [locationTwo],
-			travelMode: google.maps.TravelMode.DRIVING,
-			durationInTraffic: true,
-		}, callback);
+	service.getDistanceMatrix({
+		origins: [locationOne],
+		destinations: [locationTwo],
+		travelMode: google.maps.TravelMode.DRIVING,
+		durationInTraffic: true,
+	}, callback);
 	function callback(response, status) {
 		if(status == google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;
 			var destinations = response.destinationsAdresses;
 			
 			for (var i = 0; i < origins.length; i++) {
-				var results = response.row[i].elements;
+				var results = response.rows[i].elements;
 				for (var j = 0; j < results.length; j++) {
 					var element = results[j];
 					var distance = element.distance.text;
@@ -67,10 +66,10 @@ function searchForSpot(evt) {
 					var from = origins[i];
 					var to = destinations[j];
 					console.log(distance);
+				}
 			}
 		}
 	}
-}
 }
 
 // "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + origins + "&destinations=" + destinations + "mode=bicycling" + "&key=API_KEY"
