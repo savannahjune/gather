@@ -10,7 +10,7 @@ def run_app():
 
 # @app.route("/map", methods=["POST"])
 # def get_locations(): 
-# 	print "You got here"
+# 	print "You got here" 
 # 	location_one = request.form.get("location_one")
 # 	location_two = request.form.get("location_two")
 # 	print location_one
@@ -18,7 +18,7 @@ def run_app():
 # 	return redirect("/map", location_one=location_one, 
 #     	location_two=location_two)
 
-@app.route("/map_placeholder")
+@app.route("/map")
 def search():
     key = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
     return render_template("map.html", key=key)

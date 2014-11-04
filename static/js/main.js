@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-	// NEW TYPE AHEAD STUFF
+	// this allows google autocomplete to display
 
 	$(".typeahead").typeahead({
 		minLength: 2,
@@ -10,11 +10,14 @@ $(document).ready(function () {
 	{
 		source: getSuggestions,
 		displayKey: 'description',
-		highlighter: true,
 	});
 
-	$(".btn").submit(searchForSpot);
+	// this creates event listener for location form
+
+	$("#location_form").submit(searchForSpot);
 });
+
+// function for autocomplete from google autocomplete
 
 function getSuggestions(query, cb) {
 	var service = new google.maps.places.AutocompleteService();
@@ -29,8 +32,14 @@ function getSuggestions(query, cb) {
 	});
 }
 
-function searchForSpot() {
-	var locationOne = $("#location_one").val();
+// function to submit and store variables for locations
+
+function searchForSpot(evt) {
+	evt.preventDefault();
+	console.log("Got here");
+	var locationOne = $("#location_one");
+	locationOne = locationOne.val();
+	console.log(locationOne);
 	var locationTwo = $("#location_two").val();
 	console.log("searchForSpot: ", locationOne, locationTwo);
 }
