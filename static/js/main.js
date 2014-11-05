@@ -38,10 +38,6 @@ $(document).ready(function() {
             if(status == google.maps.DistanceMatrixStatus.OK) {
                 var origins = response.originAddresses;
                 var destinations = response.destinationAddresses;
-                // using distance matrix service to find time, distance between two origins
-                // console logging distance to use that find midpoint and calculate times
-                // origins and destiations taken from form
-                // var distance = calculateDistance(response);
                 makeCoordinates(origins, function(latLonOrigin) {
                     makeCoordinates(destinations, function(latLonDestination) {
                         // Now you can process your result with latLonOrigin and latLonDestination
@@ -52,6 +48,11 @@ $(document).ready(function() {
                         var destinations_coordinates = coordinates[1];
                         console.log("Origins coordinates: " + origins_coordinates);
                         console.log("Destinations coordinates:" + destinations_coordinates);
+                        findMidPoint(origins_coordinates, destinations_coordinates);
+                        // using distance matrix service to find time, distance between two origins
+                        // console logging distance to use that find midpoint and calculate times
+                        // origins and destiations taken from form
+                        // var distance = calculateDistance(response);
                         var map = displayMap(origins, destinations);
                     });
                 });
@@ -74,34 +75,6 @@ function getSuggestions(query, cb) {
         return cb(predictions);
 
     });
-}
-
-// function to submit and store variables for locations
-
-
-function calculateDistance(response) {
-    var origins = response.originAddresses;
-    var destinations = response.destinationAddresses;
-    // var distance = 0;
-    
-    for (var i = 0; i < origins.length; i++) {
-        var results = response.rows[i].elements;
-        for (var j = 0; j < results.length; j++) {
-            var element = results[j];
-            var distance = element.distance.value;
-            var duration = element.duration.text;
-            var from = origins[i];
-            var to = destinations[j];
-            // console.log("Distance: " + distance);
-        // return distance;
-        }
-        // this console logs all info sent back from distance matrix api    
-        console.log("Response:");
-        console.log(response);
-        displayMap(origins, destinations);
-        // findMidPoint(distance, origins, destinations);
-    }
-    // return distance;
 }
 
 function makeCoordinates(target, callback) {
@@ -129,7 +102,7 @@ function makeCoordinates(target, callback) {
     });
 }
 
-function findMidPoint(loc1, loc2){
+function findMidPoint(origins_coordinates, destinations_coordinates){
 
     //lat is loc1[0]
     //lon is loc1[1]
@@ -142,11 +115,40 @@ function findMidPoint(loc1, loc2){
     // var longitude_mid = ( (loc1[1] + loc2[1]) /2 );
     // var midpoint = (latitude_mid, longitude_mid);
     // console.log(midpoint);
-    var lat_one = ++loc1[0] * (3.14 / 180);
+    console.log(typeof origins_coordinates);
+    var lat_one = ++origins_coordinates[0] * (3.14 / 180);
     console.log(lat_one);
 
 
 }
+
+// function to calculate distances and travel times between points
+
+
+function calculateDistance(response) {
+    var origins = response.originAddresses;
+    var destinations = response.destinationAddresses;
+    // var distance = 0;
+    
+    for (var i = 0; i < origins.length; i++) {
+        var results = response.rows[i].elements;
+        for (var j = 0; j < results.length; j++) {
+            var element = results[j];
+            var distance = element.distance.value;
+            var duration = element.duration.text;
+            var from = origins[i];
+            var to = destinations[j];
+            // console.log("Distance: " + distance);
+        // return distance;
+        }
+        // this console logs all info sent back from distance matrix api    
+        console.log("Response:");
+        console.log(response);
+    }
+    // return distance;
+}
+
+// map display function, creates url out of origins and destination to show route
 
 function displayMap(origins, destinations) {
     // takes origin and destinations from the search for spot function and subs 
@@ -154,3 +156,5 @@ function displayMap(origins, destinations) {
     var src = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + origins + "&destination=" + destinations;
     $("#map_view").attr("src", src);
 }
+
+
