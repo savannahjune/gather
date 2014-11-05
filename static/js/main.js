@@ -23,7 +23,7 @@ function getSuggestions(query, cb) {
 	var service = new google.maps.places.AutocompleteService();
 	service.getQueryPredictions({ input: query }, function(predictions, status) {
 		if (status != google.maps.places.PlacesServiceStatus.OK) {
-			alert(status);
+			console.log("Autocomplete status: " + status);
 			return;
 		}
 		// console logs each prediction as you type
@@ -45,7 +45,7 @@ function searchForSpot(evt) {
 	
 // using distance matrix service to find time, distance between two origins
 // console logging distance to use that find midpoint and calculate times
-// origins and destiations taken from form, they are not actually origin/destination yet
+// origins and destiations taken from form
 
 	origins = locationOne;
 	destinations = locationTwo;
@@ -82,8 +82,7 @@ function calculateDistance(response) {
 			var duration = element.duration.text;
 			var from = origins[i];
 			var to = destinations[j];
-			// this logs distance which will be used to find midpoint
-			console.log("Distance: " + distance);
+			// console.log("Distance: " + distance);
 		// return distance;
 		}
 		// this console logs all info sent back from distance matrix api	
@@ -98,36 +97,43 @@ function calculateDistance(response) {
 
 function getLatLon(origins, destinations) {
 	var geocoder = new google.maps.Geocoder();
-	// var address_origin = origins;
 	// console.log("This is origins:" + origins);
 	// ""+turns origins into a string, dunno what it was before
-	geocoder.geocode( { 'address': ""+origins}, function(results, status) {
-      
-      if (status == google.maps.GeocoderStatus.OK) {
-        var loc=[]; // no need to define it in outer function now
-        loc[0]=results[0].geometry.location.lat();
-        loc[1]=results[0].geometry.location.lng();
+	function makeCoordinate(target){
+		var loc1=[];
+		geocoder.geocode( { 'address': ""+origins}, function(results, status) {
+	if (status == google.maps.GeocoderStatus.OK) {
+			loc1[0]=results[0].geometry.location.lat();
+			loc1[1]=results[0].geometry.location.lng();
 
-        display( loc );
+	console.log(loc1);
 
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
+  } else {
+		console.log("Geocode was not successful for the following reason: " + status);
+		}
 
+	});
+	return loc1;
+}
+	loc1 = makeCoordinate(origins);
+	loc2 = makeCoordinate(destinations);
+	findMidPoint(loc1, loc2);
   }
 
-  function display( long_lat ){
-     alert(long_lat);
-  }
+function findMidPoint(loc1, loc2){
 
-// function findMidPoint(distance, origins, destinations){
-//		geo_mid_point = (distance/2);
-//		console.log("Geo MidPoint: ");
-//		console.log(geo_mid_point);
-//		var distance_lat
-//		var distance_lon 
-// }
+	//lat is loc1[0]
+	//lon is loc1[1]
+	// var Bx = Math.cos(loc2[0]) * Math.cos(dLon);
+	// var By = Math.cos(loc2[0]) * Math.sin(dLon);
+	// var lat3 = Math.atan2(Math.sin(loc1[0])+Math.sin(loc2[0]),
+ //                      Math.sqrt( (Math.cos(loc1[0])+Bx)*(Math.cos(loc1[0])+Bx) + By*By ) );
+	// var lon3 = lon1 + Math.atan2(By, Math.cos(loc1[0]) + Bx);
+	var latitude_mid = ( (loc1[0] + loc2[0]) / 2 );
+	var longitude_mid = ( (loc1[1] + loc2[1]) /2 );
+	var midpoint = (latitude_mid, longitude_mid);
+	console.log(midpoint);
+}
 
 function displayMap(origins, destinations) {
 	// takes origin and destinations from the search for spot function and subs 
