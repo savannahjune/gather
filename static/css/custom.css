@@ -14,3 +14,10 @@
 	width: 25%;
 	background-color: purple;
 }*/
+
+#map_view {
+	margin:0 auto;
+	display: block;	
+	/*margin-left: 50px;*/
+	margin-top: 20px;
+}
