@@ -22,10 +22,6 @@ $(document).ready(function() {
         // console.log(locationOne);
         var locationTwo = $("#location_two").val();
         // console.log("searchForSpot: ", locationOne, locationTwo);
-        
-    // using distance matrix service to find time, distance between two origins
-    // console logging distance to use that find midpoint and calculate times
-    // origins and destiations taken from form
 
         origins = locationOne;
         destinations = locationTwo;
@@ -42,19 +38,27 @@ $(document).ready(function() {
             if(status == google.maps.DistanceMatrixStatus.OK) {
                 var origins = response.originAddresses;
                 var destinations = response.destinationAddresses;
+                // using distance matrix service to find time, distance between two origins
+                // console logging distance to use that find midpoint and calculate times
+                // origins and destiations taken from form
                 // var distance = calculateDistance(response);
-                // var midPoint = findMidPoint(distance, origins, destinations);
-                var coordinates = [makeCoordinates(origins), makeCoordinates(destinations)];
-                console.log(coordinates);
-                var origins_coordinates = coordinates[0];
-                var destinations_coordinates = coordinates[1];
-                console.log("Origins coordinates: " + origins_coordinates);
-                console.log("Destinations coordinates:" + destinations_coordinates);
-                var map = displayMap(origins, destinations);
+                makeCoordinates(origins, function(latLonOrigin) {
+                    makeCoordinates(destinations, function(latLonDestination) {
+                        // Now you can process your result with latLonOrigin and latLonDestination
+                        var coordinates = [latLonOrigin, latLonDestination];
+
+                        console.log(coordinates);
+                        var origins_coordinates = coordinates[0];
+                        var destinations_coordinates = coordinates[1];
+                        console.log("Origins coordinates: " + origins_coordinates);
+                        console.log("Destinations coordinates:" + destinations_coordinates);
+                        var map = displayMap(origins, destinations);
+                    });
+                });
             }
         }
     }
-    });
+});
 
 // function for autocomplete from google autocomplete api
 
@@ -100,7 +104,7 @@ function calculateDistance(response) {
     // return distance;
 }
 
-function makeCoordinates(target) {
+function makeCoordinates(target, callback) {
     var latlon=[];
     var geocoder = new google.maps.Geocoder();
     // console.log("This is origins:" + origins);
@@ -120,17 +124,9 @@ function makeCoordinates(target) {
         } else {
             console.log("Geocode was not successful for the following reason: " + status);
         }
-    return latlon;
+
+        callback(latlon);
     });
-}
-
-
-function getAddress(origins, destinations) {
-    var loc1 = makeCoordinates(origins);
-    var loc2 = makeCoordinates(destinations);
-    alert(typeof loc1);
-    // debugger;
-    // findMidPoint(loc1, loc2);
 }
 
 function findMidPoint(loc1, loc2){
