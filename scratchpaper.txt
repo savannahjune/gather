@@ -1,3 +1,4 @@
 scratch paper
 
 - maybe delete map.html?
+- use better formula for finding midpoint?
