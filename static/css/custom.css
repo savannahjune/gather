@@ -15,9 +15,21 @@
 	background-color: purple;
 }*/
 
-#map_view {
+.maps{
+	margin: auto;
+	width: 1200px;
+}
+
+#map_view1 {
 	margin:0 auto;
-	display: block;	
+	display: inline-block;	
+	/*margin-left: 50px;*/
+	margin-top: 20px;
+}
+
+#map_view2 {
+	margin:0 auto;
+	display: inline-block;	
 	/*margin-left: 50px;*/
 	margin-top: 20px;
 }
