@@ -15,7 +15,11 @@ function geocallback(response)
 	points.append(coordinates from the response);
 	if len(points) >= 2 (this number is variable depending on jQuery selector on form class)
 
-3. call spotAlgorithm(loc1, loc2)
+3.
+
+Option 1:
+
+ call spotAlgorithm(loc1, loc2)
 	tolerance = 10 mins; (arbitrary at first)
 	durDiff = 9999; (also arbitrary at first)
 
@@ -27,8 +31,20 @@ function geocallback(response)
 
 	}
 
+Option2: 
 
+def findGatheringPointp (p1, p2, midpoint)
 
+	if calcDur(p1, midpoint) - duration(p2 - midpoint) <= tolerance
+		return midpoint
+
+	if calcDur(p1, midpoint) > duration(p2, midpoint)
+		midpoint = findmidpoint (p1, midpoint)
+	else
+		midpoint(p2, midpoint)
+	return midtime (p1,p2, midpoint)
+
+4. find spot using midpoint 
 
 
 
@@ -40,5 +56,5 @@ function spotAlgorithm
 
 funciton findMidPoint
 
-function calcDur (points)
+function calcDur(points)
 

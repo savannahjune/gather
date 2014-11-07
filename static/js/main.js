@@ -57,7 +57,7 @@ function getDistanceMatrixCallback(response, status) {
                 console.log(coordinates);
                 var locationOne_coordinates = coordinates[0];
                 var locationTwo_coordinates = coordinates[1];
-                console.log("locati  onOne coordinates: " + locationOne_coordinates);
+                console.log("locationOne coordinates: " + locationOne_coordinates);
                 console.log("locationTwo coordinates:" + locationTwo_coordinates);
                 var midpoint = findMidPoint(locationOne_coordinates, locationTwo_coordinates);
                 console.log(midpoint);

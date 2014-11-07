@@ -1,3 +1,18 @@
+body {
+	background-image: url('/static/assets/gplaypattern.png');
+}
+
+h1 {
+	font-family: 'Raleway', sans-serif;
+	font-size: 40pt;
+	margin-left: 10px;
+	display: inline-block;
+}
+
+.tt-dropdown-menu {
+	background-color: #FFF;
+	border: 1px solid black;
+}
 .transport {
     width: 45px;
     height: 45px;
@@ -11,8 +26,10 @@
 }
 
 /*.btn {
+	margin-left: 10px;
 	width: 25%;
-	background-color: purple;
+	background-color: red;
+	position: relative;
 }*/
 
 .maps{
