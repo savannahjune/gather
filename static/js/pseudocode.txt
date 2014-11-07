@@ -1,0 +1,44 @@
+pseudo code
+
+1. take adresses from form
+
+$(button).submit( function(){
+	points = [];
+	geocode(locationOne, geocallback);
+	geocode(locationTwo, geocallback);
+})
+
+function geocode(locationOne, cb);
+	call google( , cb);
+
+function geocallback(response)
+	points.append(coordinates from the response);
+	if len(points) >= 2 (this number is variable depending on jQuery selector on form class)
+
+3. call spotAlgorithm(loc1, loc2)
+	tolerance = 10 mins; (arbitrary at first)
+	durDiff = 9999; (also arbitrary at first)
+
+	while (durDiff > tolerance or !hasSpot) {
+		 mid = findMidPoint (loc1, loc2) >> may need to be outside because i have to reset it not reset loc1/loc2
+		 duration1 = calcDur (loc1, mid)
+		 duration2 = calcDur (loc2, mid)
+		 durDiff = duration2 - duration1
+
+	}
+
+
+
+
+
+
+
+
+
+
+function spotAlgorithm
+
+funciton findMidPoint
+
+function calcDur (points)
+

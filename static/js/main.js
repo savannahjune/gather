@@ -33,36 +33,40 @@ $(document).ready(function() {
             travelMode: google.maps.TravelMode.DRIVING,
             // calculation travel time based on traffic
             durationInTraffic: true,
-        }, callback);
-        function callback(response, status) {
-            //this is all for calculateDistance function
-            if(status == google.maps.DistanceMatrixStatus.OK) {
-                var origins = response.originAddresses;
-                var destinations = response.destinationAddresses;
-                // using distance matrix service to find time, distance between two origins
-                // console logging distance to use that find midpoint and calculate times
-                // origins and destiations taken from form
-                // var distance = calculateDistance(response);
+        }, getDistanceMatrixCallback);
 
-                makeCoordinates(origins, function(latLonOrigin) {
-                    makeCoordinates(destinations, function(latLonDestination) {
-                        // Now you can process your result with latLonOrigin and latLonDestination
-                        var coordinates = [latLonOrigin, latLonDestination];
-
-                        console.log(coordinates);
-                        var origins_coordinates = coordinates[0];
-                        var destinations_coordinates = coordinates[1];
-                        console.log("Origins coordinates: " + origins_coordinates);
-                        console.log("Destinations coordinates:" + destinations_coordinates);
-                        var midpoint = findMidPoint(origins_coordinates, destinations_coordinates);
-                        console.log(midpoint);
-                        var map = displayMap(origins, destinations, midpoint);
-                    });
-                });
-            }
-        }
     }
 });
+
+
+function getDistanceMatrixCallback(response, status) {
+    //this is all for calculateDistance function
+    if(status == google.maps.DistanceMatrixStatus.OK) {
+        var locationOne = response.originAddresses;
+        var locationTwo = response.destinationAddresses;
+        // using distance matrix service to find time, distance between two origins
+        // console logging distance to use that find midpoint and calculate times
+        // origins and destiations taken from form
+        var distance = calculateDuration(response);
+
+        makeCoordinates(locationOne, function(latLonOrigin) {
+            makeCoordinates(locationTwo, function(latLonDestination) {
+                // Now you can process your result with latLonOrigin and latLonDestination
+                var coordinates = [latLonOrigin, latLonDestination];
+
+                console.log(coordinates);
+                var locationOne_coordinates = coordinates[0];
+                var locationTwo_coordinates = coordinates[1];
+                console.log("locati  onOne coordinates: " + locationOne_coordinates);
+                console.log("locationTwo coordinates:" + locationTwo_coordinates);
+                var midpoint = findMidPoint(locationOne_coordinates, locationTwo_coordinates);
+                console.log(midpoint);
+                var map = displayMap(locationOne, locationTwo, midpoint);
+            });
+        });
+    }
+}
+
 
 // function for autocomplete from google autocomplete api
 
@@ -105,13 +109,13 @@ function makeCoordinates(target, callback) {
     });
 }
 
-function findMidPoint(origins_coordinates, destinations_coordinates){
-    console.log(typeof origins_coordinates);
-    var lat_one = origins_coordinates[0];
+function findMidPoint(locationOne_coordinates, locationTwo_coordinates){
+    console.log(typeof locationOne_coordinates);
+    var lat_one = locationOne_coordinates[0];
     // console.log("Lat_one: " + lat_one);
-    var lon_one = origins_coordinates[1];
-    var lat_two = destinations_coordinates[0];
-    var lon_two = destinations_coordinates[1];
+    var lon_one = locationOne_coordinates[1];
+    var lat_two = locationTwo_coordinates[0];
+    var lon_two = locationTwo_coordinates[1];
     var latitude_mid = ( (lat_one + lat_two) / 2);
     // console.log("Latitude_mid: " + latitude_mid);
     var longitude_mid = ( (lon_one + lon_two) / 2);
@@ -129,36 +133,37 @@ function findMidPoint(origins_coordinates, destinations_coordinates){
     // var λ3 = λ1 + Math.atan2(By, Math.cos(φ1) + Bx);
 }
 
-// function to calculate distances and travel times between points
+
+// function to calculate travel times between points
 
 
-function calculateDistance(response) {
+function calculateDuration(response) {
     var origins = response.originAddresses;
     var destinations = response.destinationAddresses;
-    // var distance = 0;
+    var duration = 0;
     
     for (var i = 0; i < origins.length; i++) {
         var results = response.rows[i].elements;
         for (var j = 0; j < results.length; j++) {
             var element = results[j];
             var distance = element.distance.value;
-            var duration = element.duration.text;
+            duration = element.duration.text;
             var from = origins[i];
             var to = destinations[j];
             // console.log("Distance: " + distance);
-        // return distance;
         }
         // this console logs all info sent back from distance matrix api    
         console.log("Response:");
         console.log(response);
     }
-    // return distance;
+    console.log("Duration: " + duration);
+    return duration;
 }
 
 // map display function, creates url out of origins and destination to show route
 
-function displayMap(origins, destinations, midpoint) {
-    // takes origin and destinations from the search for spot function and subs 
+function displayMap(locationOne, locationTwo, midpoint) {
+    // takes locationOne and locationTwo from the search for spot function and subs 
     // them into the url for the google maps call for directions
     var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + origins + "&destination=" + midpoint;
     var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + destinations + "&destination=" + midpoint;
