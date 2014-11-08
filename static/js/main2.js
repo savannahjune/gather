@@ -27,8 +27,9 @@ $(document).ready(function() {
                 // console.log("First point coordinates: " + pointOne_coordinates);
                 // console.log("Second point coordinates:" + pointTwo_coordinates);
                 var initialMid = findMidPoint(pointOne_coordinates, pointTwo_coordinates);
-                if (coordinates.length >= 2);
-                    findGatherPoint(pointTwo_coordinates, pointTwo_coordinates, initialMid);
+                // if (coordinates.length >= 2){
+                //     findGatheringPoint(pointTwo_coordinates, pointTwo_coordinates, initialMid);}
+                calculateDuration(pointOne_coordinates, initialMid);
             });
         });
     });
@@ -132,6 +133,21 @@ function findMidPoint(pointOne, pointTwo){
 }
 
 /**
+  *  Finds best gathering point between two places, as far as time to reach a midpoint
+  *  
+  *  @param {pointOne} this is the first place, must be in coordinate form for math
+  *  @param {pointTwo} this is the second place, must be in coordinate form for math
+  *  @param {initialMid} this is the initial midpoint, will be redefined in this recursive function
+  */
+
+
+// function findGatheringPoint(pointOne, pointTwo, initialMid) {
+//     durOne = calculateDuration(pointOne, initialMid);
+//     console.log(durOne);
+
+// }
+
+/**
   *  Finds midpoint between any two places
   *  
   *
@@ -139,12 +155,49 @@ function findMidPoint(pointOne, pointTwo){
   *  @param {pointTwo} this is the second place, must be in coordinate form for math
   */
 
-
-function findGatheringPoint(pointOne, pointTwo, initialMid) {
-
-
+function calculateDuration(pointOne, pointTwo) {
+    console.log("PointOne: " + pointOne);
+    console.log("PointTwo: " + pointTwo);
+    pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
+    pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+        {
+            origins: [pointOne],
+            destinations: [pointTwo],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false,
+            durationInTraffic: true,
+        }, calculateDurationCallback);
 }
 
-function calcDuration(pointOne, pointTwo) {
-    
+function calculateDurationCallback(response, status) {
+    console.log("Hello we're in the calc duration callback!");
+    console.log("Response: " + response);
+    // need to troubleshooot this, narrow down
+    console.log(response.rows.elements.duration.text);
+  //   if (status != google.maps.DistanceMatrixStatus.OK) {
+  //   alert('Error was: ' + status);
+  // } else {
+  //   var origins = response.originAddresses;
+  //   console.log(origins);
+  //   var destinations = response.destinationAddresses;
+  //   var outputDiv = document.getElementById('outputDiv');
+  //   outputDiv.innerHTML = '';
+  //   deleteOverlays();
+
+  //   for (var i = 0; i < origins.length; i++) {
+  //     var results = response.rows[i].elements;
+  //     addMarker(origins[i], false);
+  //     for (var j = 0; j < results.length; j++) {
+  //       addMarker(destinations[j], true);
+  //       outputDiv.innerHTML += origins[i] + ' to ' + destinations[j]
+  //           + ': ' + results[j].distance.text + ' in '
+  //           + results[j].duration.text + '<br>';
+  //     }
+  //   }
+  // }
 }
+
