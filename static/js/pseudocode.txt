@@ -8,6 +8,7 @@ $(button).submit( function(){
 	geocode(locationTwo, geocallback);
 })
 
+2. Get coordinates
 function geocode(locationOne, cb);
 	call google( , cb);
 
@@ -15,11 +16,11 @@ function geocallback(response)
 	points.append(coordinates from the response);
 	if len(points) >= 2 (this number is variable depending on jQuery selector on form class)
 
-3.
+3. Then run this
 
 Option 1:
 
- call spotAlgorithm(loc1, loc2)
+ call findGatheringPoint(loc1, loc2)
 	tolerance = 10 mins; (arbitrary at first)
 	durDiff = 9999; (also arbitrary at first)
 
@@ -33,7 +34,7 @@ Option 1:
 
 Option2: 
 
-def findGatheringPointp (p1, p2, midpoint)
+def findGatheringPoint(p1, p2, midpoint)
 
 	if calcDur(p1, midpoint) - duration(p2 - midpoint) <= tolerance
 		return midpoint
@@ -44,7 +45,7 @@ def findGatheringPointp (p1, p2, midpoint)
 		midpoint(p2, midpoint)
 	return midtime (p1,p2, midpoint)
 
-4. find spot using midpoint 
+4. find spot to eat/drink/etc using midpoint 
 
 
 

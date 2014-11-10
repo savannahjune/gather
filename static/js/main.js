@@ -1,6 +1,4 @@
-// Javascript for Gather
 $(document).ready(function() {
-
     // this allows google autocomplete to display
 
     $(".typeahead").typeahead({
@@ -8,69 +6,71 @@ $(document).ready(function() {
         highlight: true,
     },
     {
-        source: getSuggestions,
+        source: getAutocompleteSuggestions,
         displayKey: 'description',
     });
 
     // this creates event listener for location form
-
-    $("#location_form").submit(searchForSpot);
-    function searchForSpot(evt) {
+    $("#location_form").submit(function(evt) {
+        // console.log('submitted form');
         evt.preventDefault();
-        // console.log("Got here");
-        var locationOne = $("#location_one").val();
-        // console.log(locationOne);
-        var locationTwo = $("#location_two").val();
-        // console.log("searchForSpot: ", locationOne, locationTwo);
+        var addresses = getAdressesFromForm();
+        // points is an array of values from our from inputs
+        // makes coordinates from addresses
 
-        origins = locationOne;
-        destinations = locationTwo;
-        var service = new google.maps.DistanceMatrixService();
-        service.getDistanceMatrix({
-            origins: [locationOne],
-            destinations: [locationTwo],
-            // modify this line to change travel mode
-            travelMode: google.maps.TravelMode.DRIVING,
-            // calculation travel time based on traffic
-            durationInTraffic: true,
-        }, getDistanceMatrixCallback);
+        makeCoordinates(addresses[0])
+        .then(function(latLonPointOne) {
+            console.log("Got first promise result");
+            return makeCoordinates(addresses[1])
+            .then(function(latLonPointTwo) {
+                console.log("Got second promise result");
+                return [latLonPointOne, latLonPointTwo];
+            });
+        })
+        .spread(function(latLonPointOne, latLonPointTwo) {
+            console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
+            var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
+            if (latLonPointOne, latLonPointTwo) {
+                console.log("Started find gathering point");
+                return findGatheringPoint(latLonPointOne, latLonPointTwo, initialMid);
+            }
+            // TODO You need to throw an error if we didn't get two valid points!
+            console.log("ERROR");
 
-    }
+        })
+        .then(function(gatheringPoint) {
+            console.log("Gathering Point: " + gatheringPoint);
+        });
+    });
 });
 
-
-function getDistanceMatrixCallback(response, status) {
-    //this is all for calculateDistance function
-    if(status == google.maps.DistanceMatrixStatus.OK) {
-        var locationOne = response.originAddresses;
-        var locationTwo = response.destinationAddresses;
-        // using distance matrix service to find time, distance between two origins
-        // console logging distance to use that find midpoint and calculate times
-        // origins and destiations taken from form
-        var distance = calculateDuration(response);
-
-        makeCoordinates(locationOne, function(latLonOrigin) {
-            makeCoordinates(locationTwo, function(latLonDestination) {
-                // Now you can process your result with latLonOrigin and latLonDestination
-                var coordinates = [latLonOrigin, latLonDestination];
-
-                console.log(coordinates);
-                var locationOne_coordinates = coordinates[0];
-                var locationTwo_coordinates = coordinates[1];
-                console.log("locationOne coordinates: " + locationOne_coordinates);
-                console.log("locationTwo coordinates:" + locationTwo_coordinates);
-                var midpoint = findMidPoint(locationOne_coordinates, locationTwo_coordinates);
-                console.log(midpoint);
-                var map = displayMap(locationOne, locationTwo, midpoint);
-            });
-        });
-    }
+/**
+ * Returns an array of addresses gathered from each input of our form.
+ *
+ * Note : This function must be modified when more location inputs
+ * are added.
+ *
+ */
+function getAdressesFromForm() {
+    var points = [];
+    // console.log("Got here");
+    var locationOne = $("#location_one").val();
+    // console.log(locationOne);
+    var locationTwo = $("#location_two").val();
+    // console.log("searchForSpot: ", locationOne, locationTwo);
+    points.push(locationOne, locationTwo);
+    console.log(points);
+    return points;
 }
 
-
-// function for autocomplete from google autocomplete api
-
-function getSuggestions(query, cb) {
+/**
+  *  Get Autocomplete suggestions. Uses Google Places AutocompleteService to search 
+  *  for known addresses that match the given query
+  *
+  *  @param {query} the input to suggest autocomplete matches against. e.g: "123 Main St"
+  *  @param {cb} a callback to deliver the potential matches. Takes a single array argument of matches
+  */
+function getAutocompleteSuggestions(query, cb) {
     var service = new google.maps.places.AutocompleteService();
     service.getQueryPredictions({ input: query }, function(predictions, status) {
         if (status != google.maps.places.PlacesServiceStatus.OK) {
@@ -84,7 +84,16 @@ function getSuggestions(query, cb) {
     });
 }
 
-function makeCoordinates(target, callback) {
+/**
+  *  Takes an address and makes a coordinate out of it
+  *  
+  *
+  *  @param {target}
+  *  @param {callback} a callback to deliver the coordinates takes one address
+  */
+function makeCoordinates(target) {
+    var deferred = Q.defer();
+
     var latlon=[];
     var geocoder = new google.maps.Geocoder();
     // console.log("This is origins:" + origins);
@@ -100,22 +109,31 @@ function makeCoordinates(target, callback) {
             // alert("Is this happening?");
             // debugger;
 
+            deferred.resolve(latlon);
 
         } else {
             console.log("Geocode was not successful for the following reason: " + status);
+            deferred.reject(new Error(status));
         }
-
-        callback(latlon);
     });
+
+    return deferred.promise;
 }
 
-function findMidPoint(locationOne_coordinates, locationTwo_coordinates){
-    console.log(typeof locationOne_coordinates);
-    var lat_one = locationOne_coordinates[0];
+/**
+  *  Finds midpoint between any two places
+  *  
+  *
+  *  @param {pointOne} this is the first place, must be in coordinate form for math
+  *  @param {pointTwo} this is the second place, must be in coordinate form for math
+  */
+function findMidPoint(pointOne, pointTwo){
+    console.log(typeof pointOne);
+    var lat_one = pointOne[0];
     // console.log("Lat_one: " + lat_one);
-    var lon_one = locationOne_coordinates[1];
-    var lat_two = locationTwo_coordinates[0];
-    var lon_two = locationTwo_coordinates[1];
+    var lon_one = pointOne[1];
+    var lat_two = pointTwo[0];
+    var lon_two = pointTwo[1];
     var latitude_mid = ( (lat_one + lat_two) / 2);
     // console.log("Latitude_mid: " + latitude_mid);
     var longitude_mid = ( (lon_one + lon_two) / 2);
@@ -123,52 +141,99 @@ function findMidPoint(locationOne_coordinates, locationTwo_coordinates){
     var mid_point = [latitude_mid, longitude_mid];
     console.log("Mid_point: " + mid_point);
     return mid_point;
+}
 
-    // this is the formual to find the great circle mid point. 
+ // this is the formual to find the great circle mid point. 
     // useful if the origins are more than 250 miles apart
     // var Bx = Math.cos(φ2) * Math.cos(λ2-λ1);
     // var By = Math.cos(φ2) * Math.sin(λ2-λ1);
     // var φ3 = Math.atan2(Math.sin(φ1) + Math.sin(φ2),
     //                 Math.sqrt( (Math.cos(φ1)+Bx)*(Math.cos(φ1)+Bx) + By*By ) );
     // var λ3 = λ1 + Math.atan2(By, Math.cos(φ1) + Bx);
+
+/**
+  *  Finds best gathering point between two places, as far as time to reach a midpoint
+  *  
+  *  @param {pointOne} this is the first place, must be in coordinate form for math
+  *  @param {pointTwo} this is the second place, must be in coordinate form for math
+  *  @param {initialMid} this is the initial midpoint, will be redefined in this recursive function
+  */
+
+
+function findGatheringPoint(pointOne, pointTwo, initialMid) {
+    var deferred = Q.defer();
+
+    console.log("We're in the findGatheringPointFunction");
+    calculateDuration(pointOne, initialMid)
+    .then(function(durationOne) {
+        console.log("Got duration for pointOne " + durationOne);
+        return calculateDuration(pointTwo, initialMid)
+        .then(function(durationTwo) {
+            return [durationOne, durationTwo];
+        });
+    })
+    .spread(function(durationOne, durationTwo) {
+        // Ensure responseTwo is valid
+
+        // Now we have valid results for the duration from pointOne to initialMid
+        // and the duration from pointTwo to initialMid
+
+        console.log("Hello we're in the calc duration callback!");
+        console.log("Duration one: " + durationOne);
+        console.log("Duration two: " + durationTwo);
+        // TODO: FindGatheringPoint will eventually return a new midpoint for now to test just using initialmid
+        deferred.resolve(initialMid);
+    })
+    .catch(function (error) {
+        console.log("findGatheringPoint Error: " + error);
+    });
+
+    return deferred.promise;
 }
 
+/**
+  *  Finds duration of time between two places
+  *  
+  *
+  *  @param {pointOne} this is the first place, must be in coordinate form for math
+  *  @param {pointTwo} this is the second place, must be in coordinate form for math
+  */
+function calculateDuration(pointOne, pointTwo) {
+    var deferred = Q.defer();
 
-// function to calculate travel times between points
+    console.log("PointOne: " + pointOne);
+    console.log("PointTwo: " + pointTwo);
+    pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
+    pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
+    var service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+        {
+            origins: [pointOne],
+            destinations: [pointTwo],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false,
+            durationInTraffic: true,
+        }, function(response, status) {
+            // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
+            var duration = (response.rows[0].elements[0].duration.value);
+            console.log("Got google duration " + duration);
+            deferred.resolve(duration);
+        });
 
-
-function calculateDuration(response) {
-    var origins = response.originAddresses;
-    var destinations = response.destinationAddresses;
-    var duration = 0;
-    
-    for (var i = 0; i < origins.length; i++) {
-        var results = response.rows[i].elements;
-        for (var j = 0; j < results.length; j++) {
-            var element = results[j];
-            var distance = element.distance.value;
-            duration = element.duration.text;
-            var from = origins[i];
-            var to = destinations[j];
-            // console.log("Distance: " + distance);
-        }
-        // this console logs all info sent back from distance matrix api    
-        console.log("Response:");
-        console.log(response);
-    }
-    console.log("Duration: " + duration);
-    return duration;
+    return deferred.promise;
 }
 
-// map display function, creates url out of origins and destination to show route
+// function calculateDurationCallback(response, status) {
+//     console.log("Hello we're in the calc duration callback!");
+//     console.log("Response: ");
+//     console.log(response);
+//     // need to look up what value is
+//     var duration = (response.rows[0].elements[0].duration.value);
+//     console.log("Duration: " + duration);
+//     //return duration; // We can't capture the return value of this callback
 
-function displayMap(locationOne, locationTwo, midpoint) {
-    // takes locationOne and locationTwo from the search for spot function and subs 
-    // them into the url for the google maps call for directions
-    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + origins + "&destination=" + midpoint;
-    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + destinations + "&destination=" + midpoint;
-    $("#map_view1").attr("src", src1);
-    $("#map_view2").attr("src", src2);
-}
 
+// }
 
