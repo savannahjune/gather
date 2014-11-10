@@ -17,21 +17,20 @@ $(document).ready(function() {
         var addresses = getAdressesFromForm();
         // points is an array of values from our from inputs
         // makes coordinates from addresses
-
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
-            console.log("Got first promise result");
+            // console.log("Got first promise result");
             return makeCoordinates(addresses[1])
             .then(function(latLonPointTwo) {
-                console.log("Got second promise result");
+                // console.log("Got second promise result");
                 return [latLonPointOne, latLonPointTwo];
             });
         })
         .spread(function(latLonPointOne, latLonPointTwo) {
-            console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
+            // console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
-                console.log("Started find gathering point");
+                // console.log("Started find gathering point");
                 return findGatheringPoint(latLonPointOne, latLonPointTwo, initialMid);
             }
             // TODO You need to throw an error if we didn't get two valid points!
@@ -88,26 +87,23 @@ function getAutocompleteSuggestions(query, cb) {
   *  Takes an address and makes a coordinate out of it
   *  
   *
-  *  @param {target}
-  *  @param {callback} a callback to deliver the coordinates takes one address
+  *  @param {target} - address to become a coordinate
+  *  
   */
 function makeCoordinates(target) {
     var deferred = Q.defer();
 
     var latlon=[];
     var geocoder = new google.maps.Geocoder();
-    // console.log("This is origins:" + origins);
-    // ""+turns origins into a string, dunno what it was before
+
     geocoder.geocode( { 'address': ""+target}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             latlon[0]=results[0].geometry.location.lat();
             latlon[1]=results[0].geometry.location.lng();
 
-            console.log("Lat:" + latlon[0]);
-            console.log("Lon:" + latlon[1]);
-            // return latlon[0];
-            // alert("Is this happening?");
-            // debugger;
+            // console.log("Is makeCoordinates happening?");
+            // console.log("Lat:" + latlon[0]);
+            // console.log("Lon:" + latlon[1]);
 
             deferred.resolve(latlon);
 
@@ -139,7 +135,7 @@ function findMidPoint(pointOne, pointTwo){
     var longitude_mid = ( (lon_one + lon_two) / 2);
     // console.log("Longitude_mid: " + longitude_mid);
     var mid_point = [latitude_mid, longitude_mid];
-    console.log("Mid_point: " + mid_point);
+    // console.log("Mid_point: " + mid_point);
     return mid_point;
 }
 
@@ -163,26 +159,42 @@ function findMidPoint(pointOne, pointTwo){
 function findGatheringPoint(pointOne, pointTwo, initialMid) {
     var deferred = Q.defer();
 
-    console.log("We're in the findGatheringPointFunction");
+    // console.log("We're in the findGatheringPointFunction");
     calculateDuration(pointOne, initialMid)
     .then(function(durationOne) {
-        console.log("Got duration for pointOne " + durationOne);
+        // console.log("Got duration for pointOne " + durationOne);
         return calculateDuration(pointTwo, initialMid)
         .then(function(durationTwo) {
             return [durationOne, durationTwo];
         });
     })
     .spread(function(durationOne, durationTwo) {
-        // Ensure responseTwo is valid
 
         // Now we have valid results for the duration from pointOne to initialMid
         // and the duration from pointTwo to initialMid
 
-        console.log("Hello we're in the calc duration callback!");
+        // console.log("Hello we're in the calc duration callback!");
         console.log("Duration one: " + durationOne);
         console.log("Duration two: " + durationTwo);
-        // TODO: FindGatheringPoint will eventually return a new midpoint for now to test just using initialmid
-        deferred.resolve(initialMid);
+        console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
+        var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
+        if (Math.abs(durationOne - durationTwo) <= tolerance){
+            deferred.resolve(initialMid);
+            console.log("Found the duration midpoint: " + initialMid);
+        }
+        else if (durationOne > durationTwo) {
+            console.log("Duration one was greater!");
+            newMidpoint = findMidPoint(pointOne, initialMid);
+            console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
+            return findGatheringPoint(pointOne, pointTwo, newMidpoint);
+        }
+        else {
+            console.log("Duration two was greater!");
+            newMidpoint = findMidPoint(pointTwo, initialMid);
+            console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
+            return findGatheringPoint(pointOne, pointTwo, newMidpoint);
+        }
+
     })
     .catch(function (error) {
         console.log("findGatheringPoint Error: " + error);
@@ -201,8 +213,8 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
 function calculateDuration(pointOne, pointTwo) {
     var deferred = Q.defer();
 
-    console.log("PointOne: " + pointOne);
-    console.log("PointTwo: " + pointTwo);
+    // console.log("PointOne: " + pointOne);
+    // console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     var service = new google.maps.DistanceMatrixService();
@@ -217,23 +229,12 @@ function calculateDuration(pointOne, pointTwo) {
             durationInTraffic: true,
         }, function(response, status) {
             // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
+            // value in this case is seconds, duration is in seconds
             var duration = (response.rows[0].elements[0].duration.value);
-            console.log("Got google duration " + duration);
+            // console.log("Got google duration " + duration);
             deferred.resolve(duration);
         });
 
     return deferred.promise;
 }
-
-// function calculateDurationCallback(response, status) {
-//     console.log("Hello we're in the calc duration callback!");
-//     console.log("Response: ");
-//     console.log(response);
-//     // need to look up what value is
-//     var duration = (response.rows[0].elements[0].duration.value);
-//     console.log("Duration: " + duration);
-//     //return duration; // We can't capture the return value of this callback
-
-
-// }
 
