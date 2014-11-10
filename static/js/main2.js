@@ -12,7 +12,7 @@ $(document).ready(function() {
 
     // this creates event listener for location form
     $("#location_form").submit(function(evt) {
-        console.log('submitted form');
+        // console.log('submitted form');
         evt.preventDefault();
         var addresses = getAdressesFromForm();
         // points is an array of values from our from inputs
@@ -27,9 +27,9 @@ $(document).ready(function() {
                 // console.log("First point coordinates: " + pointOne_coordinates);
                 // console.log("Second point coordinates:" + pointTwo_coordinates);
                 var initialMid = findMidPoint(pointOne_coordinates, pointTwo_coordinates);
-                // if (coordinates.length >= 2){
-                //     findGatheringPoint(pointTwo_coordinates, pointTwo_coordinates, initialMid);}
-                calculateDuration(pointOne_coordinates, initialMid);
+                if (coordinates.length >= 2) {
+                    findGatheringPoint(pointOne_coordinates, pointTwo_coordinates, initialMid);
+                }
             });
         });
     });
@@ -141,21 +141,39 @@ function findMidPoint(pointOne, pointTwo){
   */
 
 
-// function findGatheringPoint(pointOne, pointTwo, initialMid) {
-//     durOne = calculateDuration(pointOne, initialMid);
-//     console.log(durOne);
+function findGatheringPoint(pointOne, pointTwo, initialMid) {
+    console.log("We're in the findGatheringPointFunction");
+    calculateDuration(pointOne, initialMid, function(responseOne, statusOne) {
+      // Ensure responseOne is valid
+      calculateDuration(pointTwo, initialMid, function(responseTwo, statusTwo) {
+        // Ensure responseTwo is valid
 
-// }
+        // Now we have valid results for the duration from pointOne to initialMid
+        // and the duration from pointTwo to initialMid
+
+        console.log("Hello we're in the calc duration callback!");
+        console.log("Response: ");
+        console.log(responseOne);
+        console.log(responseTwo);
+        // need to look up what value is
+        var durationOne = (responseOne.rows[0].elements[0].duration.value);
+        console.log("Duration one: " + durationOne);
+        var durationTwo = (responseTwo.rows[0].elements[0].duration.value);
+        console.log("Duration two: " + durationTwo);
+
+        //return duration; // We can't capture the return value of this callback
+      });
+    });
+}
 
 /**
-  *  Finds midpoint between any two places
+  *  Finds duration of time between two places
   *  
   *
   *  @param {pointOne} this is the first place, must be in coordinate form for math
   *  @param {pointTwo} this is the second place, must be in coordinate form for math
   */
-
-function calculateDuration(pointOne, pointTwo) {
+function calculateDuration(pointOne, pointTwo, callback) {
     console.log("PointOne: " + pointOne);
     console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
@@ -170,34 +188,18 @@ function calculateDuration(pointOne, pointTwo) {
             avoidHighways: false,
             avoidTolls: false,
             durationInTraffic: true,
-        }, calculateDurationCallback);
+        }, callback);
 }
 
-function calculateDurationCallback(response, status) {
-    console.log("Hello we're in the calc duration callback!");
-    console.log("Response: " + response);
-    // need to troubleshooot this, narrow down
-    console.log(response.rows.elements.duration.text);
-  //   if (status != google.maps.DistanceMatrixStatus.OK) {
-  //   alert('Error was: ' + status);
-  // } else {
-  //   var origins = response.originAddresses;
-  //   console.log(origins);
-  //   var destinations = response.destinationAddresses;
-  //   var outputDiv = document.getElementById('outputDiv');
-  //   outputDiv.innerHTML = '';
-  //   deleteOverlays();
+// function calculateDurationCallback(response, status) {
+//     console.log("Hello we're in the calc duration callback!");
+//     console.log("Response: ");
+//     console.log(response);
+//     // need to look up what value is
+//     var duration = (response.rows[0].elements[0].duration.value);
+//     console.log("Duration: " + duration);
+//     //return duration; // We can't capture the return value of this callback
 
-  //   for (var i = 0; i < origins.length; i++) {
-  //     var results = response.rows[i].elements;
-  //     addMarker(origins[i], false);
-  //     for (var j = 0; j < results.length; j++) {
-  //       addMarker(destinations[j], true);
-  //       outputDiv.innerHTML += origins[i] + ' to ' + destinations[j]
-  //           + ': ' + results[j].distance.text + ' in '
-  //           + results[j].duration.text + '<br>';
-  //     }
-  //   }
-  // }
-}
+
+// }
 
