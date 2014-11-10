@@ -25,12 +25,10 @@ h1 {
 	margin-right: 5px;
 }
 
-/*.btn {
-	margin-left: 10px;
-	width: 25%;
-	background-color: red;
+.btn {
+	background-color: #A6CF4F;
 	position: relative;
-}*/
+}
 
 .maps{
 	margin: auto;

@@ -1,5 +1,10 @@
+/** Global starting points. Accessed throughout recursive calls to findGatheringPoint */
 var initialPointOne;
 var initialPointTwo;
+
+/** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search */
+const maxAttempts = 5;
+var numAttempts;
 
 $(document).ready(function() {
     // this allows google autocomplete to display
@@ -15,6 +20,7 @@ $(document).ready(function() {
 
     // this creates event listener for location form
     $("#location_form").submit(function(evt) {
+        numAttempts = 0;
         // console.log('submitted form');
         evt.preventDefault();
         var addresses = getAdressesFromForm();
@@ -36,7 +42,7 @@ $(document).ready(function() {
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
                 // console.log("Started find gathering point");
-                return findGatheringPoint(latLonPointOne, latLonPointTwo, initialMid);
+                return findGatheringPoint(initialPointOne, initialPointTwo, initialMid);
             }
             // TODO You need to throw an error if we didn't get two valid points!
             console.log("ERROR");
@@ -162,12 +168,16 @@ function findMidPoint(pointOne, pointTwo){
 
 
 function findGatheringPoint(pointOne, pointTwo, initialMid) {
+    numAttempts++;
+    //debugger;
     var deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
+    console.log("initialPointOne : " + initialPointOne);
     calculateDuration(initialPointOne, initialMid)
     .then(function(durationOne) {
         // console.log("Got duration for pointOne " + durationOne);
+        console.log("initialPointTwo : " + initialPointTwo);
         return calculateDuration(initialPointTwo, initialMid)
         .then(function(durationTwo) {
             return [durationOne, durationTwo];
@@ -183,13 +193,15 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
         console.log("Duration two: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
         var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
-        if (Math.abs(durationOne - durationTwo) <= tolerance){
+        if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+            if (numAttempts >= maxAttempts) {
+                console.log("Stopped findGatheringPoint after max attempts reached");
+            }
             deferred.resolve(initialMid);
             console.log("Found the duration midpoint: " + initialMid);
         }
         else if (durationOne > durationTwo) {
             console.log("Duration one was greater!");
-            // lastMidpoint = initialMid;
             newMidpoint = findMidPoint(pointOne, initialMid);
             console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
             return findGatheringPoint(pointOne, initialMid, newMidpoint);
@@ -198,7 +210,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
             console.log("Duration two was greater!");
             newMidpoint = findMidPoint(pointTwo, initialMid);
             console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
-            return findGatheringPoint(pointTwo, initialMid, newMidpoint);
+            return findGatheringPoint(initialMid, pointTwo, newMidpoint);
         }
 
     })
