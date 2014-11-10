@@ -1,3 +1,6 @@
+var initialPointOne;
+var initialPointTwo;
+
 $(document).ready(function() {
     // this allows google autocomplete to display
 
@@ -20,9 +23,11 @@ $(document).ready(function() {
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
             // console.log("Got first promise result");
+            initialPointOne = latLonPointOne;
             return makeCoordinates(addresses[1])
             .then(function(latLonPointTwo) {
                 // console.log("Got second promise result");
+                initialPointTwo = latLonPointTwo;
                 return [latLonPointOne, latLonPointTwo];
             });
         })
@@ -160,10 +165,10 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
     var deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
-    calculateDuration(pointOne, initialMid)
+    calculateDuration(initialPointOne, initialMid)
     .then(function(durationOne) {
         // console.log("Got duration for pointOne " + durationOne);
-        return calculateDuration(pointTwo, initialMid)
+        return calculateDuration(initialPointTwo, initialMid)
         .then(function(durationTwo) {
             return [durationOne, durationTwo];
         });
@@ -184,15 +189,16 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
         }
         else if (durationOne > durationTwo) {
             console.log("Duration one was greater!");
+            // lastMidpoint = initialMid;
             newMidpoint = findMidPoint(pointOne, initialMid);
             console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
-            return findGatheringPoint(pointOne, pointTwo, newMidpoint);
+            return findGatheringPoint(pointOne, initialMid, newMidpoint);
         }
         else {
             console.log("Duration two was greater!");
             newMidpoint = findMidPoint(pointTwo, initialMid);
             console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
-            return findGatheringPoint(pointOne, pointTwo, newMidpoint);
+            return findGatheringPoint(pointTwo, initialMid, newMidpoint);
         }
 
     })
