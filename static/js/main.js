@@ -28,21 +28,26 @@ $(document).ready(function() {
         // makes coordinates from addresses
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
-            // console.log("Got first promise result");
+            console.log("Got first promise result");
             initialPointOne = latLonPointOne;
             return makeCoordinates(addresses[1])
             .then(function(latLonPointTwo) {
-                // console.log("Got second promise result");
+                console.log("Got second promise result");
                 initialPointTwo = latLonPointTwo;
                 return [latLonPointOne, latLonPointTwo];
             });
         })
-        .spread(function(latLonPointOne, latLonPointTwo) {
+        // .spread(function(latLonPointOne, latLonPointTwo) {
+        .then(function(x) {
+            latLonPointOne = x[0];
+            latLonPointTwo = x[1];
             console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
-                // console.log("Started find gathering point");
+                console.log("Started find gathering point", initialMid);
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid);
+            } else {
+                console.log("WTF?");
             }
 
         })
@@ -118,8 +123,8 @@ function makeCoordinates(target) {
             latlon[1]=results[0].geometry.location.lng();
 
             // console.log("Is makeCoordinates happening?");
-            // console.log("Lat:" + latlon[0]);
-            // console.log("Lon:" + latlon[1]);
+            console.log("Lat:" + latlon[0]);
+            console.log("Lon:" + latlon[1]);
 
             deferred.resolve(latlon);
 
@@ -175,55 +180,62 @@ function findMidPoint(pointOne, pointTwo){
 function findGatheringPoint(pointOne, pointTwo, initialMid) {
     numAttempts++;
     //debugger;
-    deferred = Q.defer();
+    var deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
     console.log("initialPointOne : " + initialPointOne);
     calculateDuration(initialPointOne, initialMid)
     .then(function(durationOne) {
-        // console.log("Got duration for pointOne " + durationOne);
+        console.log("Got duration for pointOne " + durationOne);
         console.log("initialPointTwo : " + initialPointTwo);
         return calculateDuration(initialPointTwo, initialMid)
         .then(function(durationTwo) {
             return [durationOne, durationTwo];
         });
     })
-    .spread(function(durationOne, durationTwo) {
-
-        // Now we have valid results for the duration from pointOne to initialMid
-        // and the duration from pointTwo to initialMid
-
-        // console.log("Hello we're in the calc duration callback!");
-        console.log("Duration one: " + durationOne);
-        console.log("Duration two: " + durationTwo);
-        console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
-        var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
-        if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
-            if (numAttempts >= maxAttempts) {
-                console.log("Stopped findGatheringPoint after max attempts reached");
-            }
-            deferred.resolve(initialMid);
-            console.log("Found the duration midpoint: " + initialMid);
-            return deferred.promise;
-
-        }
-        else if (durationOne > durationTwo) {
-            console.log("Duration one was greater!");
-            newMidpoint = findMidPoint(pointOne, initialMid);
-            console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
-            return findGatheringPoint(pointOne, initialMid, newMidpoint);
-        }
-        else {
-            console.log("Duration two was greater!");
-            newMidpoint = findMidPoint(pointTwo, initialMid);
-            console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
-            return findGatheringPoint(initialMid, pointTwo, newMidpoint);
-        }
-
-    })
-    .catch(function (error) {
-        console.log("findGatheringPoint Error: " + error);
+    .then(function(durationOne) {
+        console.log("Joel's duration One function");
+        deferred.resolve(666);
+        return deferred.promise;
     });
+
+    /// JOEL: this was thought-to-be-good-code, commented out for simplicity, added then, above
+    // .spread(function(durationOne, durationTwo) {
+
+    //     // Now we have valid results for the duration from pointOne to initialMid
+    //     // and the duration from pointTwo to initialMid
+
+    //     // console.log("Hello we're in the calc duration callback!");
+    //     console.log("Duration one: " + durationOne);
+    //     console.log("Duration two: " + durationTwo);
+    //     console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
+    //     var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
+    //     if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+    //         if (numAttempts >= maxAttempts) {
+    //             console.log("Stopped findGatheringPoint after max attempts reached");
+    //         }
+    //         deferred.resolve(initialMid);
+    //         console.log("Found the duration midpoint: " + initialMid);
+    //         return deferred.promise;
+
+    //     }
+    //     else if (durationOne > durationTwo) {
+    //         console.log("Duration one was greater!");
+    //         newMidpoint = findMidPoint(pointOne, initialMid);
+    //         console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
+    //         return findGatheringPoint(pointOne, initialMid, newMidpoint);
+    //     }
+    //     else {
+    //         console.log("Duration two was greater!");
+    //         newMidpoint = findMidPoint(pointTwo, initialMid);
+    //         console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
+    //         return findGatheringPoint(initialMid, pointTwo, newMidpoint);
+    //     }
+
+    // })
+    // .catch(function (error) {
+    //     console.log("findGatheringPoint Error: " + error);
+    // });
 
 }
 
@@ -237,34 +249,39 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
 function calculateDuration(pointOne, pointTwo) {
     var deferred = Q.defer();
 
-    // console.log("PointOne: " + pointOne);
-    // console.log("PointTwo: " + pointTwo);
+    console.log("PointOne: " + pointOne);
+    console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix(
-        {
-            origins: [pointOne],
-            destinations: [pointTwo],
-            travelMode: google.maps.TravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.METRIC,
-            avoidHighways: false,
-            avoidTolls: false,
-            durationInTraffic: true,
-        }, function(response, status) {
-            // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
-            // value in this case is seconds, duration is in seconds
-            var duration = (response.rows[0].elements[0].duration.value);
-            // console.log("Got google duration " + duration);
-            deferred.resolve(duration);
-        });
+    console.log("About to get Distance Matrix");
 
+    deferred.resolve(44982);
+    // service.getDistanceMatrix(
+    //     {
+    //         origins: [pointOne],
+    //         destinations: [pointTwo],
+    //         travelMode: google.maps.TravelMode.DRIVING,
+    //         unitSystem: google.maps.UnitSystem.METRIC,
+    //         avoidHighways: false,
+    //         avoidTolls: false,
+    //         durationInTraffic: true,
+    //     }, function(response, status) {
+    //         // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
+    //         // value in this case is seconds, duration is in seconds
+    //         var duration = (response.rows[0].elements[0].duration.value);
+    //         console.log("Got google duration " + duration);
+    //         deferred.resolve(duration);
+    //     });
+
+    console.log("leaving calculateDuration");
     return deferred.promise;
 }
 
 function findBusiness(gatheringPoint) {
     var deferred = Q.defer();
 
+    console.log("findBusiness", gatheringPoint);
     var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch({
