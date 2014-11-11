@@ -50,6 +50,10 @@ $(document).ready(function() {
         })
         .then(function(gatheringPoint) {
             console.log("Gathering Point: " + gatheringPoint);
+            return findBusiness(gatheringPoint);
+        })
+        .then(function(business){
+
         });
     });
 });
@@ -199,6 +203,8 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
             }
             deferred.resolve(initialMid);
             console.log("Found the duration midpoint: " + initialMid);
+            return deferred.promise;
+
         }
         else if (durationOne > durationTwo) {
             console.log("Duration one was greater!");
@@ -218,7 +224,6 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
         console.log("findGatheringPoint Error: " + error);
     });
 
-    return deferred.promise;
 }
 
 /**
@@ -253,6 +258,24 @@ function calculateDuration(pointOne, pointTwo) {
             deferred.resolve(duration);
         });
 
+    return deferred.promise;
+}
+
+function findBusiness(gatheringPoint) {
+    var deferred = Q.defer();
+
+    var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch({
+        location: spotToSearch,
+        radius: 500,
+        types: ['restaurant'],
+    },
+    function callback(results, status) {
+        console.log("Results: ");
+        console.log(results);
+        deffered.resolve(results);
+    });
     return deferred.promise;
 }
 
