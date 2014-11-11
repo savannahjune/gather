@@ -38,14 +38,12 @@ $(document).ready(function() {
             });
         })
         .spread(function(latLonPointOne, latLonPointTwo) {
-            // console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
+            console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
                 // console.log("Started find gathering point");
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid);
             }
-            // TODO You need to throw an error if we didn't get two valid points!
-            console.log("ERROR");
 
         })
         .then(function(gatheringPoint) {
@@ -54,6 +52,9 @@ $(document).ready(function() {
         })
         .then(function(business){
 
+        })
+        .catch(function (error) {
+        console.log("Main Chain Error: " + error);
         });
     });
 });
@@ -174,7 +175,7 @@ function findMidPoint(pointOne, pointTwo){
 function findGatheringPoint(pointOne, pointTwo, initialMid) {
     numAttempts++;
     //debugger;
-    var deferred = Q.defer();
+    deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
     console.log("initialPointOne : " + initialPointOne);

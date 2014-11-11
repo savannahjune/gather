@@ -1,5 +1,6 @@
 body {
 	background-image: url('/static/assets/gplaypattern.png');
+	letter-spacing: 0.05em;
 }
 
 h1 {
@@ -9,6 +10,16 @@ h1 {
 	display: inline-block;
 }
 
+#location_one, #location_two {
+	font-family: 'Raleway Thin', sans-serif;
+	font-size: 14px;
+	color: black;
+	/*width: 95%;
+	height: 20px;
+	background-color: #FFF;
+	position: relative;*/
+}
+
 .tt-dropdown-menu {
 	background-color: #FFF;
 	border: 1px solid black;
@@ -16,18 +27,29 @@ h1 {
 .transport {
     width: 45px;
     height: 45px;
-    /*background-color: gray;*/
+    color: blue;
+    /*background-color: blue;*/
 }
 
 .twitter-typeahead {
+	font-family: 'Raleway Thin', sans-serif;
 	width: 75%;
 	margin-left: 10px;
 	margin-right: 5px;
 }
 
 .btn {
-	background-color: #A6CF4F;
+	background-color: gray;
 	position: relative;
+	/*width: 95%;*/
+	/*height: 20px;*/
+	font-family: 'Raleway', sans-serif;
+	border: solid green 1px;
+}
+
+.btn:hover {
+	background-color: #A6CF4F;
+	font-family: 'Raleway', sans-serif;
 }
 
 .maps{
@@ -48,3 +70,4 @@ h1 {
 	/*margin-left: 50px;*/
 	margin-top: 20px;
 }
+
