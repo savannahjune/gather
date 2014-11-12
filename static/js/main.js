@@ -55,9 +55,9 @@ $(document).ready(function() {
             console.log("Gathering Point: " + gatheringPoint);
             return findBusiness(gatheringPoint);
         })
-        .then(function(business){
-            console.log("In the promises return of findBusiness")
-            // return displayMap(initialPointOne, initialPointTwo, business);
+        .then(function(businessLatLon){
+            console.log("In the promises return of findBusiness");
+            return displayMap(initialPointOne, initialPointTwo, businessLatLon);
         })
         .catch(function (error) {
         console.log("Main Chain Error: " + error);
@@ -303,14 +303,15 @@ function findBusiness(gatheringPoint) {
     function(request, status) {
         console.log("Status: " + status);
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-            var placeLatLon = (request[0].geometry.location);
-            var placeOriginal = (request[0]);
+            var placeLat = (request[0].geometry.location.k);
+            var placeLon = (request[0].geometry.location.B);
+            var placeComplete= [placeLat, placeLon];
             // createMarker(place);
-            console.log("PlaceLatLon");
-            console.log(placeLatLon);
-            console.log("PlaceOriginal");
-            console.log(placeOriginal);
-            deferred.resolve(placeOriginal);
+            // console.log("PlaceLat");
+            // console.log(placeLat);
+            console.log("PlaceComplete");
+            console.log(placeComplete);
+            deferred.resolve(placeComplete);
         }
         else {
             console.log(status);
