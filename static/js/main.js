@@ -269,6 +269,13 @@ function calculateDuration(pointOne, pointTwo) {
     return deferred.promise;
 }
 
+// function displayMap(origins, destinations) {
+//     // takes origin and destinations from the search for spot function and subs 
+//     // them into the url for the google maps call for directions
+//     var src = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + origins + "&destination=" + destinations;
+//     $("#map_view").attr("src", src);
+// }
+
 function findBusiness(gatheringPoint) {
     var deferred = Q.defer();
 
