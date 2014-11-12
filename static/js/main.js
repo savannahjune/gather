@@ -56,8 +56,8 @@ $(document).ready(function() {
             return findBusiness(gatheringPoint);
         })
         .then(function(business){
-            console.log("Got to the returned promise of the findBusiness function");
-
+            console.log("In the promises return of findBusiness")
+            // return displayMap(initialPointOne, initialPointTwo, business);
         })
         .catch(function (error) {
         console.log("Main Chain Error: " + error);
@@ -261,6 +261,7 @@ function calculateDuration(pointOne, pointTwo) {
         }, function(response, status) {
             // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
             // value in this case is seconds, duration is in seconds
+            console.log(response);
             var duration = (response.rows[0].elements[0].duration.value);
             console.log("Got google duration " + duration);
             deferred.resolve(duration);
@@ -291,7 +292,7 @@ function findBusiness(gatheringPoint) {
     // console.log("About to find business");
     var request = {
         location: spotToSearch,
-        radius: '250',
+        radius: '400',
         // maybe this should be keyword
         types: ['restaurant'],
         openNow: true,
@@ -302,11 +303,14 @@ function findBusiness(gatheringPoint) {
     function(request, status) {
         console.log("Status: " + status);
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-            var place = request[0];
+            var placeLatLon = (request[0].geometry.location);
+            var placeOriginal = (request[0]);
             // createMarker(place);
-            console.log("Place");
-            console.log(place);
-            deferred.resolve(place);
+            console.log("PlaceLatLon");
+            console.log(placeLatLon);
+            console.log("PlaceOriginal");
+            console.log(placeOriginal);
+            deferred.resolve(placeOriginal);
         }
         else {
             console.log(status);
