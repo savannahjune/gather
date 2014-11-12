@@ -55,7 +55,7 @@ h1 {
 .maps{
 	margin: auto;
 	width: 1200px;
-	display: none;
+	/*display: none;*/
 }
 
 #map_view1 {

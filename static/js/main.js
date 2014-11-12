@@ -278,7 +278,6 @@ function calculateDuration(pointOne, pointTwo) {
   *  @param {gatheringPoint} this is the equal time midpoint from the findGatheringPoint function
   *  
   */
-
 function findBusiness(gatheringPoint) {
     var deferred = Q.defer();
     // var infowindow;
@@ -320,4 +319,13 @@ function findBusiness(gatheringPoint) {
     // console.log("Leaving findBusiness");
     return deferred.promise;
 }
+
+function displayMap(initialPointOne, initialPointTwo, businessLatLon) {
+    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon;
+    $("#map_view1").attr("src", src1);
+    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon;
+    $("#map_view2").attr("src", src2);
+}
+
+
 
