@@ -176,7 +176,6 @@ function findMidPoint(pointOne, pointTwo){
   *  @param {initialMid} this is the initial midpoint, will be redefined in this recursive function
   */
 
-
 function findGatheringPoint(pointOne, pointTwo, initialMid) {
     numAttempts++;
     //debugger;
@@ -184,58 +183,51 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
 
     // console.log("We're in the findGatheringPointFunction");
     console.log("initialPointOne : " + initialPointOne);
-    calculateDuration(initialPointOne, initialMid)
+    return calculateDuration(initialPointOne, initialMid)
     .then(function(durationOne) {
         console.log("Got duration for pointOne " + durationOne);
         console.log("initialPointTwo : " + initialPointTwo);
         return calculateDuration(initialPointTwo, initialMid)
-        .then(function(durationTwo) {
-            return [durationOne, durationTwo];
-        });
+               .then(function(durationTwo) {
+                    return [durationOne, durationTwo];
+               });
     })
-    .then(function(durationOne) {
-        console.log("Joel's duration One function");
-        deferred.resolve(666);
-        return deferred.promise;
+    .spread(function(durationOne, durationTwo) {
+
+        // Now we have valid results for the duration from pointOne to initialMid
+        // and the duration from pointTwo to initialMid
+
+        // console.log("Hello we're in the calc duration callback!");
+        console.log("Duration one: " + durationOne);
+        console.log("Duration two: " + durationTwo);
+        console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
+        var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
+        if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+            if (numAttempts >= maxAttempts) {
+                console.log("Stopped findGatheringPoint after max attempts reached");
+            }
+            deferred.resolve(initialMid);
+            console.log("Found the duration midpoint: " + initialMid);
+            return deferred.promise;
+
+        }
+        else if (durationOne > durationTwo) {
+            console.log("Duration one was greater!");
+            newMidpoint = findMidPoint(pointOne, initialMid);
+            console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
+            return findGatheringPoint(pointOne, initialMid, newMidpoint);
+        }
+        else {
+            console.log("Duration two was greater!");
+            newMidpoint = findMidPoint(pointTwo, initialMid);
+            console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
+            return findGatheringPoint(initialMid, pointTwo, newMidpoint);
+        }
+
+    })
+    .catch(function (error) {
+        console.log("findGatheringPoint Error: " + error);
     });
-
-    /// JOEL: this was thought-to-be-good-code, commented out for simplicity, added then, above
-    // .spread(function(durationOne, durationTwo) {
-
-    //     // Now we have valid results for the duration from pointOne to initialMid
-    //     // and the duration from pointTwo to initialMid
-
-    //     // console.log("Hello we're in the calc duration callback!");
-    //     console.log("Duration one: " + durationOne);
-    //     console.log("Duration two: " + durationTwo);
-    //     console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
-    //     var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
-    //     if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
-    //         if (numAttempts >= maxAttempts) {
-    //             console.log("Stopped findGatheringPoint after max attempts reached");
-    //         }
-    //         deferred.resolve(initialMid);
-    //         console.log("Found the duration midpoint: " + initialMid);
-    //         return deferred.promise;
-
-    //     }
-    //     else if (durationOne > durationTwo) {
-    //         console.log("Duration one was greater!");
-    //         newMidpoint = findMidPoint(pointOne, initialMid);
-    //         console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
-    //         return findGatheringPoint(pointOne, initialMid, newMidpoint);
-    //     }
-    //     else {
-    //         console.log("Duration two was greater!");
-    //         newMidpoint = findMidPoint(pointTwo, initialMid);
-    //         console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
-    //         return findGatheringPoint(initialMid, pointTwo, newMidpoint);
-    //     }
-
-    // })
-    // .catch(function (error) {
-    //     console.log("findGatheringPoint Error: " + error);
-    // });
 
 }
 
@@ -255,24 +247,23 @@ function calculateDuration(pointOne, pointTwo) {
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     var service = new google.maps.DistanceMatrixService();
     console.log("About to get Distance Matrix");
-
-    deferred.resolve(44982);
-    // service.getDistanceMatrix(
-    //     {
-    //         origins: [pointOne],
-    //         destinations: [pointTwo],
-    //         travelMode: google.maps.TravelMode.DRIVING,
-    //         unitSystem: google.maps.UnitSystem.METRIC,
-    //         avoidHighways: false,
-    //         avoidTolls: false,
-    //         durationInTraffic: true,
-    //     }, function(response, status) {
-    //         // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
-    //         // value in this case is seconds, duration is in seconds
-    //         var duration = (response.rows[0].elements[0].duration.value);
-    //         console.log("Got google duration " + duration);
-    //         deferred.resolve(duration);
-    //     });
+    
+    service.getDistanceMatrix(
+        {
+            origins: [pointOne],
+            destinations: [pointTwo],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false,
+            durationInTraffic: true,
+        }, function(response, status) {
+            // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
+            // value in this case is seconds, duration is in seconds
+            var duration = (response.rows[0].elements[0].duration.value);
+            console.log("Got google duration " + duration);
+            deferred.resolve(duration);
+        });
 
     console.log("leaving calculateDuration");
     return deferred.promise;
@@ -283,6 +274,7 @@ function findBusiness(gatheringPoint) {
 
     console.log("findBusiness", gatheringPoint);
     var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
+    console.log("Spot to search: " + spotToSearch);
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch({
         location: spotToSearch,
@@ -292,7 +284,7 @@ function findBusiness(gatheringPoint) {
     function callback(results, status) {
         console.log("Results: ");
         console.log(results);
-        deffered.resolve(results);
+        deferred.resolve(results);
     });
     return deferred.promise;
 }
