@@ -56,6 +56,7 @@ $(document).ready(function() {
             return findBusiness(gatheringPoint);
         })
         .then(function(business){
+            console.log("Got to the returned promise of the findBusiness function");
 
         })
         .catch(function (error) {
@@ -269,30 +270,49 @@ function calculateDuration(pointOne, pointTwo) {
     return deferred.promise;
 }
 
-// function displayMap(origins, destinations) {
-//     // takes origin and destinations from the search for spot function and subs 
-//     // them into the url for the google maps call for directions
-//     var src = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + origins + "&destination=" + destinations;
-//     $("#map_view").attr("src", src);
-// }
+/**
+  *  Finds business for people to meet at within a certain range of their equal time midpoint
+  *  
+  *
+  *  @param {gatheringPoint} this is the equal time midpoint from the findGatheringPoint function
+  *  
+  */
 
 function findBusiness(gatheringPoint) {
     var deferred = Q.defer();
+    // var infowindow;
 
-    console.log("findBusiness", gatheringPoint);
+    // console.log("findBusiness", gatheringPoint);
     var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
-    console.log("Spot to search: " + spotToSearch);
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch({
+    // console.log("Spot to search: " + spotToSearch);
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'));
+
+    // console.log("About to find business");
+    var request = {
         location: spotToSearch,
-        radius: 500,
+        radius: '250',
+        // maybe this should be keyword
         types: ['restaurant'],
-    },
-    function callback(results, status) {
-        console.log("Results: ");
-        console.log(results);
-        deferred.resolve(results);
+        openNow: true,
+    };
+
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request,
+    function(request, status) {
+        console.log("Status: " + status);
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var place = request[0];
+            // createMarker(place);
+            console.log("Place");
+            console.log(place);
+            deferred.resolve(place);
+        }
+        else {
+            console.log(status);
+        }
     });
+    // console.log("Leaving findBusiness");
     return deferred.promise;
 }
 
