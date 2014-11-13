@@ -287,13 +287,14 @@ function findBusiness(gatheringPoint) {
     // console.log("Spot to search: " + spotToSearch);
 
     var map = new google.maps.Map(document.getElementById('map-canvas'));
-
+    var type = $("input:checked").val();
+    console.log("Type: " + type);
     // console.log("About to find business");
     var request = {
         location: spotToSearch,
-        radius: '400',
+        radius: '1000',
         // maybe this should be keyword
-        types: ['restaurant'],
+        types: [type],
         openNow: true,
     };
 
@@ -302,14 +303,23 @@ function findBusiness(gatheringPoint) {
     function(request, status) {
         console.log("Status: " + status);
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var placeObj = (request[0]);
             var placeLat = (request[0].geometry.location.k);
             var placeLon = (request[0].geometry.location.B);
+            var placeName = (request[0].name);
+            var placeAddress = (request[0].vicinity);
+
             var placeComplete= [placeLat, placeLon];
+            console.log("Place object: ");
+            console.log(placeObj);
             // createMarker(place);
             // console.log("PlaceLat");
             // console.log(placeLat);
-            console.log("PlaceComplete");
+            console.log("PlaceComplete: ");
             console.log(placeComplete);
+
+            // little bit of jquery to show name and address of business on page
+            $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress +"</p>");
             deferred.resolve(placeComplete);
         }
         else {

@@ -52,6 +52,10 @@ h1 {
 	font-family: 'Raleway', sans-serif;
 }
 
+#business {
+	display: inline-block;
+	/*margin-left: 40px;*/
+}
 .maps{
 	margin: auto;
 	width: 1200px;

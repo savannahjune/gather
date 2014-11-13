@@ -44,9 +44,23 @@
           <input type="text" class="typeahead form-control" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"><img class="transport" src="static/assets/car.svg"></img><img class="transport" src="static/assets/walk.svg"></img><img class="transport" src="static/assets/bike.svg"></img>
       </div>
     </div>
+    <form role="form" id="business_form">
+      <p>We want to meet at a:</p> 
+        <input type="checkbox" value="bar">  Bar<br>
+        <input type="checkbox" value="restaurant">  Restaurant<br>
+        <input type="checkbox" value="cafe">  Café<br>
+        <input type="checkbox" value="park">  Park<br>
+        <input type="checkbox" value="library">  Library<br>
+    <br>
   <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block">Gather!</button>
 </form>
+<div id= "business">
+    <h2>
+    </h2>
+  </div>
 </div>
+</div>
+
 <div class="maps">
 <iframe id="map_view1"
   width="600"
@@ -67,6 +81,7 @@
 </iframe>
 </div>
 <div id="map-canvas"></div>
+
 </body>
 
 </html>
