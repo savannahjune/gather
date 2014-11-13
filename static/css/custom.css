@@ -31,6 +31,13 @@ h1 {
     /*background-color: blue;*/
 }
 
+.transport:hover {
+    width: 45px;
+    height: 45px;
+    color: blue;
+    background-color: #A6CF4F;
+}
+
 .twitter-typeahead {
 	font-family: 'Raleway Thin', sans-serif;
 	width: 75%;

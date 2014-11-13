@@ -292,7 +292,7 @@ function findBusiness(gatheringPoint) {
     // console.log("About to find business");
     var request = {
         location: spotToSearch,
-        radius: '1000',
+        radius: '500',
         // maybe this should be keyword
         types: [type],
         openNow: true,
