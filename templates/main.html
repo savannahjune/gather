@@ -37,11 +37,17 @@
   <form role="form" id="location_form">
     <div class="row">
        <div class="form-group">
-          <input type="text" data-provide="typeahead" class="typeahead form-control" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One"> <img class="transport" src="static/assets/car.svg"></img><img class="transport" src="static/assets/walk.svg"></img><img class="transport" src="static/assets/bike.svg"></img>
+          <input type="text" data-provide="typeahead" class="typeahead form-control" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One"/>
+          <div id="transportation_buttons">
+            <label>
+              <input type="radio" value="DRIVING" name="car"/>
+              <img class="transport" src="static/assets/car.svg">
+            </label>
+          </div>
           <br>
           </br>
 
-          <input type="text" class="typeahead form-control" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"><img class="transport" src="static/assets/car.svg"></img><img class="transport" src="static/assets/walk.svg"></img><img class="transport" src="static/assets/bike.svg"></img>
+          <input type="text" class="typeahead form-control" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"/><button id="car_button" class="btn btn-lg btn-primary btn-block"><img class="transport" src="static/assets/car.svg"></button><button id="walk_button" class="btn btn-lg btn-primary btn-block"><img class="transport" src="static/assets/walk.svg"></button><button id="bike_button" class="btn btn-lg btn-primary btn-block"><img class="transport" src="static/assets/bike.svg"></button>
       </div>
     </div>
     <form role="form" id="business_form">
@@ -61,24 +67,7 @@
 </div>
 </div>
 
-<div class="maps">
-<iframe id="map_view1"
-  width="600"
-  height="450"
-  frameborder="0" style="border:0"
-  src="https://www.google.com/maps/embed/v1/directions?key={{ key }}
-  &origin=Space+Needle,Seattle+WA
-  &destination=Pike's+Market,Seattle+WA">
-</iframe
-
-><iframe id="map_view2"
-  width="600"
-  height="450"
-  frameborder="0" style="border:0"
-  src="https://www.google.com/maps/embed/v1/directions?key={{ key }}
-  &origin=Space+Needle,Seattle+WA
-  &destination=Pike's+Market,Seattle+WA">
-</iframe>
+<div class="maps" hidden>
 </div>
 <div id="map-canvas"></div>
 

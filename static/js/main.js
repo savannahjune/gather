@@ -202,7 +202,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
         console.log("Duration one: " + durationOne);
         console.log("Duration two: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
-        var tolerance = 0.10 * ((durationOne + durationTwo) / 2);
+        var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
         if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
                 console.log("Stopped findGatheringPoint after max attempts reached");
@@ -248,12 +248,16 @@ function calculateDuration(pointOne, pointTwo) {
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     var service = new google.maps.DistanceMatrixService();
     console.log("About to get Distance Matrix");
+
+    var methodTransport = $("input[type=radio]:checked").val();
+    console.log("Method transport!!!!: ");
+    console.log(methodTransport);
     
     service.getDistanceMatrix(
         {
             origins: [pointOne],
             destinations: [pointTwo],
-            travelMode: google.maps.TravelMode.DRIVING,
+            travelMode: methodTransport,
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false,
             avoidTolls: false,
@@ -287,22 +291,27 @@ function findBusiness(gatheringPoint) {
     // console.log("Spot to search: " + spotToSearch);
 
     var map = new google.maps.Map(document.getElementById('map-canvas'));
-    var type = $("input:checked").val();
+    // so turns out it just uses first selected item, should instead loop through list and then get vals
+    var type = $("input[type=checkbox]:checked").val();
+    var initialRadius = 250;
     console.log("Type: " + type);
     // console.log("About to find business");
     var request = {
         location: spotToSearch,
-        radius: '500',
+        // radius: "'" + initialRadius + "'",
+        //radius: '50000',
         // maybe this should be keyword
         types: [type],
         openNow: true,
+        rankBy: google.maps.places.RankBy.DISTANCE
     };
+
 
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request,
     function(request, status) {
         console.log("Status: " + status);
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
+        if (request[0]){
             var placeObj = (request[0]);
             var placeLat = (request[0].geometry.location.k);
             var placeLon = (request[0].geometry.location.B);
@@ -332,10 +341,11 @@ function findBusiness(gatheringPoint) {
 
 function displayMap(initialPointOne, initialPointTwo, businessLatLon) {
     var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon;
-    $("#map_view1").attr("src", src1);
     var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon;
-    $("#map_view2").attr("src", src2);
+    // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
+    $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
+    $(".maps").show();
 }
 
-
+// https://maps.googleapis.com/maps/api/place/search/json?types=restaurant&rankby=distance&location=37.84122331875001,-122.26308024375001&key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M
 
