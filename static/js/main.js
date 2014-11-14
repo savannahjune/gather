@@ -23,6 +23,10 @@ $(document).ready(function() {
         numAttempts = 0;
         // console.log('submitted form');
         evt.preventDefault();
+        var methodTransportOne = $("input[id=one]:checked").val();
+        console.log("Method transport one: " + methodTransportOne);
+        var methodTransportTwo = $("input[id=two]:checked").val();
+        console.log("Method transport one: " + methodTransportTwo);
         var addresses = getAdressesFromForm();
         // points is an array of values from our from inputs
         // makes coordinates from addresses
@@ -45,7 +49,7 @@ $(document).ready(function() {
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
                 console.log("Started find gathering point", initialMid);
-                return findGatheringPoint(initialPointOne, initialPointTwo, initialMid);
+                return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
             } else {
                 console.log("WTF?");
             }
@@ -177,18 +181,18 @@ function findMidPoint(pointOne, pointTwo){
   *  @param {initialMid} this is the initial midpoint, will be redefined in this recursive function
   */
 
-function findGatheringPoint(pointOne, pointTwo, initialMid) {
+function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, methodTransportTwo) {
     numAttempts++;
     //debugger;
     var deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
     console.log("initialPointOne : " + initialPointOne);
-    return calculateDuration(initialPointOne, initialMid)
+    return calculateDuration(initialPointOne, initialMid, methodTransportOne)
     .then(function(durationOne) {
         console.log("Got duration for pointOne " + durationOne);
         console.log("initialPointTwo : " + initialPointTwo);
-        return calculateDuration(initialPointTwo, initialMid)
+        return calculateDuration(initialPointTwo, initialMid, methodTransportTwo)
                .then(function(durationTwo) {
                     return [durationOne, durationTwo];
                });
@@ -216,13 +220,13 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
             console.log("Duration one was greater!");
             newMidpoint = findMidPoint(pointOne, initialMid);
             console.log("newMidpoint between pointOne and initialMid: " + newMidpoint);
-            return findGatheringPoint(pointOne, initialMid, newMidpoint);
+            return findGatheringPoint(pointOne, initialMid, newMidpoint, methodTransportOne, methodTransportTwo);
         }
         else {
             console.log("Duration two was greater!");
             newMidpoint = findMidPoint(pointTwo, initialMid);
             console.log("newMidpoint between pointTwo and initialMid: " + newMidpoint);
-            return findGatheringPoint(initialMid, pointTwo, newMidpoint);
+            return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
         }
 
     })
@@ -239,7 +243,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid) {
   *  @param {pointOne} this is the first place, must be in coordinate form for math
   *  @param {pointTwo} this is the second place, must be in coordinate form for math
   */
-function calculateDuration(pointOne, pointTwo) {
+function calculateDuration(pointOne, pointTwo, methodTransport) {
     var deferred = Q.defer();
 
     console.log("PointOne: " + pointOne);
@@ -249,7 +253,6 @@ function calculateDuration(pointOne, pointTwo) {
     var service = new google.maps.DistanceMatrixService();
     console.log("About to get Distance Matrix");
 
-    var methodTransport = $("input[type=radio]:checked").val();
     console.log("Method transport!!!!: ");
     console.log(methodTransport);
     
@@ -302,7 +305,7 @@ function findBusiness(gatheringPoint) {
         //radius: '50000',
         // maybe this should be keyword
         types: [type],
-        openNow: true,
+        // openNow: true,
         rankBy: google.maps.places.RankBy.DISTANCE
     };
 
@@ -346,6 +349,4 @@ function displayMap(initialPointOne, initialPointTwo, businessLatLon) {
     $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
     $(".maps").show();
 }
-
-// https://maps.googleapis.com/maps/api/place/search/json?types=restaurant&rankby=distance&location=37.84122331875001,-122.26308024375001&key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M
 

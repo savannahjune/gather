@@ -29,7 +29,7 @@ h1 {
 	border: 1px solid black;
 }
 
-#transportation_buttons {
+#transportation_buttons1, #transportation_buttons2 {
 	display: inline-block;
 }
 
