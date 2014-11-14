@@ -20,10 +20,19 @@ h1 {
 	position: relative;*/
 }
 
+.form-control {
+	display: inline-block;
+}
+
 .tt-dropdown-menu {
 	background-color: #FFF;
 	border: 1px solid black;
 }
+
+#transportation_buttons {
+	display: inline-block;
+}
+
 .transport {
     width: 30px;
     height: 30px;
@@ -40,11 +49,7 @@ label > input + img {
 }
 
 label > input:checked + img {
-	border: 2px solid #f00;
-}
-
-.transport:select{
-	background-color:red;
+	border: 2px solid #A6CF4F;
 }
 
 #car_button, #walk_button, #bike_button {
