@@ -285,7 +285,12 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
   *  @param {gatheringPoint} this is the equal time midpoint from the findGatheringPoint function
   *  
   */
+
 function findBusiness(gatheringPoint) {
+    /* sets up index for business search */
+    var i = 0;
+    var businessRequest = null;
+
     var deferred = Q.defer();
     // var infowindow;
 
@@ -312,17 +317,21 @@ function findBusiness(gatheringPoint) {
 
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request,
-    function(request, status) {
+    function businessOptions(request, status) {
+        businessRequest = request;
+        console.log("i at the top: ");
+        console.log(i);
+        // debugger;
         console.log("Status: " + status);
-        if (request.length > 1){
-            $(".next_spot").show();
-        }
-        if (request[0]){
-            var placeObj = (request[0]);
-            var placeLat = (request[0].geometry.location.k);
-            var placeLon = (request[0].geometry.location.B);
-            var placeName = (request[0].name);
-            var placeAddress = (request[0].vicinity);
+        console.log("Request: ");
+        console.log(request);
+        if (request[i]){
+            console.log("In the request");
+            var placeObj = (request[i]);
+            var placeLat = (request[i].geometry.location.k);
+            var placeLon = (request[i].geometry.location.B);
+            var placeName = (request[i].name);
+            var placeAddress = (request[i].vicinity);
 
             var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
@@ -336,6 +345,18 @@ function findBusiness(gatheringPoint) {
             // little bit of jquery to show name and address of business on page
             $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress +"</p>");
             deferred.resolve(placeComplete);
+
+            if (request.length > 1){
+                $(".next_spot").show();
+                $("#next_business").unbind("click");
+                $("#next_business").click(function(evt) {
+                    evt.preventDefault();
+                    i++;
+                    console.log("i inside submit: ");
+                    console.log(i);
+                    businessOptions(request, status);
+                });
+            }
         }
         else {
             console.log(status);

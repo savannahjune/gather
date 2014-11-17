@@ -72,7 +72,7 @@ label > input:checked + img {
 	background-color: gray;
 	/*position: relative;*/
 	/*width: 95%;*/
-	/*height: 20px;*/
+	height: 35px;
 	font-family: 'Raleway', sans-serif;
 	border: solid green 1px;
 	padding: 1px 6px 1px 6px;;
