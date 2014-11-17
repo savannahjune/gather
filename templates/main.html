@@ -48,7 +48,7 @@
               <img class="transport" src="static/assets/walk.svg">
               </label>
               <label>
-              <input type="radio" value="BIKING" name="bike1" id="one"/>
+              <input type="radio" value="BICYCLING" name="bike1" id="one"/>
               <img class="transport" src="static/assets/bike.svg">
             </label>
           </div>
@@ -66,7 +66,7 @@
               <img class="transport" src="static/assets/walk.svg">
               </label>
               <label>
-              <input type="radio" value="BIKING" name="bike2" id="two"/>
+              <input type="radio" value="BICYCLING" name="bike2" id="two"/>
               <img class="transport" src="static/assets/bike.svg">
             </label>
           </div>
@@ -74,6 +74,7 @@
           </br>
       </div>
     </div>
+
     <form role="form" id="business_form">
       <p>We want to meet at a:</p> 
         <input type="checkbox" value="bar">  Bar<br>
@@ -84,10 +85,15 @@
     <br>
   <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block">Gather!</button>
 </form>
-<div id= "business">
-    <h2>
-    </h2>
-  </div>
+
+      <div id= "business">
+        <h2>
+        </h2>
+      </div>
+      <div class="next_spot" hidden>
+        <button id="next_business" type="submit" class="btn btn-md btm-primary btn-block">No Thanks, Pick Me Another</button>
+      </div>
+
 </div>
 </div>
 

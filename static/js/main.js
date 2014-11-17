@@ -314,6 +314,9 @@ function findBusiness(gatheringPoint) {
     service.nearbySearch(request,
     function(request, status) {
         console.log("Status: " + status);
+        if (request.length > 1){
+            $(".next_spot").show();
+        }
         if (request[0]){
             var placeObj = (request[0]);
             var placeLat = (request[0].geometry.location.k);
