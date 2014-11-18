@@ -61,7 +61,7 @@ $(document).ready(function() {
         })
         .then(function(businessLatLon){
             console.log("In the promises return of findBusiness");
-            return displayMap(initialPointOne, initialPointTwo, businessLatLon);
+            return displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo);
         })
         .catch(function (error) {
         console.log("Main Chain Error: " + error);
@@ -353,23 +353,31 @@ function findBusiness(gatheringPoint) {
                     businessIndex++;
                     console.log("businessIndex inside submit: ");
                     console.log(businessIndex);
-                    businessOptions(request, status);
+                    placeComplete = businessOptions(request, status);
+                    var methodTransportOne = $("input[id=one]:checked").val();
+                    console.log("Method transport one: " + methodTransportOne);
+                    var methodTransportTwo = $("input[id=two]:checked").val();
+                    console.log("Method transport two: " + methodTransportTwo);
+                    displayMap(initialPointOne, initialPointTwo, placeComplete, methodTransportOne, methodTransportTwo);
                 });
             }
+            return placeComplete;
         }
         else {
             $(".next_spot").hide();
             console.log("businessIndex should now be out of range");
             console.log(status);
         }
-    });
+    }); /* end of businessOptions */
     console.log("Leaving findBusiness");
     return deferred.promise;
-}
+} /* end of findBusiness */
 
-function displayMap(initialPointOne, initialPointTwo, businessLatLon) {
-    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon;
-    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon;
+function displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo) {
+    methodTransportOne = methodTransportOne.toLowerCase();
+    methodTransportTwo = methodTransportTwo.toLowerCase();
+    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon + "&mode=" + methodTransportOne;
+    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon + "&mode=" + methodTransportTwo;
     // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
     $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
     $(".maps").show();
