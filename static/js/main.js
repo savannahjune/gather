@@ -286,10 +286,10 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
   *  
   */
 
+
 function findBusiness(gatheringPoint) {
     /* sets up index for business search */
-    var i = 0;
-    var businessRequest = null;
+    var businessIndex = 0;
 
     var deferred = Q.defer();
     // var infowindow;
@@ -310,7 +310,7 @@ function findBusiness(gatheringPoint) {
         //radius: '50000',
         // maybe this should be keyword
         types: [type],
-        // openNow: true,
+        // openNow: true
         rankBy: google.maps.places.RankBy.DISTANCE
     };
 
@@ -318,20 +318,19 @@ function findBusiness(gatheringPoint) {
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request,
     function businessOptions(request, status) {
-        businessRequest = request;
-        console.log("i at the top: ");
-        console.log(i);
+        console.log("businessIndex at the top: ");
+        console.log(businessIndex);
         // debugger;
         console.log("Status: " + status);
         console.log("Request: ");
         console.log(request);
-        if (request[i]){
+        if (request[businessIndex]){
             console.log("In the request");
-            var placeObj = (request[i]);
-            var placeLat = (request[i].geometry.location.k);
-            var placeLon = (request[i].geometry.location.B);
-            var placeName = (request[i].name);
-            var placeAddress = (request[i].vicinity);
+            var placeObj = (request[businessIndex]);
+            var placeLat = (request[businessIndex].geometry.location.k);
+            var placeLon = (request[businessIndex].geometry.location.B);
+            var placeName = (request[businessIndex].name);
+            var placeAddress = (request[businessIndex].vicinity);
 
             var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
@@ -346,23 +345,25 @@ function findBusiness(gatheringPoint) {
             $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress +"</p>");
             deferred.resolve(placeComplete);
 
-            if (request.length > 1){
+            if (request.length > 1 && businessIndex < request.length ){
                 $(".next_spot").show();
                 $("#next_business").unbind("click");
                 $("#next_business").click(function(evt) {
                     evt.preventDefault();
-                    i++;
-                    console.log("i inside submit: ");
-                    console.log(i);
+                    businessIndex++;
+                    console.log("businessIndex inside submit: ");
+                    console.log(businessIndex);
                     businessOptions(request, status);
                 });
             }
         }
         else {
+            $(".next_spot").hide();
+            console.log("businessIndex should now be out of range");
             console.log(status);
         }
     });
-    // console.log("Leaving findBusiness");
+    console.log("Leaving findBusiness");
     return deferred.promise;
 }
 
