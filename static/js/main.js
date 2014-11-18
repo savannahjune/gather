@@ -1,9 +1,10 @@
-/** Global starting points. Accessed throughout recursive calls to findGatheringPoint */
+/** Global starting points. Accessed throughout recursive calls to findGatheringPoint **/
 var initialPointOne;
 var initialPointTwo;
 
-/** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search */
-const maxAttempts = 5;
+/** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
+of allowed attempts makes the gathering point more accurate, but takes more time **/
+const maxAttempts = 7;
 var numAttempts;
 
 $(document).ready(function() {
@@ -26,7 +27,7 @@ $(document).ready(function() {
         var methodTransportOne = $("input[id=one]:checked").val();
         console.log("Method transport one: " + methodTransportOne);
         var methodTransportTwo = $("input[id=two]:checked").val();
-        console.log("Method transport one: " + methodTransportTwo);
+        console.log("Method transport two: " + methodTransportTwo);
         var addresses = getAdressesFromForm();
         // points is an array of values from our from inputs
         // makes coordinates from addresses
@@ -317,20 +318,20 @@ function findBusiness(gatheringPoint) {
 
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request,
-    function businessOptions(request, status) {
+    function businessOptions(response, status) {
         console.log("businessIndex at the top: ");
         console.log(businessIndex);
         // debugger;
         console.log("Status: " + status);
         console.log("Request: ");
-        console.log(request);
-        if (request[businessIndex]){
-            console.log("In the request");
-            var placeObj = (request[businessIndex]);
-            var placeLat = (request[businessIndex].geometry.location.k);
-            var placeLon = (request[businessIndex].geometry.location.B);
-            var placeName = (request[businessIndex].name);
-            var placeAddress = (request[businessIndex].vicinity);
+        console.log(response);
+        if (response[businessIndex]){
+            console.log("In the response");
+            var placeObj = (response[businessIndex]);
+            var placeLat = (response[businessIndex].geometry.location.k);
+            var placeLon = (response[businessIndex].geometry.location.B);
+            var placeName = (response[businessIndex].name);
+            var placeAddress = (response[businessIndex].vicinity);
 
             var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
@@ -345,7 +346,7 @@ function findBusiness(gatheringPoint) {
             $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress +"</p>");
             deferred.resolve(placeComplete);
 
-            if (request.length > 1 && businessIndex < request.length ){
+            if (response.length > 1 && businessIndex < response.length ){
                 $(".next_spot").show();
                 $("#next_business").unbind("click");
                 $("#next_business").click(function(evt) {
@@ -353,7 +354,7 @@ function findBusiness(gatheringPoint) {
                     businessIndex++;
                     console.log("businessIndex inside submit: ");
                     console.log(businessIndex);
-                    placeComplete = businessOptions(request, status);
+                    placeComplete = businessOptions(response, status);
                     var methodTransportOne = $("input[id=one]:checked").val();
                     console.log("Method transport one: " + methodTransportOne);
                     var methodTransportTwo = $("input[id=two]:checked").val();
