@@ -398,23 +398,21 @@ function displayPlaceInfo(placeID) {
         var placeAddress = (response.formatted_address);
         var placePhoneNumber = (response.formatted_phone_number);
         var googlePlusRating = (response.rating);
-        // var hoursMonday = (response.weekday_text[0]);
-        // var hoursTuesday = (response.weekday_text.1);
-        // var hoursWednesday = (response.weekday_text.2);
-        // var hoursThursday = (response.weekday_text.3);
-        // var hoursFriday = (response.weekday_text.4);
-        // var hoursSaturday = (response.weekday_text.5);
-        // var hoursSunday = (response.weekday_text.6);
-        var placeWebsite = (response.website);
-
-
+        var hoursMonday = (response.opening_hours.weekday_text[0]);
+        var hoursTuesday = (response.opening_hours.weekday_text[1]);
+        var hoursWednesday = (response.opening_hours.weekday_text[2]);
+        var hoursThursday = (response.opening_hours.weekday_text[3]);
+        var hoursFriday = (response.opening_hours.weekday_text[4]);
+        var hoursSaturday = (response.opening_hours.weekday_text[5]);
+        var hoursSunday = (response.opening_hours.weekday_text[6]);
+        var placeWebsite = (response.opening_hours.weekday_text[7]);
 
         console.log("Stuff from place info: ");
         console.log(placeInfo);
-        //console.log("Monday opening hours: ");
-        //console.log(hoursMonday);
         // little bit of jquery to show name and address of business on page
-        $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + placePhoneNumber + "<br><a href=\""+ placeWebsite + "\"lat l>website</a></p>");
+        $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
+            placePhoneNumber + "<br>Hours: " + "<br>" + hoursMonday + "<br>" + hoursTuesday + "<br>" + hoursWednesday + "<br>" + hoursThursday + "<br>" + hoursFriday + "<br>" + hoursSaturday +
+            "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\"lat l>website</a></p>");
     });
 }
 
