@@ -330,9 +330,7 @@ function findBusiness(gatheringPoint) {
             var placeObj = (response[businessIndex]);
             var placeLat = (response[businessIndex].geometry.location.k);
             var placeLon = (response[businessIndex].geometry.location.B);
-            var placeName = (response[businessIndex].name);
-            var placeAddress = (response[businessIndex].vicinity);
-            var googlePlusRating = (response[businessIndex].rating);
+            var placeID = (response[businessIndex].place_id);
 
             var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
@@ -343,8 +341,6 @@ function findBusiness(gatheringPoint) {
             console.log("PlaceComplete: ");
             console.log(placeComplete);
 
-            // little bit of jquery to show name and address of business on page
-            $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5</p>");
             deferred.resolve(placeComplete);
 
             if (response.length > 1 && businessIndex < response.length ){
@@ -363,6 +359,7 @@ function findBusiness(gatheringPoint) {
                     displayMap(initialPointOne, initialPointTwo, placeComplete, methodTransportOne, methodTransportTwo);
                 });
             }
+            displayPlaceInfo(placeID);
             return placeComplete;
         }
         else {
@@ -374,6 +371,52 @@ function findBusiness(gatheringPoint) {
     console.log("Leaving findBusiness");
     return deferred.promise;
 } /* end of findBusiness */
+
+/**
+  *  Finds specific info about a business using Google Places Details API
+  *  
+  *
+  *  @param {placeID} placeID from the current business found in the findBusiness function
+  *  
+  */
+
+function displayPlaceInfo(placeID) {
+    console.log("Place ID in dipslayPlaceInfo: ");
+    console.log(placeID);
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'));
+
+    var request = {
+        placeId: placeID,
+    };
+
+    var service = new google.maps.places.PlacesService(map);
+    service.getDetails(request,
+    function(response, status) {
+        var placeInfo = response;
+        var placeName = (response.name);
+        var placeAddress = (response.formatted_address);
+        var placePhoneNumber = (response.formatted_phone_number);
+        var googlePlusRating = (response.rating);
+        // var hoursMonday = (response.weekday_text[0]);
+        // var hoursTuesday = (response.weekday_text.1);
+        // var hoursWednesday = (response.weekday_text.2);
+        // var hoursThursday = (response.weekday_text.3);
+        // var hoursFriday = (response.weekday_text.4);
+        // var hoursSaturday = (response.weekday_text.5);
+        // var hoursSunday = (response.weekday_text.6);
+        var placeWebsite = (response.website);
+
+
+
+        console.log("Stuff from place info: ");
+        console.log(placeInfo);
+        //console.log("Monday opening hours: ");
+        //console.log(hoursMonday);
+        // little bit of jquery to show name and address of business on page
+        $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + placePhoneNumber + "<br><a href=\""+ placeWebsite + "\"lat l>website</a></p>");
+    });
+}
 
 function displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo) {
     methodTransportOne = methodTransportOne.toLowerCase();
