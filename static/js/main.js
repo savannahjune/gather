@@ -60,6 +60,9 @@ $(document).ready(function() {
             console.log("Gathering Point: " + gatheringPoint);
             return findBusiness(gatheringPoint);
         })
+        .then(function(businessPlaceID){
+            return displayPlaceInfo(businessPlaceID);
+        })
         .then(function(businessLatLon){
             console.log("In the promises return of findBusiness");
             return displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo);
@@ -328,20 +331,11 @@ function findBusiness(gatheringPoint) {
         if (response[businessIndex]){
             console.log("In the response");
             var placeObj = (response[businessIndex]);
-            var placeLat = (response[businessIndex].geometry.location.k);
-            var placeLon = (response[businessIndex].geometry.location.B);
             var placeID = (response[businessIndex].place_id);
-
-            var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
             console.log(placeObj);
-            // createMarker(place);
-            // console.log("PlaceLat");
-            // console.log(placeLat);
-            console.log("PlaceComplete: ");
-            console.log(placeComplete);
 
-            deferred.resolve(placeComplete);
+            deferred.resolve(placeID);
 
             if (response.length > 1 && businessIndex < response.length ){
                 $(".next_spot").show();
@@ -359,8 +353,8 @@ function findBusiness(gatheringPoint) {
                     displayMap(initialPointOne, initialPointTwo, placeComplete, methodTransportOne, methodTransportTwo);
                 });
             }
-            displayPlaceInfo(placeID);
-            return placeComplete;
+            //displayPlaceInfo(placeID);
+            return placeID;
         }
         else {
             $(".next_spot").hide();
@@ -383,6 +377,7 @@ function findBusiness(gatheringPoint) {
 function displayPlaceInfo(placeID) {
     console.log("Place ID in dipslayPlaceInfo: ");
     console.log(placeID);
+    var deferred = Q.defer();
 
     var map = new google.maps.Map(document.getElementById('map-canvas'));
 
@@ -397,20 +392,23 @@ function displayPlaceInfo(placeID) {
         var placeName = (response.name);
         var placeAddress = (response.formatted_address);
         var placeGoogleURL = (response.url);
+        var placeLat = (response.geometry.location.k);
+        var placeLon = (response.geometry.location.B);
+        var placeLatLon = [placeLat, placeLon];
 
         // all info after here is optional in google places, so may not exist for the location
-        var placePhoneNumber = (response.formatted_phone_number);
-        var googlePlusRating = (response.rating);
-        var hoursMonday = (response.opening_hours.weekday_text[0]);
-        var hoursTuesday = (response.opening_hours.weekday_text[1]);
-        var hoursWednesday = (response.opening_hours.weekday_text[2]);
-        var hoursThursday = (response.opening_hours.weekday_text[3]);
-        var hoursFriday = (response.opening_hours.weekday_text[4]);
-        var hoursSaturday = (response.opening_hours.weekday_text[5]);
-        var hoursSunday = (response.opening_hours.weekday_text[6]);
-        var placeWebsite = (response.website);
+        // var placePhoneNumber = (response.formatted_phone_number);
+        // var googlePlusRating = (response.rating);
+        // var hoursMonday = (response.opening_hours.weekday_text[0]);
+        // var hoursTuesday = (response.opening_hours.weekday_text[1]);
+        // var hoursWednesday = (response.opening_hours.weekday_text[2]);
+        // var hoursThursday = (response.opening_hours.weekday_text[3]);
+        // var hoursFriday = (response.opening_hours.weekday_text[4]);
+        // var hoursSaturday = (response.opening_hours.weekday_text[5]);
+        // var hoursSunday = (response.opening_hours.weekday_text[6]);
+        // var placeWebsite = (response.website);
 
-        var placePriceLevel = (response.price_level);
+        // var placePriceLevel = (response.price_level);
 
         // other info from places that I have not yet used, but exists
         // var placeIcon = (response.icon);
@@ -423,15 +421,20 @@ function displayPlaceInfo(placeID) {
             // reviews also have text/content, reviews[].text & time of review, reviews[].time
         // var placeTypes = response.types[], tells you what establishment types google attributes to that location
 
-
+        console.log("Lat lon of chosen business in display place info: ");
+        console.log(placeLatLon);
 
         console.log("Stuff from place info: ");
         console.log(placeInfo);
         // little bit of jquery to show name and address of business on page
-        $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
-            placePhoneNumber + "<br>Hours: " + "<br>" + hoursMonday + "<br>" + hoursTuesday + "<br>" + hoursWednesday + "<br>" + hoursThursday + "<br>" + hoursFriday + "<br>" + hoursSaturday +
-            "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\">website</a></p>");
+        $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>");
+        // $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
+        //     placePhoneNumber + "<br>Hours: " + "<br>" + hoursMonday + "<br>" + hoursTuesday + "<br>" + hoursWednesday + "<br>" + hoursThursday + "<br>" + hoursFriday + "<br>" + hoursSaturday +
+        //     "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\">website</a></p>");
+        deferred.resolve(placeLatLon);
     });
+    
+    return deferred.promise;
 }
 
 function displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo) {
