@@ -396,6 +396,9 @@ function displayPlaceInfo(placeID) {
         var placeInfo = response;
         var placeName = (response.name);
         var placeAddress = (response.formatted_address);
+        var placeGoogleURL = (response.url);
+
+        // all info after here is optional in google places, so may not exist for the location
         var placePhoneNumber = (response.formatted_phone_number);
         var googlePlusRating = (response.rating);
         var hoursMonday = (response.opening_hours.weekday_text[0]);
@@ -405,14 +408,29 @@ function displayPlaceInfo(placeID) {
         var hoursFriday = (response.opening_hours.weekday_text[4]);
         var hoursSaturday = (response.opening_hours.weekday_text[5]);
         var hoursSunday = (response.opening_hours.weekday_text[6]);
-        var placeWebsite = (response.opening_hours.weekday_text[7]);
+        var placeWebsite = (response.website);
+
+        var placePriceLevel = (response.price_level);
+
+        // other info from places that I have not yet used, but exists
+        // var placeIcon = (response.icon);
+        // var placePhotos = (response.photos);
+            // photos have photo_reference, height, width
+        // var placeReviews = response.views 
+            // this is an array of up to five reviews
+            // reviews have a type which indicates what aspect of the place is being reviewed response.reviews[index].aspects.type
+            // reviews also have reviews[].author_name , author url which links to googleplus profile if available
+            // reviews also have text/content, reviews[].text & time of review, reviews[].time
+        // var placeTypes = response.types[], tells you what establishment types google attributes to that location
+
+
 
         console.log("Stuff from place info: ");
         console.log(placeInfo);
         // little bit of jquery to show name and address of business on page
-        $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
+        $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
             placePhoneNumber + "<br>Hours: " + "<br>" + hoursMonday + "<br>" + hoursTuesday + "<br>" + hoursWednesday + "<br>" + hoursThursday + "<br>" + hoursFriday + "<br>" + hoursSaturday +
-            "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\"lat l>website</a></p>");
+            "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\">website</a></p>");
     });
 }
 
