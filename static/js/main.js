@@ -332,6 +332,7 @@ function findBusiness(gatheringPoint) {
             var placeLon = (response[businessIndex].geometry.location.B);
             var placeName = (response[businessIndex].name);
             var placeAddress = (response[businessIndex].vicinity);
+            var googlePlusRating = (response[businessIndex].rating);
 
             var placeComplete= [placeLat, placeLon];
             console.log("Place object: ");
@@ -343,7 +344,7 @@ function findBusiness(gatheringPoint) {
             console.log(placeComplete);
 
             // little bit of jquery to show name and address of business on page
-            $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress +"</p>");
+            $("#business").html("<h2>" + placeName + "</h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5</p>");
             deferred.resolve(placeComplete);
 
             if (response.length > 1 && businessIndex < response.length ){
