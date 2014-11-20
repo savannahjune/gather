@@ -42,10 +42,9 @@ $(document).ready(function() {
                 return [latLonPointOne, latLonPointTwo];
             });
         })
-        // .spread(function(latLonPointOne, latLonPointTwo) {
-        .then(function(x) {
-            latLonPointOne = x[0];
-            latLonPointTwo = x[1];
+        .then(function(latlons) {
+            latLonPointOne = latlons[0];
+            latLonPointTwo = latlons[1];
             console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
@@ -99,7 +98,7 @@ function getAdressesFromForm() {
   *  @param {query} the input to suggest autocomplete matches against. e.g: "123 Main St"
   *  @param {cb} a callback to deliver the potential matches. Takes a single array argument of matches
   */
-function getAutocompleteSuggestions(query, cb) {
+function getAutocompleteSuggestions(query, callback) {
     var service = new google.maps.places.AutocompleteService();
     service.getQueryPredictions({ input: query }, function(predictions, status) {
         if (status != google.maps.places.PlacesServiceStatus.OK) {
@@ -108,7 +107,7 @@ function getAutocompleteSuggestions(query, cb) {
         }
         // console logs each prediction as you type
         // console.log("Prediction: " + predictions);
-        return cb(predictions);
+        return callback(predictions);
 
     });
 }
@@ -278,7 +277,7 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
             deferred.resolve(duration);
         });
 
-    console.log("leaving calculateDuration");
+    // console.log("leaving calculateDuration");
     return deferred.promise;
 }
 
@@ -294,9 +293,7 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 function findBusiness(gatheringPoint) {
     /* sets up index for business search */
     var businessIndex = 0;
-
     var deferred = Q.defer();
-    // var infowindow;
 
     // console.log("findBusiness", gatheringPoint);
     var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
@@ -311,7 +308,7 @@ function findBusiness(gatheringPoint) {
     var request = {
         location: spotToSearch,
         // radius: "'" + initialRadius + "'",
-        //radius: '50000',
+        // radius: '50000',
         // maybe this should be keyword
         types: [type],
         // openNow: true
@@ -334,6 +331,9 @@ function findBusiness(gatheringPoint) {
             var placeID = (response[businessIndex].place_id);
             console.log("Place object: ");
             console.log(placeObj);
+            var placeLat = (response[businessIndex].geometry.location.k);
+            var placeLon = (response[businessIndex].geometry.location.B);
+            var placeComplete= [placeLat, placeLon];
 
             deferred.resolve(placeID);
 
@@ -346,14 +346,10 @@ function findBusiness(gatheringPoint) {
                     console.log("businessIndex inside submit: ");
                     console.log(businessIndex);
                     placeComplete = businessOptions(response, status);
-                    var methodTransportOne = $("input[id=one]:checked").val();
-                    console.log("Method transport one: " + methodTransportOne);
-                    var methodTransportTwo = $("input[id=two]:checked").val();
-                    console.log("Method transport two: " + methodTransportTwo);
-                    displayMap(initialPointOne, initialPointTwo, placeComplete, methodTransportOne, methodTransportTwo);
+                    displayPlaceInfo(placeID);
                 });
             }
-            //displayPlaceInfo(placeID);
+            console.log(placeID);
             return placeID;
         }
         else {
@@ -377,6 +373,9 @@ function findBusiness(gatheringPoint) {
 function displayPlaceInfo(placeID) {
     console.log("Place ID in dipslayPlaceInfo: ");
     console.log(placeID);
+
+    var placeDetailsArray = [];
+
     var deferred = Q.defer();
 
     var map = new google.maps.Map(document.getElementById('map-canvas'));
@@ -385,29 +384,40 @@ function displayPlaceInfo(placeID) {
         placeId: placeID,
     };
 
+    var businessDetailsHTML = "";
     var service = new google.maps.places.PlacesService(map);
     service.getDetails(request,
     function(response, status) {
         var placeInfo = response;
-        var placeName = (response.name);
-        var placeAddress = (response.formatted_address);
+        // $("#placeName").html(placeName);
         var placeGoogleURL = (response.url);
+        $("#placeName").html(response.name + "<a href=\"" + placeGoogleURL + "\"></a>");
+        var placeAddress = (response.formatted_address);
+        $("#placeAddress").html(placeAddress);
         var placeLat = (response.geometry.location.k);
         var placeLon = (response.geometry.location.B);
         var placeLatLon = [placeLat, placeLon];
-
-        // all info after here is optional in google places, so may not exist for the location
+        if (response.rating) {
+            $("#googlePlusRating").html("Google+ Rating: " + response.rating + "/ 5 ");
+        }
         // var placePhoneNumber = (response.formatted_phone_number);
-        // var googlePlusRating = (response.rating);
-        // var hoursMonday = (response.opening_hours.weekday_text[0]);
-        // var hoursTuesday = (response.opening_hours.weekday_text[1]);
-        // var hoursWednesday = (response.opening_hours.weekday_text[2]);
-        // var hoursThursday = (response.opening_hours.weekday_text[3]);
-        // var hoursFriday = (response.opening_hours.weekday_text[4]);
-        // var hoursSaturday = (response.opening_hours.weekday_text[5]);
-        // var hoursSunday = (response.opening_hours.weekday_text[6]);
+        // $("#placePhoneNumber").html(placePhoneNumber);
+        if (response.opening_hours){
+            $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
+            $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
+            $("#hoursTuesday").html(response.opening_hours.weekday_text[1]);
+            $("#hoursWednesday").html(response.opening_hours.weekday_text[2]);
+            $("#hoursThursday").html(response.opening_hours.weekday_text[3]);
+            $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
+            $("#hoursSaturday").html(response.opening_hours.weekday_text[5]);
+        }
+        
+        
+    
+     
+        
         // var placeWebsite = (response.website);
-
+        // $("#placeWebsite").html("<a href\"=" + placeWebsite + "\"website</a>");
         // var placePriceLevel = (response.price_level);
 
         // other info from places that I have not yet used, but exists
@@ -426,12 +436,13 @@ function displayPlaceInfo(placeID) {
 
         console.log("Stuff from place info: ");
         console.log(placeInfo);
-        // little bit of jquery to show name and address of business on page
-        $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>");
-        // $("#business").html("<h2><a href=\"" + placeGoogleURL + "\">" + placeName + "</a></h2><p>" + placeAddress + "<br>Google+ Rating: " + googlePlusRating + "/5<br>" + "<abbr title='Phone'>P: </abbr>" +
-        //     placePhoneNumber + "<br>Hours: " + "<br>" + hoursMonday + "<br>" + hoursTuesday + "<br>" + hoursWednesday + "<br>" + hoursThursday + "<br>" + hoursFriday + "<br>" + hoursSaturday +
-        //     "<br>" + hoursSunday + "<br><a href=\""+ placeWebsite + "\">website</a></p>");
+
         deferred.resolve(placeLatLon);
+        var methodTransportOne = $("input[id=one]:checked").val();
+        console.log("Method transport one: " + methodTransportOne);
+        var methodTransportTwo = $("input[id=two]:checked").val();
+        console.log("Method transport two: " + methodTransportTwo);
+        displayMap(initialPointOne, initialPointTwo, placeLatLon, methodTransportOne, methodTransportTwo);
     });
     
     return deferred.promise;
