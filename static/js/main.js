@@ -333,11 +333,11 @@ function findBusiness(gatheringPoint) {
             console.log(placeObj);
             var placeLat = (response[businessIndex].geometry.location.k);
             var placeLon = (response[businessIndex].geometry.location.B);
-            var placeComplete= [placeLat, placeLon];
+            var placeComplete = [placeLat, placeLon];
 
             deferred.resolve(placeID);
 
-            if (response.length > 1 && businessIndex < response.length ){
+            if (response.length > 1 && businessIndex < response.length){
                 $(".next_spot").show();
                 $("#next_business").unbind("click");
                 $("#next_business").click(function(evt) {
@@ -345,7 +345,7 @@ function findBusiness(gatheringPoint) {
                     businessIndex++;
                     console.log("businessIndex inside submit: ");
                     console.log(businessIndex);
-                    placeComplete = businessOptions(response, status);
+                    placeID = businessOptions(response, status);
                     displayPlaceInfo(placeID);
                 });
             }
@@ -389,19 +389,19 @@ function displayPlaceInfo(placeID) {
     service.getDetails(request,
     function(response, status) {
         var placeInfo = response;
-        // $("#placeName").html(placeName);
-        var placeGoogleURL = (response.url);
-        $("#placeName").html(response.name + "<a href=\"" + placeGoogleURL + "\"></a>");
+        // this displays the name and makes it a link to the required Google website for the place
+        $("#placeName").html("<a href=\"" + response.url + "\">" + response.name + "</a>");
         var placeAddress = (response.formatted_address);
         $("#placeAddress").html(placeAddress);
         var placeLat = (response.geometry.location.k);
         var placeLon = (response.geometry.location.B);
         var placeLatLon = [placeLat, placeLon];
-        if (response.rating) {
+        if (response.rating){
             $("#googlePlusRating").html("Google+ Rating: " + response.rating + "/ 5 ");
         }
-        // var placePhoneNumber = (response.formatted_phone_number);
-        // $("#placePhoneNumber").html(placePhoneNumber);
+        if (response.formatted_phone_number){
+            $("#placePhoneNumber").html(response.formatted_phone_number);
+        }
         if (response.opening_hours){
             $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
             $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
@@ -412,13 +412,23 @@ function displayPlaceInfo(placeID) {
             $("#hoursSaturday").html(response.opening_hours.weekday_text[5]);
         }
         
-        
-    
-     
-        
-        // var placeWebsite = (response.website);
-        // $("#placeWebsite").html("<a href\"=" + placeWebsite + "\"website</a>");
-        // var placePriceLevel = (response.price_level);
+        if (response.website) {
+            $("#placeWebsite").html("<a href\"=" + response.website + "\">website</a>");
+        }
+        if (response.price_level){
+            if (response.price_level === 1) {
+                $("#placePriceLevel").html("$ / $$$$");
+            }
+            if (response.price_level === 2) {
+                $("#placePriceLevel").html("$$ / $$$$");
+            }
+            if (response.price_level === 3) {
+                $("#placePriceLevel").html("$$$ / $$$$");
+            }
+            if (response.price_level === 4) {
+                $("#placePriceLevel").html("$$$$ / $$$$");
+            }
+        }
 
         // other info from places that I have not yet used, but exists
         // var placeIcon = (response.icon);
@@ -454,6 +464,10 @@ function displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTran
     var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon + "&mode=" + methodTransportOne;
     var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon + "&mode=" + methodTransportTwo;
     // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
+    
+    //shareLink1 = "comgooglemaps://?saddr=" +  + "&daddr=" + + "&directionsmode=" + methodTransportOne
+
+    // console.log(shareLink1);
     $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
     $(".maps").show();
 }
