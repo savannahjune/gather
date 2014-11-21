@@ -88,7 +88,7 @@ function getAddressesFromForm() {
     var locationTwo = $("#location_two").val();
     // console.log("searchForSpot: ", locationOne, locationTwo);
     points.push(locationOne, locationTwo);
-    console.log(points);
+    // console.log(points);
     return points;
 }
 
@@ -467,14 +467,16 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(src1);
     // console.log(src2);
 
-    shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
-    shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
-
-    console.log(shareLink1);
-    console.log(shareLink2);
-
     // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
     $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
     $(".maps").show();
+
+    shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+    shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+
+    $("#share_links").html('<a href='+ shareLink1 +">Open this map in Google Maps</a>");
+    $("#share_links").html('<a href='+ shareLink2 +">Open this map in Google Maps</a>");
+    console.log(shareLink1);
+    console.log(shareLink2);
 }
 
