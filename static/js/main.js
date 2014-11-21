@@ -4,7 +4,7 @@ var initialPointTwo;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
-const maxAttempts = 7;
+const maxAttempts = 6;
 var numAttempts;
 
 $(document).ready(function() {
@@ -25,19 +25,19 @@ $(document).ready(function() {
         // console.log('submitted form');
         evt.preventDefault();
         var methodTransportOne = $("input[id=one]:checked").val();
-        console.log("Method transport one: " + methodTransportOne);
+        // console.log("Method transport one: " + methodTransportOne);
         var methodTransportTwo = $("input[id=two]:checked").val();
-        console.log("Method transport two: " + methodTransportTwo);
-        var addresses = getAdressesFromForm();
+        // console.log("Method transport two: " + methodTransportTwo);
+        var addresses = getAddressesFromForm();
         // points is an array of values from our from inputs
         // makes coordinates from addresses
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
-            console.log("Got first promise result");
+            // console.log("Got first promise result");
             initialPointOne = latLonPointOne;
             return makeCoordinates(addresses[1])
             .then(function(latLonPointTwo) {
-                console.log("Got second promise result");
+                // console.log("Got second promise result");
                 initialPointTwo = latLonPointTwo;
                 return [latLonPointOne, latLonPointTwo];
             });
@@ -45,13 +45,13 @@ $(document).ready(function() {
         .then(function(latlons) {
             latLonPointOne = latlons[0];
             latLonPointTwo = latlons[1];
-            console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
+            // console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
-                console.log("Started find gathering point", initialMid);
+                // console.log("Started find gathering point", initialMid);
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
             } else {
-                console.log("WTF?");
+                // console.log("Error with latlons");
             }
 
         })
@@ -62,9 +62,10 @@ $(document).ready(function() {
         .then(function(businessPlaceID){
             return displayPlaceInfo(businessPlaceID);
         })
-        .then(function(businessLatLon){
-            console.log("In the promises return of findBusiness");
-            return displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo);
+        .then(function(placeAddress){
+            // console.log("In the promises return of findBusiness");
+            // console.log("Place address in promises chain: " + placeAddress);
+            return displayMap(placeAddress, methodTransportOne, methodTransportTwo);
         })
         .catch(function (error) {
         console.log("Main Chain Error: " + error);
@@ -79,7 +80,7 @@ $(document).ready(function() {
  * are added.
  *
  */
-function getAdressesFromForm() {
+function getAddressesFromForm() {
     var points = [];
     // console.log("Got here");
     var locationOne = $("#location_one").val();
@@ -102,7 +103,7 @@ function getAutocompleteSuggestions(query, callback) {
     var service = new google.maps.places.AutocompleteService();
     service.getQueryPredictions({ input: query }, function(predictions, status) {
         if (status != google.maps.places.PlacesServiceStatus.OK) {
-            console.log("Autocomplete status: " + status);
+            // console.log("Autocomplete status: " + status);
             return;
         }
         // console logs each prediction as you type
@@ -130,9 +131,8 @@ function makeCoordinates(target) {
             latlon[0]=results[0].geometry.location.lat();
             latlon[1]=results[0].geometry.location.lng();
 
-            // console.log("Is makeCoordinates happening?");
-            console.log("Lat:" + latlon[0]);
-            console.log("Lon:" + latlon[1]);
+            // console.log("Lat:" + latlon[0]);
+            // console.log("Lon:" + latlon[1]);
 
             deferred.resolve(latlon);
 
@@ -186,11 +186,10 @@ function findMidPoint(pointOne, pointTwo){
 
 function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, methodTransportTwo) {
     numAttempts++;
-    //debugger;
     var deferred = Q.defer();
 
     // console.log("We're in the findGatheringPointFunction");
-    console.log("initialPointOne : " + initialPointOne);
+    // console.log("initialPointOne : " + initialPointOne);
     return calculateDuration(initialPointOne, initialMid, methodTransportOne)
     .then(function(durationOne) {
         console.log("Got duration for pointOne " + durationOne);
@@ -249,15 +248,15 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
 function calculateDuration(pointOne, pointTwo, methodTransport) {
     var deferred = Q.defer();
 
-    console.log("PointOne: " + pointOne);
-    console.log("PointTwo: " + pointTwo);
+    // console.log("PointOne: " + pointOne);
+    // console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     var service = new google.maps.DistanceMatrixService();
-    console.log("About to get Distance Matrix");
+    // console.log("About to get Distance Matrix");
 
-    console.log("Method transport!!!!: ");
-    console.log(methodTransport);
+    // console.log("Method transport in distance matrix calculation: ");
+    // console.log(methodTransport);
     
     service.getDistanceMatrix(
         {
@@ -271,9 +270,9 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
         }, function(response, status) {
             // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
             // value in this case is seconds, duration is in seconds
-            console.log(response);
+            // console.log(response);
             var duration = (response.rows[0].elements[0].duration.value);
-            console.log("Got google duration " + duration);
+            // console.log("Got google duration " + duration);
             deferred.resolve(duration);
         });
 
@@ -303,7 +302,7 @@ function findBusiness(gatheringPoint) {
     // so turns out it just uses first selected item, should instead loop through list and then get vals
     var type = $("input[type=checkbox]:checked").val();
     var initialRadius = 250;
-    console.log("Type: " + type);
+    // console.log("Type: " + type);
     // console.log("About to find business");
     var request = {
         location: spotToSearch,
@@ -319,18 +318,18 @@ function findBusiness(gatheringPoint) {
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request,
     function businessOptions(response, status) {
-        console.log("businessIndex at the top: ");
-        console.log(businessIndex);
+        // console.log("businessIndex at the top: ");
+        // console.log(businessIndex);
         // debugger;
-        console.log("Status: " + status);
-        console.log("Request: ");
-        console.log(response);
+        // console.log("Status: " + status);
+        // console.log("Business options response: ");
+        // console.log(response);
         if (response[businessIndex]){
-            console.log("In the response");
+            // console.log("In the response");
             var placeObj = (response[businessIndex]);
             var placeID = (response[businessIndex].place_id);
-            console.log("Place object: ");
-            console.log(placeObj);
+            // console.log("Place object: ");
+            // console.log(placeObj);
             var placeLat = (response[businessIndex].geometry.location.k);
             var placeLon = (response[businessIndex].geometry.location.B);
             var placeComplete = [placeLat, placeLon];
@@ -343,8 +342,8 @@ function findBusiness(gatheringPoint) {
                 $("#next_business").click(function(evt) {
                     evt.preventDefault();
                     businessIndex++;
-                    console.log("businessIndex inside submit: ");
-                    console.log(businessIndex);
+                    // console.log("businessIndex inside submit: ");
+                    // console.log(businessIndex);
                     placeID = businessOptions(response, status);
                     displayPlaceInfo(placeID);
                 });
@@ -354,11 +353,11 @@ function findBusiness(gatheringPoint) {
         }
         else {
             $(".next_spot").hide();
-            console.log("businessIndex should now be out of range");
-            console.log(status);
+            // console.log("businessIndex should now be out of range");
+            // console.log(status);
         }
     }); /* end of businessOptions */
-    console.log("Leaving findBusiness");
+    // console.log("Leaving findBusiness");
     return deferred.promise;
 } /* end of findBusiness */
 
@@ -371,20 +370,16 @@ function findBusiness(gatheringPoint) {
   */
 
 function displayPlaceInfo(placeID) {
-    console.log("Place ID in dipslayPlaceInfo: ");
-    console.log(placeID);
-
+    // console.log("Place ID in dipslayPlaceInfo: ");
+    // console.log(placeID);
     var placeDetailsArray = [];
-
     var deferred = Q.defer();
-
     var map = new google.maps.Map(document.getElementById('map-canvas'));
 
     var request = {
         placeId: placeID,
     };
 
-    var businessDetailsHTML = "";
     var service = new google.maps.places.PlacesService(map);
     service.getDetails(request,
     function(response, status) {
@@ -441,33 +436,44 @@ function displayPlaceInfo(placeID) {
             // reviews also have text/content, reviews[].text & time of review, reviews[].time
         // var placeTypes = response.types[], tells you what establishment types google attributes to that location
 
-        console.log("Lat lon of chosen business in display place info: ");
-        console.log(placeLatLon);
-
-        console.log("Stuff from place info: ");
-        console.log(placeInfo);
-
-        deferred.resolve(placeLatLon);
+        deferred.resolve(placeAddress);
         var methodTransportOne = $("input[id=one]:checked").val();
-        console.log("Method transport one: " + methodTransportOne);
+        // console.log("Method transport one: " + methodTransportOne);
         var methodTransportTwo = $("input[id=two]:checked").val();
-        console.log("Method transport two: " + methodTransportTwo);
-        displayMap(initialPointOne, initialPointTwo, placeLatLon, methodTransportOne, methodTransportTwo);
+        // console.log("Method transport two: " + methodTransportTwo);
+        // console.log("Place address" + placeAddress);
+        displayMap(placeAddress, methodTransportOne, methodTransportTwo);
     });
     
     return deferred.promise;
 }
 
-function displayMap(initialPointOne, initialPointTwo, businessLatLon, methodTransportOne, methodTransportTwo) {
+function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
+    // console.log("Place address:");
+    // console.log(placeAddress);
     methodTransportOne = methodTransportOne.toLowerCase();
     methodTransportTwo = methodTransportTwo.toLowerCase();
-    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointOne + "&destination=" + businessLatLon + "&mode=" + methodTransportOne;
-    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + initialPointTwo + "&destination=" + businessLatLon + "&mode=" + methodTransportTwo;
-    // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
+    var addresses = getAddressesFromForm();
+    // console.log("addresses in display map: ");
+    // console.log(addresses[0]);
+    // console.log(addresses[1]);
+    var addressOne = addresses[0].split(' ').join('+');
+    var addressTwo = addresses[1].split(' ').join('+');
+    placeAddress = placeAddress.split(' ').join('+');
+    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
+    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
     
-    //shareLink1 = "comgooglemaps://?saddr=" +  + "&daddr=" + + "&directionsmode=" + methodTransportOne
+    // console.log("Links for Google: ");
+    // console.log(src1);
+    // console.log(src2);
 
-    // console.log(shareLink1);
+    shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+    shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+
+    console.log(shareLink1);
+    console.log(shareLink2);
+
+    // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
     $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
     $(".maps").show();
 }
