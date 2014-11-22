@@ -33,16 +33,27 @@
   <body>
 
 <div class="container">
+
+  <div id="main_wrapper">
+    <div id="left_wrapper">
+
   <h1>Gather Map</h1>
+      <div id="user_input_wrapper">
+
   <form role="form" id="location_form">
-    <div class="row">
-       <div class="form-group">
-          <input type="text" data-provide="typeahead" class="typeahead form-control" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One"/>
-          <div id="transportation_buttons1">
+
+      
+       <div class="form-group address_wrapper">
+
+          <input type="text" class="typeahead form-control input_boxes" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One"/>
+          
+          <div id="transportation_buttons1" class='transport_icons_container'>
+
             <label>
               <input type="radio" value="DRIVING" name="transport_radio1" id="one"/>
               <img class="transport" src="static/assets/car.svg">
               </label>
+
               <label>
               <input type="radio" value="WALKING" name="transport_radio1" id="one"/>
               <img class="transport" src="static/assets/walk.svg">
@@ -55,9 +66,10 @@
           <br>
           </br>
 
-          <input type="text" class="typeahead form-control" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"/>
-          <div id="transportation_buttons2">
-            <label>
+          <input type="text" class="typeahead form-control input_boxes" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"/>
+          <div id="transportation_buttons2" class='transport_icons_container'>
+
+            <label class="transport_icons">
               <input type="radio" value="DRIVING" name="transport_radio2" id="two"/>
               <img class="transport" src="static/assets/car.svg">
               </label>
@@ -73,18 +85,24 @@
           <br>
           </br>
       </div>
-    </div>
 
+    <div id="dest_form">
     <form role="form" id="business_form">
       <p>We want to meet at a:</p> 
         <input type="checkbox" value="bar">  Bar<br>
         <input type="checkbox" value="restaurant">  Restaurant<br>
         <input type="checkbox" value="cafe">  Café<br>
         <input type="checkbox" value="park">  Park<br>
-        <input type="checkbox" value="library">  Library<br>
+        <input type="checkbox" value="library">  Library<br> 
     <br>
   <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block">Gather!</button>
+  </div> <!-- dest_form -->
+
 </form>
+</div> <!--user input wrapper -->
+
+
+  <div id="business_wrapper">
       <div id= "business">
        <h2 id="placeName"></h2>
         <div id="placeAddress"></div>
@@ -100,20 +118,31 @@
         <div id="placeWebsite"></div>
         <div id="placePriceLevel"></div>
         <br>
-      </div>
+      </div> <!-- this ends the business div -->
+
+
       <div class="next_spot" hidden>
         <button id="next_business" type="button" class="btn btn-md btm-primary btn-block">No Thanks, Pick Me Another</button>
       </div>
 
-</div>
-</div>
+</div> <!-- bussiness wrapper -->
+</div>  <!-- left wrapper end -->
 
+
+<div id="right_wrapper">
 <div class="maps" hidden>
 </div>
+
+</div>
+
 <div id="map-canvas"></div>
 <br>
-<div id="share_links">
-</div>
+
+<!-- <div id="share_links">
+</div> -->
+</div>  
+</div> <!-- main wrapper end -->
+
 </body>
 
 </html>

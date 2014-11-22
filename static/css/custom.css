@@ -3,12 +3,40 @@ body {
 	letter-spacing: 0.05em;
 }
 
+#main_wrapper{
+/*background: orange;*/
+width: 100%;
+
+}
+
+#left_wrapper {
+float: left;
+/*background: white;*/
+width: 50%;
+}
+
+#user_input_wrapper {
+	/*background: gray;*/
+	width: 100%;
+
+}
+
+.address_wrapper {
+	/*background: blue;*/
+	width: 65%;
+	/*float: left;
+	*/
+	display:inline-block;
+}
+
 h1 {
 	font-family: 'Raleway', sans-serif;
 	font-size: 40pt;
 	margin-left: 10px;
 	display: inline-block;
 }
+
+
 
 #location_one, #location_two {
 	font-family: 'Raleway Thin', sans-serif;
@@ -20,6 +48,21 @@ h1 {
 	position: relative;*/
 }
 
+
+.input_boxes {
+/*background: red;*/
+width: 100%;
+float: left;
+
+}
+
+
+.transport_icons_container {
+/*background:green;*/
+width: 100%;
+margin-left: 10px;
+
+}
 .form-control {
 	display: inline-block;
 }
@@ -30,8 +73,8 @@ h1 {
 }
 
 #transportation_buttons1, #transportation_buttons2 {
-	display: inline-block;
-}
+/*	display: inline-block;
+*/}
 
 .transport {
     width: 30px;
@@ -84,13 +127,34 @@ label > input:checked + img {
 	font-family: 'Raleway', sans-serif;
 }
 
+#dest_form {
+	/*background: yellow;*/
+	width: 30%;
+	float: right;
+	display: inline-block;
+	padding-top: 30px;
+}
+
+#business_wrapper {
+	/*background: purple;*/
+	width: 100%;
+
+}
+
 #business {
 	display: inline-block;
-	/*margin-left: 40px;*/
+	margin-left: 40px;
+}
+
+#right_wrapper{
+/*background: blue;*/
+width: 40%;
+float: right;
+
 }
 .maps{
-	margin: auto;
-	width: 1200px;
+	/*margin: auto;*/
+	width: 50%;
 	/*display: none;*/
 }
 

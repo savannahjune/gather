@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gather</title>
+    <link rel="shortcut icon" href="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQwn1Xkfh7k7t189Ewa4tqF1Z8B_idGQgqZyif-T1ppcHX6BlOkCmuIt5yHzQ"/>
+    <!-- Bootstrap -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="static/css/custom.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:100,400' rel='stylesheet' type='text/css'>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/q.js/1.0.1/q.min.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+  <script src="static/js/main.js"></script>
+  <script type="text/javascript" src="static/js/jquery.autocomplete.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+  <script src="static/js/typeahead.bundle.js"></script>
+  </head>
+
+<body>
+
+<!-- <div class="row"> -->
+<div class="span12" id="whole_page">
+	<h1>Gather Map</h1>
+	<div class="row">
+	<div class="span6" id="left_side">
+		<!-- this div is for the two address forms -->
+		<div class="row">
+		<div class="span4" id="address_forms">
+			<!-- this is the div for form group? -->
+			<div class="form-group">
+            	<input type="text" class="typeahead form-control" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One"/><br><br>
+            	<input type="text" class="typeahead form-control" id="location_two" value="225 Montecito St, Oakland, CA, United States" placeholder="Location Two"/>
+        	<!-- this ends the div for the form group -->
+        	</div>
+		<!-- this ends the div for the two address forms -->
+		</div>
+
+
+		<!-- this the divs for the business choice -->
+		<div class="span2" id="business_choice">
+			<!-- <form role="form" id="business_form"> -->
+      			<p>We want to meet at a:</p> 
+        			<input type="checkbox" value="bar">  Bar<br>
+        			<input type="checkbox" value="restaurant">  Restaurant<br>
+        			<input type="checkbox" value="cafe">  Café<br>
+        			<input type="checkbox" value="park">  Park<br>
+        			<input type="checkbox" value="library">  Library<br>
+        	<!-- </form> -->
+        <!-- this ends the div for business choices -->
+		</div>
+		<!-- ends the div class row -->
+		</div>
+
+		<div class="span4" id="gather_button">
+		</div>
+
+		<div class="span6" id="business_details">
+		</div>
+
+		<div class="span4" id="get_another"
+		</div>
+	<!-- ends div for left side -->
+	</div>
+	
+	<div class="span6" id="right_side">
+	</div>
+
+	<div class="span6" id="map_one">
+	</div>
+	<!-- ending div class row for two six divs -->
+	</div>
+
+	<div class="span6" id="map_two">
+	</div>
+
+</div>
+<!-- ends div class row for overall 12 span -->
+<!-- </div> -->
+
+</body>
