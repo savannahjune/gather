@@ -3,32 +3,6 @@ body {
 	letter-spacing: 0.05em;
 }
 
-#main_wrapper{
-/*background: orange;*/
-width: 100%;
-
-}
-
-#left_wrapper {
-float: left;
-/*background: white;*/
-width: 50%;
-}
-
-#user_input_wrapper {
-	/*background: gray;*/
-	width: 100%;
-
-}
-
-.address_wrapper {
-	/*background: blue;*/
-	width: 65%;
-	/*float: left;
-	*/
-	display:inline-block;
-}
-
 h1 {
 	font-family: 'Raleway', sans-serif;
 	font-size: 40pt;
@@ -36,33 +10,51 @@ h1 {
 	display: inline-block;
 }
 
+#main_wrapper{
+	background: #00B3E9;
+	width: 100%;
+	height: 800px;
+	padding: 40px;
+}
 
+#left_wrapper {
+	float: left;
+	background: purple;
+	width: 50%;
+}
+
+#user_input_wrapper {
+	background: violet;
+	width: 100%;
+
+}
+
+.address_wrapper {
+	background: pink;
+	width: 65%;
+	display:inline-block;
+}
 
 #location_one, #location_two {
 	font-family: 'Raleway Thin', sans-serif;
 	font-size: 14px;
 	color: black;
-	/*width: 95%;
-	height: 20px;
-	background-color: #FFF;
-	position: relative;*/
 }
 
 
 .input_boxes {
-/*background: red;*/
-width: 100%;
-float: left;
-
+	background: brown;
+	width: 100%;
+	float: left;
 }
 
 
 .transport_icons_container {
-/*background:green;*/
-width: 100%;
-margin-left: 10px;
-
+	background: #EAC9BA;
+	width: 100%;
+	margin-left: 10px;
 }
+
 .form-control {
 	display: inline-block;
 }
@@ -128,7 +120,7 @@ label > input:checked + img {
 }
 
 #dest_form {
-	/*background: yellow;*/
+	background: yellow;
 	width: 30%;
 	float: right;
 	display: inline-block;
@@ -136,7 +128,7 @@ label > input:checked + img {
 }
 
 #business_wrapper {
-	/*background: purple;*/
+	background: red;
 	width: 100%;
 
 }
@@ -147,9 +139,9 @@ label > input:checked + img {
 }
 
 #right_wrapper{
-/*background: blue;*/
-width: 40%;
-float: right;
+	background: green;
+	width: 40%;
+	float: right;
 
 }
 .maps{

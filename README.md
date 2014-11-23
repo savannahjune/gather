@@ -5,7 +5,7 @@ Web app that chooses a spot between two locations that is equi-time between them
 
 Users can specify two locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
-Gather then returns the best spot, and displays it with directions on a map.
+Gather then returns the best spot, and displays it with directions on a map from each origin point.
 
 Technologies used:
 
@@ -13,9 +13,9 @@ Technologies used:
 -Flask
 -Javascript
 -HTML/CSS
--Boostrap
+-Bootstrap
 -JQuery
--Promises - Q library
+-Promises (Q library)
 -Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby
 
 

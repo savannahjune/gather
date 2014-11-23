@@ -32,15 +32,15 @@
   </head>
   <body>
 
-<div class="container">
+  <!-- <div class="container"> -->
 
   <div id="main_wrapper">
     <div id="left_wrapper">
 
-  <h1>Gather Map</h1>
-      <div id="user_input_wrapper">
+    <h1>Gather Map</h1>
+    <div id="user_input_wrapper">
 
-  <form role="form" id="location_form">
+      <form role="form" id="location_form">
 
       
        <div class="form-group address_wrapper">
@@ -62,7 +62,7 @@
               <input type="radio" value="BICYCLING" name="transport_radio1" id="one"/>
               <img class="transport" src="static/assets/bike.svg">
             </label>
-          </div>
+          </div> <!-- end of transportation buttons 1 div -->
           <br>
           </br>
 
@@ -81,10 +81,10 @@
               <input type="radio" value="BICYCLING" name="transport_radio2" id="two"/>
               <img class="transport" src="static/assets/bike.svg">
             </label>
-          </div>
+          </div> <!-- end of transportation buttons 2 div -->
           <br>
           </br>
-      </div>
+      </div> <!-- end of address wrapper div -->
 
     <div id="dest_form">
     <form role="form" id="business_form">
@@ -96,12 +96,14 @@
         <input type="checkbox" value="library">  Library<br> 
     <br>
   <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block">Gather!</button>
-  </div> <!-- dest_form -->
+  </div> <!-- dest_form end -->
 
 </form>
-</div> <!--user input wrapper -->
+</div>  <!--user input wrapper end -->
+</div>  <!-- left wrapper end -->
 
 
+<div id="right_wrapper">
   <div id="business_wrapper">
       <div id= "business">
        <h2 id="placeName"></h2>
@@ -125,23 +127,21 @@
         <button id="next_business" type="button" class="btn btn-md btm-primary btn-block">No Thanks, Pick Me Another</button>
       </div>
 
-</div> <!-- bussiness wrapper -->
-</div>  <!-- left wrapper end -->
+  </div> <!-- bussiness wrapper -->
 
+</div> <!-- end of right wrapper -->
 
-<div id="right_wrapper">
-<div class="maps" hidden>
-</div>
-
-</div>
+<div class="maps" hidden></div>
 
 <div id="map-canvas"></div>
-<br>
+<!-- <br> -->
 
 <!-- <div id="share_links">
 </div> -->
-</div>  
+
 </div> <!-- main wrapper end -->
+
+<!-- </div> ends container div -->
 
 </body>
 
