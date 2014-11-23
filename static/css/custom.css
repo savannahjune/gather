@@ -11,26 +11,26 @@ h1 {
 }
 
 #main_wrapper{
-	background: #00B3E9;
+	/*background: #00B3E9;*/
 	width: 100%;
-	height: 800px;
+	height: 900px;
 	padding: 40px;
 }
 
 #left_wrapper {
 	float: left;
-	background: purple;
+	/*background: purple;*/
 	width: 50%;
 }
 
 #user_input_wrapper {
-	background: violet;
+	/*background: violet;*/
 	width: 100%;
 
 }
 
 .address_wrapper {
-	background: pink;
+	/*background: pink;*/
 	width: 65%;
 	display:inline-block;
 }
@@ -43,14 +43,14 @@ h1 {
 
 
 .input_boxes {
-	background: brown;
+	/*background: brown;*/
 	width: 100%;
 	float: left;
 }
 
 
 .transport_icons_container {
-	background: #EAC9BA;
+	/*background: #EAC9BA;*/
 	width: 100%;
 	margin-left: 10px;
 }
@@ -120,7 +120,7 @@ label > input:checked + img {
 }
 
 #dest_form {
-	background: yellow;
+	/*background: yellow;*/
 	width: 30%;
 	float: right;
 	display: inline-block;
@@ -128,7 +128,7 @@ label > input:checked + img {
 }
 
 #business_wrapper {
-	background: red;
+	/*background: red;*/
 	width: 100%;
 
 }
@@ -139,28 +139,32 @@ label > input:checked + img {
 }
 
 #right_wrapper{
-	background: green;
+	/*background: green;*/
 	width: 40%;
 	float: right;
 
 }
 .maps{
-	/*margin: auto;*/
-	width: 50%;
+	margin: 10px;
+	width: 100%;
 	/*display: none;*/
 }
 
 #map_view1 {
 	margin:0 auto;
 	display: inline-block;	
-	/*margin-left: 50px;*/
-	margin-top: 20px;
+	width: 49%;
+	float:left;
+	/*margin-left: 50px;
+	margin-top: 20px;*/
 }
 
 #map_view2 {
 	margin:0 auto;
-	display: inline-block;	
-	/*margin-left: 50px;*/
-	margin-top: 20px;
+	display: inline-block;
+	width: 49%;	
+	float:right;
+	/*margin-left: 50px;
+	margin-top: 20px;*/
 }
 

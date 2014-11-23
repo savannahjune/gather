@@ -468,7 +468,7 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(src2);
 
     // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
-    $(".maps").html('<iframe id="map_view1" width="600" height="450" frameborder="0" style="border:0" src=' + src1 + '></iframe><iframe id="map_view2" width="600" height="450" frameborder="0" style="border:0" src=' + src2 + '></iframe>');
+    $(".maps").html('<div id="map_view1"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div><div id="map_view2"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".maps").show();
 
     shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
