@@ -208,7 +208,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         console.log("Duration one: " + durationOne);
         console.log("Duration two: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
-        var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
+        var tolerance = 0.07 * ((durationOne + durationTwo) / 2);
         if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
                 console.log("Stopped findGatheringPoint after max attempts reached");
@@ -349,7 +349,7 @@ function findBusiness(gatheringPoint) {
                     displayPlaceInfo(placeID);
                 });
             }
-            console.log(placeID);
+            // console.log(placeID);
             return placeID;
         }
         else {
@@ -464,6 +464,7 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     var addressOne = addresses[0].split(' ').join('+');
     var addressTwo = addresses[1].split(' ').join('+');
     placeAddress = placeAddress.split(' ').join('+');
+
     var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
     var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
     
@@ -475,12 +476,54 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     $(".maps").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div><div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".maps").show();
 
-    shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
-    shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+    // shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+    // shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
 
-    $("#share_links").html('<a href='+ shareLink1 +">Open this map in Google Maps</a>");
-    $("#share_links").html('<a href='+ shareLink2 +">Open this map in Google Maps</a>");
-    console.log(shareLink1);
-    console.log(shareLink2);
+    // $("#share_links").html('<a href='+ shareLink1 +">Open this map in Google Maps</a>");
+    // $("#share_links").html('<a href='+ shareLink2 +">Open this map in Google Maps</a>");
+    // console.log(shareLink1);
+    // console.log(shareLink2);
+
+    // var distanceRequest = "https://maps.googleapis.com/maps/api/directions/json?origin=" + addressOne + "&destination=" + placeAddress+ "&key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M";
+
+    // console.log("Making request to " + distanceRequest);
+    // $.ajax({
+    //     url: proxyUrlJsonp(distanceRequest),
+    //     dataType: 'jsonp',
+    //     cache: false,
+    //     success: function (data) {
+    //             alert(showPolyLines(data));
+    //     }
+    // });
+
+    // function proxyUrlJsonp(url) {
+    //     var encodedUrl = encodeURIComponent(url);
+    //     var proxyUrl = 'http://jsonp.guffa.com/Proxy.ashx?url=' + encodedUrl;
+    //     return proxyUrl;
+    // }
+
+    // function showPolyLines( data ){
+    //     console.log("Polyline stuff:");
+    //     console.log(data);
+    //     var polyline = data.routes[0].overview_polyline;
+    //     var polylinePoints = data.routes[0].overview_polyline.points;
+    //     console.log(polyline);
+    //     console.log(polylinePoints);
+
+    // }
+
+    // mike courier attempt
+    // $.ajax({
+    //     url: distanceRequest,
+    //     dataType: 'JSONP',
+    //     jsonpCallback: 'callback',
+    //     type: 'GET',
+    //     // cache: false,
+    //     success: function (data) {
+    //             // alert('Status code: ' + data.Status.code);
+    //             console.log(data);
+    //     }
+    // });
+
 }
 

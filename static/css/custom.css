@@ -1,7 +1,7 @@
 body {
 	background-image: url('/static/assets/struckaxiom.png');
-	/*background-color: #ABC4BB;*/
-	letter-spacing: 0.05em;
+	/*background-color: #2ECC71;*/
+	letter-spacing: 0.07em;
 }
 
 h1 {
@@ -9,6 +9,11 @@ h1 {
 	font-size: 40pt;
 	margin-left: 10px;
 	display: inline-block;
+	color: #2ECC71;
+}
+
+h2 {
+	margin-top:0px;
 }
 
 #location_one, #location_two {
@@ -46,8 +51,8 @@ h1 {
 
 .chrome {
 	padding: 16px;
-	background-color: #eee;
-	border: 2px solid #eee;
+	background-color: #D4D4D5;
+	border: 2px solid #D4D4D5;
     border-radius: 25px;
 }
 
@@ -87,7 +92,8 @@ label > input + img {
 }
 
 label > input:checked + img {
-	border: 2px solid #A6CF4F;
+	/*border: 2px solid #A6CF4F;*/
+	border: 2px solid #2ECC71;
 }
 
 #car_button, #walk_button, #bike_button {
@@ -107,19 +113,28 @@ label > input:checked + img {
 }
 
 .btn {
-	background-color: gray;
-	color: white;
-	/*position: relative;*/
-	/*width: 95%;*/
+	background-color: #90FFB9;
+	color: black;
 	height: 35px;
 	font-family: 'Raleway', sans-serif;
-	border: solid green 1px;
+	border: #2ECC71 solid 3px;
 	padding: 1px 6px 1px 6px;;
 }
 
-.btn:hover {
-	background-color: #A6CF4F;
+.btn:focus {
+    background-color: #90FFB9;
+	color: black;
+	height: 35px;
 	font-family: 'Raleway', sans-serif;
+    outline: none;
+    border: #2ECC71 solid 3px;
+}
+
+.btn:hover {
+	background-color: #2ECC71;
+	color: white;
+	font-family: 'Raleway', sans-serif;
+	border: #2ECC71 solid 3px;
 }
 
 #dest_form {
