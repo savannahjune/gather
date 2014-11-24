@@ -20,13 +20,13 @@ $(document).ready(function() {
     });
 
     // this creates event listener for location form
-    $("#location_form").submit(function(evt) {
+    $("#location_input").on('click', function(evt) {
         numAttempts = 0;
         // console.log('submitted form');
         evt.preventDefault();
-        var methodTransportOne = $("input[id=one]:checked").val();
+        var methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
         // console.log("Method transport one: " + methodTransportOne);
-        var methodTransportTwo = $("input[id=two]:checked").val();
+        var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
         // console.log("Method transport two: " + methodTransportTwo);
         var addresses = getAddressesFromForm();
         // points is an array of values from our from inputs
@@ -300,7 +300,8 @@ function findBusiness(gatheringPoint) {
 
     var map = new google.maps.Map(document.getElementById('map-canvas'));
     // so turns out it just uses first selected item, should instead loop through list and then get vals
-    var type = $("input[type=checkbox]:checked").val();
+    var type = $("input:radio[name=business_option]:checked").val();
+
     var initialRadius = 250;
     // console.log("Type: " + type);
     // console.log("About to find business");
@@ -437,9 +438,10 @@ function displayPlaceInfo(placeID) {
         // var placeTypes = response.types[], tells you what establishment types google attributes to that location
 
         deferred.resolve(placeAddress);
-        var methodTransportOne = $("input[id=one]:checked").val();
+        var methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
+
         // console.log("Method transport one: " + methodTransportOne);
-        var methodTransportTwo = $("input[id=two]:checked").val();
+        var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
         // console.log("Method transport two: " + methodTransportTwo);
         // console.log("Place address" + placeAddress);
         displayMap(placeAddress, methodTransportOne, methodTransportTwo);
@@ -468,7 +470,7 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(src2);
 
     // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
-    $(".maps").html('<div id="map_view1"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div><div id="map_view2"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
+    $(".maps").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div><div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".maps").show();
 
     shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;

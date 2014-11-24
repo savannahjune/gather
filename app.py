@@ -7,7 +7,7 @@ app.secret_key= 'alsjksdbzuhbozsdi'
 @app.route("/")
 def run_app():   
 	key = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
-	return render_template("main.html", key=key)
+	return render_template("newhtml.html", key=key)
 
 # @app.route("/map")
 # def search():

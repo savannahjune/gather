@@ -1,5 +1,6 @@
 body {
-	background-image: url('/static/assets/struckaxiom.png');
+	/*background-image: url('/static/assets/struckaxiom.png');*/
+	background-color: #ABC4BB;
 	letter-spacing: 0.05em;
 }
 
@@ -8,31 +9,6 @@ h1 {
 	font-size: 40pt;
 	margin-left: 10px;
 	display: inline-block;
-}
-
-#main_wrapper{
-	/*background: #00B3E9;*/
-	width: 100%;
-	height: 900px;
-	padding: 40px;
-}
-
-#left_wrapper {
-	float: left;
-	/*background: purple;*/
-	width: 50%;
-}
-
-#user_input_wrapper {
-	/*background: violet;*/
-	width: 100%;
-
-}
-
-.address_wrapper {
-	/*background: pink;*/
-	width: 65%;
-	display:inline-block;
 }
 
 #location_one, #location_two {
@@ -44,10 +20,13 @@ h1 {
 
 .input_boxes {
 	/*background: brown;*/
-	width: 100%;
-	float: left;
+	/*width: 100%;*/
+	/*float: left;*/
 }
 
+.radio-inline {
+	margin-right:20px;
+}
 
 .transport_icons_container {
 	/*background: #EAC9BA;*/
@@ -56,12 +35,21 @@ h1 {
 }
 
 .form-control {
-	display: inline-block;
+	/*display: inline-block;*/
 }
 
 .tt-dropdown-menu {
 	background-color: #FFF;
 	border: 1px solid black;
+	text-align: left;
+}
+
+.single-address-group {
+	background-color: #FFF;
+	padding: 8px;
+	text-align: center;
+	border: 2px solid #FFF;
+    border-radius: 25px;
 }
 
 #transportation_buttons1, #transportation_buttons2 {
@@ -69,8 +57,13 @@ h1 {
 */}
 
 .transport {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
+}
+
+.business_icon {
+	width: 35px;
+	height: 35px;
 }
 
 label > input {
@@ -138,12 +131,13 @@ label > input:checked + img {
 	margin-left: 40px;
 }
 
-#right_wrapper{
-	/*background: green;*/
+/*#right_wrapper{
+	background: green;
 	width: 40%;
 	float: right;
 
-}
+}*/
+
 .maps{
 	margin: 10px;
 	width: 100%;
