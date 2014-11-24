@@ -39,43 +39,18 @@
           <h1>Gather Map</h1>
         </div> <!-- ends div for col-12 logo -->
       </div> <!-- ends div for row with logo -->
-      
-      <div class="maps row" hidden></div>
-
-      <!-- Map canvas is always hidden, just needed for google maps api -->
-      <div id="map-canvas"></div>
-
-      <div id="business" class="row">
-        <div id="business-details" class="col-md-8">
-          <h2 id="placeName"></h2>
-          <div id="placeAddress"></div>
-          <div id="googlePlusRating"></div>
-          <abbr id="placePhoneNumber" title='Phone'></abbr><br>
-          <div id="hoursSunday"></div>
-          <div id="hoursMonday"></div>
-          <div id="hoursTuesday"></div>
-          <div id="hoursWednesday"></div>
-          <div id="hoursThursday"></div>
-          <div id="hoursFriday"></div>
-          <div id="hoursSaturday"></div>
-          <div id="placeWebsite"></div>
-          <div id="placePriceLevel"></div>
-        </div> <!-- ends div for business-details col-8 -->
-
-        <div class="next_spot col-md-4" hidden>
-          <button id="next_business" type="button" class="btn btn-md btm-primary btn-block">Find Me Another Spot</button>
-        </div> <!-- ends the div for next_spot button col-4 -->
-      </div> <!-- this ends the business div row that has all business stuff -->
-
+    
       <div class="row">
 
-        <div class="col-md-6"> <!-- address-form -->
+        <div class="col-md-6 chrome"> <!-- address-form -->
 
           <div class="row"> <!-- this row is for location_one -->
              <div class="col-md-12 single-address-group">
+
+              <!-- this is the icon for location one marker red -->
               <img class="pull-left" style="margin-left:30px; margin-top:30px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+ff8888.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">
 
-              <form role="form">
+              <form role="form"> <!-- location one form -->
 
                 <div class="form-group address_wrapper">
                   <input type="text" class="typeahead form-control input_boxes" id="location_one" value="1626 Shattuck Ave, Berkeley, CA, United States" placeholder="Location One">
@@ -96,14 +71,9 @@
                   <img class="transport" src="static/assets/bike.svg">
                 </label>
 
-                <!--</div>   ends div for form-group address_wrapper -->
-              </form> <!-- ends form location form -->
-            </div>
+              </form> <!-- ends form locatio one form -->
+            </div> <!-- ends col mid 2 for location one -->
           </div> <!-- ends row for location_one -->
-
-          <div class="row">
-            <br>
-          </div>
 
           <div class="row"> <!-- this row is for location_two -->
              <div class="col-md-12 single-address-group">
@@ -130,47 +100,84 @@
                     <img class="transport" src="static/assets/bike.svg">
                   </label>
 
-                <!--</div>   ends div for form-group address_wrapper -->
+                <!-- </div>   ends div for form-group address_wrapper commented out to keep all options in one left side widget  -->
               </form> <!-- ends form location form -->
-            </div> <!-- this div ends the single address group which is the background -->
+            </div> <!-- this div ends col 12 for location two -->
           </div> <!-- ends row for location_two -->
-        </div> <!-- ends address for div col-8 --> 
+          
+          <div class="row"> <!-- row for business options and gather button -->
+
+            <div class="col-md-12"> <!-- gather_button -->
+
+              <form role="form" style="text-align:center">
+                <h3>Let's meet at a:</h3> 
+                <label class="radio-inline" style="margin-right:5px; margin-left:5px">
+                  <input type="radio" value="bar" name="business_option">
+                  <img class="business_icon" src="static/assets/bar.svg">
+                </label>
+                <label class="radio-inline" style="margin-right:5px; margin-left:5px">
+                  <input type="radio" value="restaurant" name="business_option">
+                  <img class="business_icon" src="static/assets/restaurant-50.png">
+                </label>
+                <label class="radio-inline" style="margin-right:5px; margin-left:5px">
+                  <input type="radio" value="cafe" name="business_option">
+                  <img class="business_icon" src="static/assets/cafe-50.png">
+                </label>
+                <label class="radio-inline" style="margin-right:5px; margin-left:5px">
+                  <input type="radio" value="park" name="business_option">
+                  <img class="business_icon" src="static/assets/park.svg">
+                </label>
+                <label class="radio-inline" style="margin-right:5px; margin-left:5px">
+                  <input type="radio" value="library" name="business_option">
+                  <img class="business_icon" src="static/assets/library.svg">
+                </label>
+                <br>
+
+              <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block" style="width:50%; margin:auto; margin-top:20px;">Gather!</button>
+              </form> <!-- ends business gather button form -->
+            
+            </div> <!-- ends col div for business options and gather button col-md-12 -->
+          
+          </div> <!-- ends div row for business options and gather button -->
         
-        <div class="col-md-1"> <!-- this is empty space between buttons -->
-        </div>
+        </div> <!-- ends left widget col div col-6 --> 
         
-        <div class="col-md-4"> <!-- gather_button -->
+      </div>  <!-- ends row div for business details which keeps whole left widget together as a row--> 
 
-          <form role="form">
-            <p>We want to meet at a:</p> 
-            <label class="radio-inline" style="margin-right:5px; margin-left:5px">
-              <input type="radio" value="bar" name="business_option">
-              <img class="business_icon" src="static/assets/bar.svg">
-            </label>
-            <label class="radio-inline" style="margin-right:5px; margin-left:5px">
-              <input type="radio" value="restaurant" name="business_option">
-              <img class="business_icon" src="static/assets/restaurant-50.png">
-            </label>
-            <label class="radio-inline" style="margin-right:5px; margin-left:5px">
-              <input type="radio" value="cafe" name="business_option">
-              <img class="business_icon" src="static/assets/cafe-50.png">
-            </label>
-            <label class="radio-inline" style="margin-right:5px; margin-left:5px">
-              <input type="radio" value="park" name="business_option">
-              <img class="business_icon" src="static/assets/park.svg">
-            </label>
-            <label class="radio-inline" style="margin-right:5px; margin-left:5px">
-              <input type="radio" value="library" name="business_option">
-              <img class="business_icon" src="static/assets/library.svg">
-            </label>
-            <br>
+      <br> <!-- space between two left widgets -->
+      <br>
 
-          <button id="location_input" type="submit" class="btn btn-lg btn-primary btn-block">Gather!</button>
-          </form> <!-- ends business gather button form -->
-        </div> <!-- ends div for gather button col-md-4 -->
-      </div> <!-- ends row div for location search -->
-      
+      <div class="row business" hidden> <!-- this is the row for business details --> 
+        <div class="col-md-6 chrome"> <!-- this is the col md 6 for business details keeps in line with above widget --> 
 
+             <h2 id="placeName"></h2>
+              <div id="placeAddress"></div>
+              <div id="googlePlusRating"></div>
+              <abbr id="placePhoneNumber" title='Phone'></abbr>
+              <div id="hoursSunday"></div>
+              <div id="hoursMonday"></div>
+              <div id="hoursTuesday"></div>
+              <div id="hoursWednesday"></div>
+              <div id="hoursThursday"></div>
+              <div id="hoursFriday"></div>
+              <div id="hoursSaturday"></div>
+              <div id="placeWebsite"></div>
+              <div id="placePriceLevel"></div>
+              <br>
+
+            <div class="next_spot" hidden>
+              <button id="next_business" type="button" class="btn btn-md btm-primary btn-block" style="width:50%; margin:auto; margin-top:20px;">No Thanks, Pick Me Another</button>
+            </div> <!-- ends div for next_spot button -->
+
+        </div> <!-- ends the col md 6 for business details keeps in line with above widget -->
+      </div> <!-- ends row div for business details--> 
+
+      <div class="maps row" hidden></div>
+
+      <!-- Map canvas is always hidden, just needed for google maps api -->
+      <div id="map-canvas"></div>
+
+    
     </div> <!-- ends container div -->
 
   </body>

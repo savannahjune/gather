@@ -385,6 +385,8 @@ function displayPlaceInfo(placeID) {
     service.getDetails(request,
     function(response, status) {
         var placeInfo = response;
+
+        $(".business").show();
         // this displays the name and makes it a link to the required Google website for the place
         $("#placeName").html("<a href=\"" + response.url + "\">" + response.name + "</a>");
         var placeAddress = (response.formatted_address);

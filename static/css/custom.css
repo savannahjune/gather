@@ -1,6 +1,6 @@
 body {
-	/*background-image: url('/static/assets/struckaxiom.png');*/
-	background-color: #ABC4BB;
+	background-image: url('/static/assets/struckaxiom.png');
+	/*background-color: #ABC4BB;*/
 	letter-spacing: 0.05em;
 }
 
@@ -44,12 +44,22 @@ h1 {
 	text-align: left;
 }
 
-.single-address-group {
-	background-color: #FFF;
-	padding: 8px;
-	text-align: center;
-	border: 2px solid #FFF;
+.chrome {
+	padding: 16px;
+	background-color: #eee;
+	border: 2px solid #eee;
     border-radius: 25px;
+}
+
+.chrome-subdued {
+	padding: 16px;
+	background-color: #D4D4D5;
+	border: 2px solid #D4D4D5;
+    border-radius: 25px;
+}
+
+.single-address-group {
+	text-align: center;
 }
 
 #transportation_buttons1, #transportation_buttons2 {
