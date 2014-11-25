@@ -472,9 +472,10 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(src1);
     // console.log(src2);
 
-    // if you change this jquery selector to $(".maps").append, you can keep a list of all the queries the user has made
-    $(".maps").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div><div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
-    $(".maps").show();
+    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:600px; height:400px" src=' + src1 + '></iframe></div>');
+    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:600px; height:400px" src=' + src2 + '></iframe></div>');
+    $(".map_one").show();
+    $(".map_two").show();
 
     // shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
     // shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
@@ -483,10 +484,6 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // $("#share_links").html('<a href='+ shareLink2 +">Open this map in Google Maps</a>");
     // console.log(shareLink1);
     // console.log(shareLink2);
-
-    // var distanceRequest = "https://maps.googleapis.com/maps/api/directions/json?origin=" + addressOne + "&destination=" + placeAddress+ "&key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M";
-
-    // console.log(distanceRequest);
 
     var directionsService = new google.maps.DirectionsService();
 

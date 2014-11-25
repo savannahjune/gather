@@ -22,13 +22,6 @@ h2 {
 	color: black;
 }
 
-
-.input_boxes {
-	/*background: brown;*/
-	/*width: 100%;*/
-	/*float: left;*/
-}
-
 .radio-inline {
 	margin-right:20px;
 }
@@ -39,9 +32,7 @@ h2 {
 	margin-left: 10px;
 }
 
-.form-control {
-	/*display: inline-block;*/
-}
+
 
 .tt-dropdown-menu {
 	background-color: #FFF;
@@ -66,10 +57,6 @@ h2 {
 .single-address-group {
 	text-align: center;
 }
-
-#transportation_buttons1, #transportation_buttons2 {
-/*	display: inline-block;
-*/}
 
 .transport {
     width: 35px;
@@ -137,53 +124,9 @@ label > input:checked + img {
 	border: #2ECC71 solid 3px;
 }
 
-#dest_form {
-	/*background: yellow;*/
-	width: 30%;
-	float: right;
-	display: inline-block;
-	padding-top: 30px;
-}
-
-#business_wrapper {
-	/*background: red;*/
-	width: 100%;
-
-}
-
-#business {
-	display: inline-block;
-	margin-left: 40px;
-}
-
-/*#right_wrapper{
-	background: green;
-	width: 40%;
-	float: right;
-
-}*/
-
-.maps{
+/*.maps{
 	margin: 10px;
 	width: 100%;
-	/*display: none;*/
-}
-
-#map_view1 {
-	margin:0 auto;
-	display: inline-block;	
-	width: 49%;
-	float:left;
-	/*margin-left: 50px;
-	margin-top: 20px;*/
-}
-
-#map_view2 {
-	margin:0 auto;
-	display: inline-block;
-	width: 49%;	
-	float:right;
-	/*margin-left: 50px;
-	margin-top: 20px;*/
-}
+	display: none;
+}*/
 

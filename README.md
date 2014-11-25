@@ -6,9 +6,11 @@ Web app that chooses a spot between two locations that is equi-time between them
 
 Users can specify two origin locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
-Gather then returns the best spot, and displays it with directions on a map from each origin point.
+Gather then returns the best spot for the two people to meet at, so that they both spend the same time getting there.  Then maps are displayed with directions from each origin spot to the chosen destination.
 
-Technologies used:
+Users can then ask for a different spot nearby, if they do not want to meet at that particular bar, restaurant, café, library or bar.
+
+###### Technologies used:
 
 -Python
 -Flask
