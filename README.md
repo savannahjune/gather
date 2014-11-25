@@ -1,9 +1,10 @@
 gather
 =========
+###### Let's Meet in the Middle.
 
 Web app that chooses a spot between two locations that is equi-time between them. 
 
-Users can specify two locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
+Users can specify two origin locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
 Gather then returns the best spot, and displays it with directions on a map from each origin point.
 

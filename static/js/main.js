@@ -385,7 +385,7 @@ function displayPlaceInfo(placeID) {
     service.getDetails(request,
     function(response, status) {
         var placeInfo = response;
-
+        console.log(placeInfo);
         $(".business").show();
         // this displays the name and makes it a link to the required Google website for the place
         $("#placeName").html("<a href=\"" + response.url + "\">" + response.name + "</a>");
@@ -455,7 +455,7 @@ function displayPlaceInfo(placeID) {
 function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log("Place address:");
     // console.log(placeAddress);
-    methodTransportOne = methodTransportOne.toLowerCase();
+    // methodTransportOne = methodTransportOne.toLowerCase();
     methodTransportTwo = methodTransportTwo.toLowerCase();
     var addresses = getAddressesFromForm();
     // console.log("addresses in display map: ");
@@ -486,44 +486,27 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
 
     // var distanceRequest = "https://maps.googleapis.com/maps/api/directions/json?origin=" + addressOne + "&destination=" + placeAddress+ "&key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M";
 
-    // console.log("Making request to " + distanceRequest);
-    // $.ajax({
-    //     url: proxyUrlJsonp(distanceRequest),
-    //     dataType: 'jsonp',
-    //     cache: false,
-    //     success: function (data) {
-    //             alert(showPolyLines(data));
-    //     }
-    // });
+    // console.log(distanceRequest);
 
-    // function proxyUrlJsonp(url) {
-    //     var encodedUrl = encodeURIComponent(url);
-    //     var proxyUrl = 'http://jsonp.guffa.com/Proxy.ashx?url=' + encodedUrl;
-    //     return proxyUrl;
-    // }
+    var directionsService = new google.maps.DirectionsService();
 
-    // function showPolyLines( data ){
-    //     console.log("Polyline stuff:");
-    //     console.log(data);
-    //     var polyline = data.routes[0].overview_polyline;
-    //     var polylinePoints = data.routes[0].overview_polyline.points;
-    //     console.log(polyline);
-    //     console.log(polylinePoints);
+    var request = {
 
-    // }
+        origin: addressOne,
+        destination: placeAddress,
+        travelMode: methodTransportOne,
 
-    // mike courier attempt
-    // $.ajax({
-    //     url: distanceRequest,
-    //     dataType: 'JSONP',
-    //     jsonpCallback: 'callback',
-    //     type: 'GET',
-    //     // cache: false,
-    //     success: function (data) {
-    //             // alert('Status code: ' + data.Status.code);
-    //             console.log(data);
-    //     }
-    // });
+    };
+
+    directionsService.route(request, function (data, status){
+        if (status == google.maps.DirectionsStatus.OK) {
+            console.log(data);
+            var polyline = data.routes[0].overview_polyline;
+            var polylinePoints = data.routes[0].overview_polyline.points;
+            console.log(polyline);
+            console.log(polylinePoints);
+        }
+    });
 
 }
 
