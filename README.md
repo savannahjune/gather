@@ -8,7 +8,7 @@ Users can specify two origin locations, transportation methods used, and desired
 
 Gather then returns the best spot for the two people to meet at, so that they both spend the same time getting there.  Then maps are displayed with directions from each origin spot to the chosen destination.
 
-Users can then ask for a different spot nearby, if they do not want to meet at that particular bar, restaurant, café, library or bar.
+Users can then ask for a different spot nearby, if they do not want to meet at that particular bar, restaurant, café, library, or park.
 
 ###### Technologies used:
 
