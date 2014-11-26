@@ -12,15 +12,15 @@ Users can then ask for a different spot nearby, if they do not want to meet at t
 
 ###### Stack:
 
-*Python
-*Flask
-*Jinja
-*Javascript
-*Jquery
-*Promises (Q library)
-*HTML/CSS
-*Bootstrap
-*Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby
+*	Python
+*	Flask
+*	Jinja
+*	Javascript
+*	Jquery
+*	Promises (Q library)
+*	HTML/CSS
+*	Bootstrap
+*	Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby
 
 ###### Acknowledgements:
 
