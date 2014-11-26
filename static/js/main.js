@@ -311,7 +311,7 @@ function findBusiness(gatheringPoint) {
         // radius: '50000',
         // maybe this should be keyword
         types: [type],
-        // openNow: true
+        openNow: true,
         rankBy: google.maps.places.RankBy.DISTANCE
     };
 
@@ -400,31 +400,46 @@ function displayPlaceInfo(placeID) {
         if (response.formatted_phone_number){
             $("#placePhoneNumber").html(response.formatted_phone_number);
         }
+        var dayOfWeek = new Date().getDay();
         if (response.opening_hours){
-            $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
-            $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
-            $("#hoursTuesday").html(response.opening_hours.weekday_text[1]);
-            $("#hoursWednesday").html(response.opening_hours.weekday_text[2]);
-            $("#hoursThursday").html(response.opening_hours.weekday_text[3]);
-            $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
-            $("#hoursSaturday").html(response.opening_hours.weekday_text[5]);
+            if (dayOfWeek === 0) {
+                $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
+            }
+            if (dayOfWeek === 1) {
+                $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
+            }
+            if (dayOfWeek === 2) {
+                $("#hoursTuesday").html(response.opening_hours.weekday_text[1]);
+            }
+            if (dayOfWeek === 3) {
+                $("#hoursWednesday").html(response.opening_hours.weekday_text[2]);
+            }
+            if (dayOfWeek === 4) {
+                $("#hoursThursday").html(response.opening_hours.weekday_text[3]);
+            }
+            if (dayOfWeek === 5) {
+                $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
+            }
+            if (dayOfWeek === 6) {
+                $("#hoursSaturday").html(response.opening_hours.weekday_text[1]);
+            }
         }
         
         if (response.website) {
-            $("#placeWebsite").html("<a href\"=" + response.website + "\">website</a>");
+            $("#placeWebsite").html("<a href=\"" + response.website + "\">website</a>");
         }
         if (response.price_level){
             if (response.price_level === 1) {
-                $("#placePriceLevel").html("$ / $$$$");
+                $("#placePriceLevel").html("<strong>$</strong> out of $$$$");
             }
             if (response.price_level === 2) {
-                $("#placePriceLevel").html("$$ / $$$$");
+                $("#placePriceLevel").html("<strong>$$</strong> out of $$$$");
             }
             if (response.price_level === 3) {
-                $("#placePriceLevel").html("$$$ / $$$$");
+                $("#placePriceLevel").html("<strong>$$$<strong> out of $$$$");
             }
             if (response.price_level === 4) {
-                $("#placePriceLevel").html("$$$$ / $$$$");
+                $("#placePriceLevel").html("$$$$ out of $$$$");
             }
         }
 
@@ -455,7 +470,7 @@ function displayPlaceInfo(placeID) {
 function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log("Place address:");
     // console.log(placeAddress);
-    // methodTransportOne = methodTransportOne.toLowerCase();
+    methodTransportOne = methodTransportOne.toLowerCase();
     methodTransportTwo = methodTransportTwo.toLowerCase();
     var addresses = getAddressesFromForm();
     // console.log("addresses in display map: ");
@@ -472,8 +487,8 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(src1);
     // console.log(src2);
 
-    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:600px; height:400px" src=' + src1 + '></iframe></div>');
-    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:600px; height:400px" src=' + src2 + '></iframe></div>');
+    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div>');
+    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".map_one").show();
     $(".map_two").show();
 
@@ -485,25 +500,25 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     // console.log(shareLink1);
     // console.log(shareLink2);
 
-    var directionsService = new google.maps.DirectionsService();
+    // var directionsService = new google.maps.DirectionsService();
 
-    var request = {
+    // var request = {
 
-        origin: addressOne,
-        destination: placeAddress,
-        travelMode: methodTransportOne,
+    //     origin: addressOne,
+    //     destination: placeAddress,
+    //     travelMode: methodTransportOne,
 
-    };
+    // };
 
-    directionsService.route(request, function (data, status){
-        if (status == google.maps.DirectionsStatus.OK) {
-            console.log(data);
-            var polyline = data.routes[0].overview_polyline;
-            var polylinePoints = data.routes[0].overview_polyline.points;
-            console.log(polyline);
-            console.log(polylinePoints);
-        }
-    });
+    // directionsService.route(request, function (data, status){
+    //     if (status == google.maps.DirectionsStatus.OK) {
+    //         console.log(data);
+    //         var polyline = data.routes[0].overview_polyline;
+    //         var polylinePoints = data.routes[0].overview_polyline.points;
+    //         console.log(polyline);
+    //         console.log(polylinePoints);
+    //     }
+    // });
 
 }
 
