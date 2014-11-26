@@ -19,8 +19,7 @@ h2 {
 
 .container {
 	font-size: 12pt;
-	/*font-family: 'Raleway', sans-serif;*/
-	
+	font-family: 'Arimo', sans-serif;	
 }
 
 /*a:link, a:visited, a:hover, a:active {*/
@@ -36,10 +35,20 @@ a:active {
 	color: #6AB5D6;
 }
 
+/*this adjusts what's in the adress inputs*/
+
 #location_one, #location_two {
-	font-family: 'Raleway Thin', sans-serif;
+	/*font-family: 'Raleway Thin', sans-serif;*/
 	font-size: 14px;
 	color: black;
+}
+
+/*this adjust the color/shadow around the adress inputs*/
+
+#location_one:focus, #location_two:focus {
+	border-color: #E6905D;
+	box-shadow: 0 1px 1px #E6905D inset, 0 0 8px #E6905D;
+	outline: 0 none;
 }
 
 .radio-inline {
@@ -89,6 +98,7 @@ a:active {
 #business_info {
 	padding-left: 30px;
 	padding-right: 30px;
+	font-size: 18px;
 }
 
 label > input {
@@ -97,14 +107,17 @@ label > input {
 }
 
 label > input + img {
-	cursor:pointer;
 	border:2px solid transparent;
 	padding:2px;
 }
 
+label > input:hover + img {
+	border:3px black;
+}
+
 label > input:checked + img {
 	/*border: 2px solid #A6CF4F;*/
-	border: 4px solid #E6905D;
+	border: 3px solid #E6905D;
 	background-color: white;
 }
 
@@ -118,7 +131,7 @@ label > input:checked + img {
 }
 
 .twitter-typeahead {
-	font-family: 'Raleway Thin', sans-serif;
+	/*font-family: 'Raleway Thin', sans-serif;*/
 	width: 75%;
 	margin-left: 10px;
 	margin-right: 5px;
@@ -129,17 +142,17 @@ label > input:checked + img {
 	background-color: #FDB383;
 	color: white;
 	height: 35px;
-	font-family: 'Raleway', sans-serif;
+	/*font-family: 'Raleway', sans-serif;*/
 	border: #E6905D solid 3px;
-	padding: 1px 6px 1px 6px;;
+	padding: 1px 6px 1px 6px;
 }
 
-.btn:focus {
+.btn:focus, .btn:active {
     /*background-color: #90FFB9;*/
     background-color: #FDB383;
 	color: white;
 	height: 35px;
-	font-family: 'Raleway', sans-serif;
+	/*font-family: 'Raleway', sans-serif;*/
     outline: none;
     /*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
@@ -148,11 +161,12 @@ label > input:checked + img {
 .btn:hover {
 	background-color: #E6905D;
 	color: white;
-	font-family: 'Raleway', sans-serif;
+	/*font-family: 'Raleway', sans-serif;*/
 	/*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
 
 }
+
 
 .col-md-6, .col-md-5, .col-md-1, .col-md-12 {
 	padding-left: 0;

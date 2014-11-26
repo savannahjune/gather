@@ -10,7 +10,7 @@ Gather then returns the best spot for the two people to meet at, so that they bo
 
 Users can then ask for a different spot nearby, if they do not want to meet at that particular bar, restaurant, café, library, or park.
 
-###### Technologies used:
+###### Stack:
 
 -Python
 -Flask
@@ -21,5 +21,11 @@ Users can then ask for a different spot nearby, if they do not want to meet at t
 -Promises (Q library)
 -Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby
 
+###### Acknowledgements:
 
+All icons from the noun project.  
+
+The tree is entitled 'Tree' by Mister Pixel from The Noun Project.
+
+Thanks!
 

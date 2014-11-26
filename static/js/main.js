@@ -4,7 +4,7 @@ var initialPointTwo;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
-const maxAttempts = 6;
+const maxAttempts = 14;
 var numAttempts;
 
 $(document).ready(function() {
@@ -208,7 +208,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         console.log("Duration one: " + durationOne);
         console.log("Duration two: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
-        var tolerance = 0.07 * ((durationOne + durationTwo) / 2);
+        var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
         if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
                 console.log("Stopped findGatheringPoint after max attempts reached");
@@ -302,7 +302,7 @@ function findBusiness(gatheringPoint) {
     // so turns out it just uses first selected item, should instead loop through list and then get vals
     var type = $("input:radio[name=business_option]:checked").val();
 
-    var initialRadius = 250;
+    // var initialRadius = 250;
     // console.log("Type: " + type);
     // console.log("About to find business");
     var request = {
@@ -395,7 +395,7 @@ function displayPlaceInfo(placeID) {
         var placeLon = (response.geometry.location.B);
         var placeLatLon = [placeLat, placeLon];
         if (response.rating){
-            $("#googlePlusRating").html("Google+ Rating: " + response.rating + "/ 5 ");
+            $("#googlePlusRating").html("Google+ Rating: " + response.rating + " out of 5");
         }
         if (response.formatted_phone_number){
             $("#placePhoneNumber").html(response.formatted_phone_number);
