@@ -56,6 +56,8 @@ $(document).ready(function() {
 
         })
         .then(function(gatheringPoint) {
+            // @param {gatheringPoint} coordinate between two points
+            // @return {businessPlaceID} returns Google Maps Place ID
             console.log("Gathering Point: " + gatheringPoint);
             return findBusiness(gatheringPoint);
         })
@@ -98,6 +100,7 @@ function getAddressesFromForm() {
   *
   *  @param {query} the input to suggest autocomplete matches against. e.g: "123 Main St"
   *  @param {cb} a callback to deliver the potential matches. Takes a single array argument of matches
+  *  @return {null|predictions} null or prediction from Google Maps Autocomplete
   */
 function getAutocompleteSuggestions(query, callback) {
     var service = new google.maps.places.AutocompleteService();
@@ -118,7 +121,7 @@ function getAutocompleteSuggestions(query, callback) {
   *  
   *
   *  @param {target} - address to become a coordinate
-  *  
+  *  @return {latlon} - array of coordinates
   */
 function makeCoordinates(target) {
     var deferred = Q.defer();
@@ -151,6 +154,7 @@ function makeCoordinates(target) {
   *
   *  @param {pointOne} this is the first place, must be in coordinate form for math
   *  @param {pointTwo} this is the second place, must be in coordinate form for math
+  *  @return
   */
 function findMidPoint(pointOne, pointTwo){
     console.log(typeof pointOne);
@@ -317,8 +321,7 @@ function findBusiness(gatheringPoint) {
 
 
     var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request,
-    function businessOptions(response, status) {
+    service.nearbySearch(request, function businessOptions(response, status) {
         // console.log("businessIndex at the top: ");
         // console.log(businessIndex);
         // debugger;
@@ -501,8 +504,8 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     var addressTwo = addresses[1].split(' ').join('+');
     placeAddress = placeAddress.split(' ').join('+');
 
-    var src1 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
-    var src2 = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyD94Hy8ebu6mo6BwokrIHw2MqOGrlnA26M&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
+    var src1 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
+    var src2 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
     
     // console.log("Links for Google: ");
     console.log(src1);
