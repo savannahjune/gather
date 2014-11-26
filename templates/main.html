@@ -40,9 +40,12 @@
 
     <div class="container">
       <div class="row">
-        <div class="logo col-md-12">
+        <div class="logo col-md-4">
           <h1>Gather Map</h1>
-        </div> <!-- ends div for col-12 logo -->
+        </div> <!-- ends div for col-3 logo -->
+        <div class="loading col-mid-8">
+          <img class"footsteps" src="static/assets/walkingeast.gif" hidden>
+        </div>
       </div> <!-- ends div for row with logo -->
     
       <div class="row">
@@ -53,7 +56,7 @@
              <div class="col-md-12 single-address-group">
 
               <!-- this is the icon for location one marker red -->
-              <img class="pull-left" style="margin-left:30px; margin-top:30px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+ff8888.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">
+              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+ff8888.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">
 
               <form role="form"> <!-- location one form -->
 
@@ -76,13 +79,19 @@
                   <img class="transport" src="static/assets/bike.svg">
                 </label>
 
-              </form> <!-- ends form locatio one form -->
+              </form> <!-- ends form location one form -->
             </div> <!-- ends col mid 2 for location one -->
           </div> <!-- ends row for location_one -->
+          
+          <div class="row">
+            <div class="col-md-12">
+               <br>
+            </div>
+          </div>
 
           <div class="row"> <!-- this row is for location_two -->
              <div class="col-md-12 single-address-group">
-              <img class="pull-left" style="margin-left:30px; margin-top:30px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+3366FF.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"> 
+              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+3366FF.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"> 
 
               <form role="form">
 
@@ -164,8 +173,8 @@
                 <div id="hoursSaturday"></div>
                 <div id="placePriceLevel"></div>
                 <div id="placeWebsite"></div>
-              </div>
-
+                <div class="share_links" hidden></div>
+            </div>
             <div class="next_spot" hidden>
               <button id="next_business" type="button" class="btn btn-lg btn-block" style="width:50%; margin:auto; margin-top:20px;">Pick Me Another</button>
             </div> <!-- ends div for next_spot button -->

@@ -14,7 +14,7 @@ h1 {
 }
 
 h2 {
-	margin-top:0px;
+	margin-top:0;
 }
 
 .container {
@@ -132,7 +132,7 @@ label > input:checked + img {
 
 .twitter-typeahead {
 	/*font-family: 'Raleway Thin', sans-serif;*/
-	width: 75%;
+	width: 77%;
 	margin-left: 10px;
 	margin-right: 5px;
 }
