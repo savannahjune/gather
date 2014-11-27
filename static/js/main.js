@@ -553,8 +553,8 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     var src1 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
     var src2 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
 
-    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src1 + '></iframe></div>');
-    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
+    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="padding-left:10px; padding-right:10px; border:0; width:100%; height:400px" src=' + src1 + '></iframe></div>');
+    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="padding-left:10px; padding-right:10px; border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".map_one").show();
     $(".map_two").show();
 
