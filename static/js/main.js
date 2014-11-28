@@ -484,19 +484,19 @@ function displayPlaceInfo(placeID) {
         if (response.website) {
             $("#placeWebsite").html("<a href=\"" + response.website + "\">website</a>");
         }
-        if (response.price_level){
-            if (response.price_level === 1) {
+        switch (response.price_level) {
+            case 1:
                 $("#placePriceLevel").html("<strong>$</strong> out of $$$$");
-            }
-            if (response.price_level === 2) {
+                break;
+            case 2:
                 $("#placePriceLevel").html("<strong>$$</strong> out of $$$$");
-            }
-            if (response.price_level === 3) {
+                break;
+            case 3:
                 $("#placePriceLevel").html("<strong>$$$<strong> out of $$$$");
-            }
-            if (response.price_level === 4) {
+                break;
+            case 4:
                 $("#placePriceLevel").html("$$$$ out of $$$$");
-            }
+                break;
         }
 
         // other info from places that I have not yet used, but exists
