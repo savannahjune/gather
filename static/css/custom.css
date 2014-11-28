@@ -135,10 +135,40 @@ label > input:checked + img {
 }
 
 .twitter-typeahead {
-	/*font-family: 'Raleway Thin', sans-serif;*/
 	width: 77%;
+	font-size: 16px;
 	margin-left: 10px;
 	margin-right: 5px;
+}
+
+.tt-dropdown-menu {
+    width: 472px;
+    /*margin-top: 12px;*/
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-query {
+	font-size: 30px;
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* color of  suggestions as you go down the list */
+    color: #fff;
+    background-color: #FDB383;
+}
+
+.tt-suggestion p {
+    margin: 0;
 }
 
 .btn {
