@@ -25,6 +25,8 @@ $(document).ready(function() {
         numAttempts = 0;
         // console.log('submitted form');
         evt.preventDefault();
+        $("#gather_button").prop('disabled',true);
+        $("#gather_button").text("Loading...");
         var methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
         // console.log("Method transport one: " + methodTransportOne);
         var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
@@ -112,7 +114,9 @@ $(document).ready(function() {
             *
             * @param {error} <string> description of error in the main promises chain
             */
-        console.log("Main Chain Error: " + error);
+            console.log("Main Chain Error: " + error);
+            $("#gather_button").prop('disabled',false);
+            $("#gather_button").text("Gather!");
         });
     });
 });
@@ -184,6 +188,8 @@ function makeCoordinates(target) {
         } else {
             console.log("Geocode was not successful for the following reason: " + status);
             deferred.reject(new Error(status));
+            $("#gather_button").prop('disabled',false);
+            $("#gather_button").text("Gather!");
         }
     });
 
@@ -560,6 +566,8 @@ function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
     $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="padding-left:10px; padding-right:10px; border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
     $(".map_one").show();
     $(".map_two").show();
+    $("#gather_button").prop('disabled',false);
+    $("#gather_button").text("Gather!");
 
     /**
     *  this is used to get polyline from google maps directions service
