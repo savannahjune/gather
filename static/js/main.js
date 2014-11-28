@@ -456,37 +456,28 @@ function displayPlaceInfo(placeID) {
         var dayOfWeek = new Date().getDay();
         if (response.opening_hours){
 
-            // switch(dayOfWeek) {
-            //     case 4:
-            //         // special 4 stuff 
-            //     case 0:
-            //         // case 4 shares this logic with case 0
-            //         // 0 time
-            //         break;
-
-            //     case 1:
-            //         break;
-            // }
-            if (dayOfWeek === 0) {
-                $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
-            }
-            if (dayOfWeek === 1) {
-                $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
-            }
-            if (dayOfWeek === 2) {
-                $("#hoursTuesday").html(response.opening_hours.weekday_text[1]);
-            }
-            if (dayOfWeek === 3) {
-                $("#hoursWednesday").html(response.opening_hours.weekday_text[2]);
-            }
-            if (dayOfWeek === 4) {
-                $("#hoursThursday").html(response.opening_hours.weekday_text[3]);
-            }
-            if (dayOfWeek === 5) {
-                $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
-            }
-            if (dayOfWeek === 6) {
-                $("#hoursSaturday").html(response.opening_hours.weekday_text[1]);
+            switch(dayOfWeek) {
+                case 0:
+                    $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
+                    break;
+                case 1:
+                    $("#hoursMonday").html(response.opening_hours.weekday_text[0]);
+                    break;
+                case 2:
+                    $("#hoursTuesday").html(response.opening_hours.weekday_text[1]);
+                    break;
+                case 3:
+                    $("#hoursWednesday").html(response.opening_hours.weekday_text[2]);
+                    break;
+                case 4:
+                    $("#hoursThursday").html(response.opening_hours.weekday_text[3]);
+                    break;
+                case 5:
+                    $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
+                    break;
+                case 6:
+                    $("#hoursSaturday").html(response.opening_hours.weekday_text[1]);
+                    break;
             }
         }
         
