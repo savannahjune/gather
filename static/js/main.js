@@ -20,8 +20,8 @@ $(document).ready(function() {
         displayKey: 'description',
     });
 
-    // this creates event listener for location form
-    $("#location_input").on('click', function(evt) {
+    // this creates event listener for gather button
+    $("#gather_button").on('click', function(evt) {
         numAttempts = 0;
         // console.log('submitted form');
         evt.preventDefault();
@@ -30,7 +30,7 @@ $(document).ready(function() {
         var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
         // console.log("Method transport two: " + methodTransportTwo);
         var addresses = getAddressesFromForm();
-        // points is an array of values from our from inputs
+        // points is an array of values from our form inputs
         // makes coordinates from addresses
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
@@ -455,6 +455,18 @@ function displayPlaceInfo(placeID) {
         }
         var dayOfWeek = new Date().getDay();
         if (response.opening_hours){
+
+            // switch(dayOfWeek) {
+            //     case 4:
+            //         // special 4 stuff 
+            //     case 0:
+            //         // case 4 shares this logic with case 0
+            //         // 0 time
+            //         break;
+
+            //     case 1:
+            //         break;
+            // }
             if (dayOfWeek === 0) {
                 $("#hoursSunday").html(response.opening_hours.weekday_text[6]);
             }
