@@ -7,6 +7,8 @@ var methodTransportOne;
 var methodTransportTwo;
 var polylineOne;
 var polylineTwo;
+var markerOne;
+var markerTwo;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
@@ -663,6 +665,7 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     if (isFirstRoute) {
         if (polylineOne) {
             polylineOne.setMap(null);   // Remove old polyline
+            markerOne.setMap(null);
         }
         strokeColor = '#ff8888';
         // Map icon for Address 1 at LatLngArray[0]
@@ -670,10 +673,16 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
+            markerTwo.setMap(null);
         }
         strokeColor = '#3366FF';
         // Map icon for Address 2 at LatLngArray[0]
     }
+
+    var imageOriginOne = "static/assets/markerOne.svg";
+    var imageOriginTwo = "static/assets/markerTwo.svg";
+    
+    var marker;
 
     var route = new google.maps.Polyline({
         path: LatLngArray,
@@ -685,10 +694,22 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
 
     if (isFirstRoute) {
         polylineOne = route;
+        markerOne = new google.maps.Marker({
+            position: LatLngArray[0],
+            icon: imageOriginOne
+        });
+        marker = markerOne;
     } else {
         polylineTwo = route;
+        markerTwo = new google.maps.Marker({
+            position: LatLngArray[0],
+            icon: imageOriginTwo
+        });
+        marker = markerTwo;
     }
+
     route.setMap(googleMap);
+    marker.setMap(googleMap);
 
     // Unhide map_two
     //$(".map_two").show();

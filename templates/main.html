@@ -36,10 +36,13 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
         <script>
           var googleMap;
+          var myStyle = [{"featureType":"landscape","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":51},{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"road.arterial","stylers":[{"saturation":-100},{"lightness":30},{"visibility":"on"}]},{"featureType":"road.local","stylers":[{"saturation":-100},{"lightness":40},{"visibility":"on"}]},{"featureType":"transit","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"administrative.province","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":-25},{"saturation":-100}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffff00"},{"lightness":-25},{"saturation":-97}]}]
+
           function initialize() {
             var mapOptions = {
               zoom: 8,
-              center: new google.maps.LatLng(-34.397, 150.644)
+              center: new google.maps.LatLng(-34.397, 150.644),
+              styles: myStyle
             };
             googleMap = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
@@ -70,7 +73,7 @@
              <div class="col-md-12 single-address-group">
 
               <!-- this is the icon for location one marker red -->
-              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+ff8888.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">
+              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="static/assets/markerOne.svg">
 
               <form role="form"> <!-- location one form -->
 
@@ -105,7 +108,7 @@
 
           <div class="row"> <!-- this row is for location_two -->
              <div class="col-md-12 single-address-group">
-              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="https://api.tiles.mapbox.com/v4/marker/pin-m+3366FF.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"> 
+              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="static/assets/markerTwo.svg"> 
 
               <form role="form">
 
