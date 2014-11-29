@@ -656,7 +656,7 @@ function displayMap(latLonArray) {
     return deferred.promise;
 }
 
-function mapPolyLine(pointArray, isFirstRoute) {
+function mapPolyLine(LatLngArray, isFirstRoute) {
 
     var strokeColor;
 
@@ -665,19 +665,22 @@ function mapPolyLine(pointArray, isFirstRoute) {
             polylineOne.setMap(null);   // Remove old polyline
         }
         strokeColor = '#ff8888';
+        // Map icon for Address 1 at LatLngArray[0]
+        // Gather point icon is LatLngArray[LatLngArray.length-1]
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
         }
         strokeColor = '#3366FF';
+        // Map icon for Address 2 at LatLngArray[0]
     }
 
     var route = new google.maps.Polyline({
-        path: pointArray,
+        path: LatLngArray,
         geodesic: true,
         strokeColor: strokeColor,
         strokeOpacity: 1.0,
-        strokeWeight: 8
+        strokeWeight: 6
     });
 
     if (isFirstRoute) {
