@@ -1,7 +1,12 @@
 /** Global starting points. Accessed throughout recursive calls to findGatheringPoint **/
 var initialPointOne;
 var initialPointTwo;
+var addresses;
 var gatheringPlaceAddress;
+var methodTransportOne;
+var methodTransportTwo;
+var polylineOne;
+var polylineTwo;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
@@ -29,11 +34,11 @@ $(document).ready(function() {
         evt.preventDefault();
         $("#gather_button").prop('disabled',true);
         $("#gather_button").text("Loading...");
-        var methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
+        methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
         // console.log("Method transport one: " + methodTransportOne);
-        var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
+        methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
         // console.log("Method transport two: " + methodTransportTwo);
-        var addresses = getAddressesFromForm();
+        addresses = getAddressesFromForm();
         // points is an array of values from our form inputs
         // makes coordinates from addresses
         makeCoordinates(addresses[0])
@@ -429,6 +434,26 @@ function findBusiness(gatheringPoint) {
                     // console.log(businessIndex);
                     placeID = businessOptions(response, status);
                     displayPlaceInfo(placeID);
+
+                    var gatheringPlaceAddress = response[businessIndex].vicinity;
+                    return getRouteCoordinates(gatheringPlaceAddress, addresses[0], methodTransportOne)
+                    .then(function(routeCoordinatesOne) {
+
+                        return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
+                        .then(function(routeCoordinatesTwo) {
+                            return [routeCoordinatesOne, routeCoordinatesTwo];
+                        });
+                    })
+                    .then(function(routeCoordinatesArray) {
+                         /**
+                        * takes routeCoordinates, both sets from both origin points
+                        *
+                        * @param {routeCoordinates} <array> array of coordinates
+                        * @return {routeCoordatinesOne, calls getRouteCoordinates with placeAddress, addresses[1], methodTransportTwo}
+                        */
+                        return displayMap(routeCoordinatesArray);
+                    });
+
                 });
             }
             return placeID;
@@ -611,7 +636,6 @@ function displayMap(latLonArray) {
     var deferred = Q.defer();
 
     // Request a Google map in #map_two
-
     mapPolyLine(latLonArray[0], true);
     mapPolyLine(latLonArray[1], false);
 
@@ -637,12 +661,18 @@ function mapPolyLine(pointArray, isFirstRoute) {
     var strokeColor;
 
     if (isFirstRoute) {
+        if (polylineOne) {
+            polylineOne.setMap(null);   // Remove old polyline
+        }
         strokeColor = '#ff8888';
     } else {
+        if (polylineTwo) {
+            polylineTwo.setMap(null);   // Remove old polyline
+        }
         strokeColor = '#3366FF';
     }
 
-    var routeOne = new google.maps.Polyline({
+    var route = new google.maps.Polyline({
         path: pointArray,
         geodesic: true,
         strokeColor: strokeColor,
@@ -650,7 +680,12 @@ function mapPolyLine(pointArray, isFirstRoute) {
         strokeWeight: 8
     });
 
-    routeOne.setMap(googleMap);
+    if (isFirstRoute) {
+        polylineOne = route;
+    } else {
+        polylineTwo = route;
+    }
+    route.setMap(googleMap);
 
     // Unhide map_two
     //$(".map_two").show();
