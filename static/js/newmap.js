@@ -1,6 +1,7 @@
 /** Global starting points. Accessed throughout recursive calls to findGatheringPoint **/
 var initialPointOne;
 var initialPointTwo;
+var gatheringPlaceAddress;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
@@ -101,12 +102,30 @@ $(document).ready(function() {
         .then(function(placeAddress){
             /**
             * takes placeAddress from displayPlaceInfo in order to pass it to
-            * displayMap
+            * getRouteCoordinates
             *
             * @param {placeAddress} <string> address of a business
-            * @return {placeAddress, methodTransportOne, methodTransportTwo} <string>
+            * @return {placeAddress} <string>
             */
-            return displayMap(placeAddress, methodTransportOne, methodTransportTwo);
+            gatheringPlaceAddress = placeAddress;
+            return getRouteCoordinates(gatheringPlaceAddress, addresses[0], methodTransportOne);
+
+        })
+        .then(function(routeCoordinatesOne) {
+
+            return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
+            .then(function(routeCoordinatesTwo) {
+                return [routeCoordinatesOne, routeCoordinatesTwo];
+            });
+        })
+        .then(function(routeCoordinatesArray) {
+             /**
+            * takes routeCoordinates, both sets from both origin points
+            *
+            * @param {routeCoordinates} <array> array of coordinates
+            * @return {routeCoordatinesOne, calls getRouteCoordinates with placeAddress, addresses[1], methodTransportTwo}
+            */
+            return displayMap(routeCoordinatesArray);
         })
         .catch(function (error) {
             /**
@@ -535,59 +554,95 @@ function displayPlaceInfo(placeID) {
         // console.log(shareLink1);
         // console.log(shareLink2);
 
-        displayMap(placeAddress, methodTransportOne, methodTransportTwo);
+        // displayMap(placeAddress, methodTransportOne, methodTransportTwo);
     });
     
     return deferred.promise;
 }
 
 /**
-  *  Displays two google maps at bottom of the page with directions from each origin point to the chosen business.
+  *  Gets two arrays of latlon coordinates for display on one unified map
   *  
-  *  @param {placeAddress, methodTransportOne, methodTransportTwo} <string> these are used to show directions on the map
-  *
+  *  @param {placeAddress} <string> business address where two people are meeting
+  *  @param {originAddress} <string> address from form field
+  *  @param {methodTransport} <string> from radio button
+  *  @return {routeCoordinates} <array> from directions service  API
   */
 
-function displayMap(placeAddress, methodTransportOne, methodTransportTwo) {
-    // modifications needed in order to pass info to google maps directions api
-    methodTransportOne = methodTransportOne.toLowerCase();
-    methodTransportTwo = methodTransportTwo.toLowerCase();
-    var addresses = getAddressesFromForm();
-    var addressOne = addresses[0].split(' ').join('+');
-    var addressTwo = addresses[1].split(' ').join('+');
+function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
+    var deferred = Q.defer();
+    originAddress = originAddress.split(' ').join('+');
     placeAddress = placeAddress.split(' ').join('+');
 
-    var src1 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressOne + "&destination=" + placeAddress + "&mode=" + methodTransportOne;
-    var src2 = "https://www.google.com/maps/embed/v1/directions?key=" + googleMapsAPIKey + "&origin=" + addressTwo + "&destination=" + placeAddress + "&mode=" + methodTransportTwo;
-
-    $(".map_one").html('<div id="map_view1" class="col-mid-6"><iframe frameborder="0" style="padding-left:10px; padding-right:10px; border:0; width:100%; height:400px" src=' + src1 + '></iframe></div>');
-    $(".map_two").html('<div id="map_view2" class="col-mid-6"><iframe frameborder="0" style="padding-left:10px; padding-right:10px; border:0; width:100%; height:400px" src=' + src2 + '></iframe></div>');
-    $(".map_one").show();
-    $(".map_two").show();
     $("#gather_button").prop('disabled',false);
     $("#gather_button").text("Gather!");
 
-    /**
-    *  this is used to get polyline from google maps directions service
-    *  may use this if I decide to have one unified map
-    */
     var directionsService = new google.maps.DirectionsService();
 
     var request = {
 
-        origin: addressOne,
+        origin: originAddress,
         destination: placeAddress,
-        travelMode: methodTransportOne,
+        travelMode: methodTransport,
 
     };
 
     directionsService.route(request, function (data, status){
         if (status == google.maps.DirectionsStatus.OK) {
             console.log(data);
+            var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
+            console.log(latLonArray);
             console.log(polyline);
+            deferred.resolve(latLonArray);
+        }
+        else {
+            console.log("Status in getRouteCoordinates: " + status);
+            deferred.reject(new Error(status));
         }
     });
-
+    return deferred.promise;
 }
+    /**
+  *  Gets an array of lat lon coordinates from getRouteCoordinates
+  *  
+  *  
+  *  @param {latLonArray} <array> from directions service  API
+  */
+function displayMap(latLonArray) {
+    var deferred = Q.defer();
+
+    // Request a Google map in #map_two
+
+    var map = new google.maps.Map(document.getElementById('map_two'));
+
+    mapPolyLine(latLonArray[0]);
+    mapPolyLine(latLonArray[1]);
+
+    deferred.resolve();
+    return deferred.promise;
+}
+
+function mapPolyLine(pointArray) {
+    var map = new google.maps.Map(document.getElementById('map_two'));
+
+    var latLngArray = [];
+    for (x = 0; x < pointArray.length; x++) {
+        latLngArray.push(new google.maps.LatLng(pointArray[x].B, pointArray[x].k));
+    }
+
+    var routeOne = new google.maps.Polyline({
+        path: latLngArray,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+
+    routeOne.setMap(map);
+    // Unhide map_two
+    $(".map_two").show();
+}
+
+
 

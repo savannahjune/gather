@@ -26,7 +26,7 @@
 
     <script> var googleMapsAPIKey="{{ key }}"; </script>
     <!-- Gather JS Script -->
-    <script src="static/js/main.js"></script>
+    <script src="static/js/newmap.js"></script>
 
     <!-- Javascript for AutoComplete -->
     <script type="text/javascript" src="static/js/jquery.autocomplete.js"></script>
@@ -174,7 +174,6 @@
                 <div id="hoursFriday"></div>
                 <div id="hoursSaturday"></div>
                 <div id="placePriceLevel"></div>
-                <div id="placeWebsite"></div>
                 <div class="share_links" hidden></div>
                 <br>
             </div>
@@ -194,12 +193,12 @@
       <div class="row maps"> <!-- this is the row for business details --> 
         <div class="map_one col-md-6 chrome" hidden></div>
         <div class="col-md-1"></div>
-        <div class="map_two col-md-5 chrome" hidden></div>
+        <div id="map_two" class="map_two col-md-5 chrome" hidden></div>
       </div> <!-- ends row div for business details--> 
 
       <!-- Map canvas is always hidden, just needed for google maps api -->
       <div id="map-canvas"></div>
-    
+      <br>
     </div> <!-- ends container div -->
 
   </body>

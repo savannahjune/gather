@@ -2,6 +2,7 @@ body {
 	/*background-image: url('/static/assets/struckaxiom.png');*/
 	/*background-color: #CDEBE9;*/
 	background-color: #022330;
+	/*background-color: #00384C;*/
 	letter-spacing: 0.07em;
 }
 
@@ -135,18 +136,17 @@ label > input:checked + img {
 }
 
 .twitter-typeahead {
-	width: 77%;
+	width: 70%;
 	font-size: 16px;
 	margin-left: 10px;
 	margin-right: 5px;
 }
 
 .tt-dropdown-menu {
-    width: 472px;
+    width: 428px;
     /*margin-top: 12px;*/
     padding: 8px 0;
     background-color: #fff;
-    border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
@@ -176,7 +176,6 @@ label > input:checked + img {
 	background-color: #FDB383;
 	color: white;
 	height: 35px;
-	/*font-family: 'Raleway', sans-serif;*/
 	border: #E6905D solid 3px;
 	padding: 1px 6px 1px 6px;
 }
@@ -186,7 +185,6 @@ label > input:checked + img {
     background-color: #FDB383;
 	color: white;
 	height: 35px;
-	/*font-family: 'Raleway', sans-serif;*/
     outline: none;
     /*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
@@ -195,7 +193,6 @@ label > input:checked + img {
 .btn:hover {
 	background-color: #E6905D;
 	color: white;
-	/*font-family: 'Raleway', sans-serif;*/
 	/*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
 
