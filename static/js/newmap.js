@@ -461,10 +461,15 @@ function findBusiness(gatheringPoint) {
             return placeID;
         }
         else {
-            $(".next_spot").hide();
-            alert("Sorry, there is no " + type + " near your gathering point.");
-            $("#gather_button").prop('disabled',false);
-            $("#gather_button").text("Gather!");
+            if (businessIndex > 1){
+                alert("Sorry, there are no more " + type + "s near your gathering point.");
+                $(".next_spot").hide();
+            }
+            else {
+                alert("Sorry, there is no " + type + " near your gathering point.");
+                $("#gather_button").prop('disabled',false);
+                $("#gather_button").text("Gather!");
+            }
         }
     }); /* end of businessOptions */
     return deferred.promise;
@@ -494,7 +499,7 @@ function displayPlaceInfo(placeID) {
         // this displays the name and makes it a link to the required Google website for the place
         
         var type = $("input:radio[name=business_option]:checked").val();
-        $("#placeIcon").html("<img src=\"static/assets/"+ type + "-50.png\">");
+        $("#placeIcon").html("<img class=\"place_icon\" src=\"static/assets/"+ type + ".png\">");
         $("#placeName").html("<a href=\"" + response.website + "\">" + response.name + "</a>");
         var placeAddress = (response.formatted_address);
         $("#placeAddress").html(placeAddress);
