@@ -103,6 +103,15 @@ a:active {
 	font-size: 18px;
 }
 
+.place_icon {
+	width:40px;
+	height:40px;
+}
+
+#placeName {
+	font-size: 30px;
+}
+
 .business {
 	height: 367px;
 }

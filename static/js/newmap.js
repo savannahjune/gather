@@ -492,6 +492,9 @@ function displayPlaceInfo(placeID) {
         console.log(placeInfo);
         $(".business").show();
         // this displays the name and makes it a link to the required Google website for the place
+        
+        var type = $("input:radio[name=business_option]:checked").val();
+        $("#placeIcon").html("<img src=\"static/assets/"+ type + "-50.png\">");
         $("#placeName").html("<a href=\"" + response.website + "\">" + response.name + "</a>");
         var placeAddress = (response.formatted_address);
         $("#placeAddress").html(placeAddress);
@@ -527,7 +530,7 @@ function displayPlaceInfo(placeID) {
                     $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
                     break;
                 case 6:
-                    $("#hoursSaturday").html(response.opening_hours.weekday_text[1]);
+                    $("#hoursSaturday").html(response.opening_hours.weekday_text[5]);
                     break;
             }
         }

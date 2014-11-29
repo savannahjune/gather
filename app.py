@@ -10,4 +10,5 @@ def run_app():
 	return render_template("main.html", key=key)
 
 if __name__ == "__main__":
-    app.run(debug = True)
+	# change this to app.run for production
+    app.run(host='0.0.0.0')

@@ -483,7 +483,7 @@ function displayPlaceInfo(placeID) {
                     $("#hoursFriday").html(response.opening_hours.weekday_text[4]);
                     break;
                 case 6:
-                    $("#hoursSaturday").html(response.opening_hours.weekday_text[1]);
+                    $("#hoursSaturday").html(response.opening_hours.weekday_text[5]);
                     break;
             }
         }

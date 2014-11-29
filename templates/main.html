@@ -36,7 +36,9 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
         <script>
           var googleMap;
-          var myStyle = [{"featureType":"landscape","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":51},{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"road.arterial","stylers":[{"saturation":-100},{"lightness":30},{"visibility":"on"}]},{"featureType":"road.local","stylers":[{"saturation":-100},{"lightness":40},{"visibility":"on"}]},{"featureType":"transit","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"administrative.province","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":-25},{"saturation":-100}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffff00"},{"lightness":-25},{"saturation":-97}]}]
+          var myStyle = [{"featureType":"landscape","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":51},{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"road.arterial","stylers":[{"saturation":-100},{"lightness":30},{"visibility":"on"}]},{"featureType":"road.local","stylers":[{"saturation":-100},{"lightness":40},{"visibility":"on"}]},{"featureType":"transit","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"administrative.province","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":-25},{"saturation":-100}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#022330"}]}]
+
+            // {"featureType": "administrative","elementType":"all","stylers":[{"hue":"#022330"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]
 
           function initialize() {
             var mapOptions = {
@@ -177,7 +179,7 @@
 
         <div class="col-md-5 chrome business" hidden> <!-- this is the col md 5 for business details keeps in line with above widget --> 
             <div id="business_info">
-               <h2 id="placeName"></h2>
+              <div id="first_line_business"><span class="place_icon" id="placeIcon"></span><span id="placeName"></span></div>           
                 <div id="placeAddress"></div>
                 <br>
                 <div id="googlePlusRating"></div>
