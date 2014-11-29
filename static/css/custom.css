@@ -204,3 +204,9 @@ label > input:checked + img {
 	padding-right: 0;
 }
 
+#map-canvas {
+	width:100%;
+ 	height:100%;
+}
+
+html, body, .container { height: 100% }

@@ -9,6 +9,7 @@ const maxAttempts = 14;
 var numAttempts;
 
 $(document).ready(function() {
+
     /** this function provides google 
     autocomplete of addresses */
 
@@ -381,7 +382,6 @@ function findBusiness(gatheringPoint) {
     // console.log("Spot to search: " + spotToSearch);
 
     // gets type of business users wants from form on the page
-    var map = new google.maps.Map(document.getElementById('map-canvas'));
 
     var type = $("input:radio[name=business_option]:checked").val();
 
@@ -394,7 +394,7 @@ function findBusiness(gatheringPoint) {
     };
 
 
-    var service = new google.maps.places.PlacesService(map);
+    var service = new google.maps.places.PlacesService(googleMap);
     /**
     * Finds business options near gatheringPoint, and gets info about the business
     * Users are allowed to request next business in the object when they press button
@@ -455,13 +455,11 @@ function findBusiness(gatheringPoint) {
 function displayPlaceInfo(placeID) {
     var placeDetailsArray = [];
     var deferred = Q.defer();
-    var map = new google.maps.Map(document.getElementById('map-canvas'));
-
     var request = {
         placeId: placeID,
     };
 
-    var service = new google.maps.places.PlacesService(map);
+    var service = new google.maps.places.PlacesService(googleMap);
     service.getDetails(request, function(response, status) {
         var placeInfo = response;
         console.log(placeInfo);
@@ -614,34 +612,48 @@ function displayMap(latLonArray) {
 
     // Request a Google map in #map_two
 
-    var map = new google.maps.Map(document.getElementById('map_two'));
+    mapPolyLine(latLonArray[0], true);
+    mapPolyLine(latLonArray[1], false);
 
-    mapPolyLine(latLonArray[0]);
-    mapPolyLine(latLonArray[1]);
+    // Calculate a bounds for the map view
+    // given all the points
+    var allLatLng = latLonArray[0].concat(latLonArray[1]);
+    var bounds = new google.maps.LatLngBounds();
+
+    for (x = 0; x < allLatLng.length; x++) {
+        // var nextLatLng = new google.maps.LatLng(pointArray[x].B, pointArray[x].k);
+        bounds = bounds.extend(allLatLng[x]);
+    }
+
+     // Frame route within map
+    googleMap.fitBounds(bounds);
 
     deferred.resolve();
     return deferred.promise;
 }
 
-function mapPolyLine(pointArray) {
-    var map = new google.maps.Map(document.getElementById('map_two'));
+function mapPolyLine(pointArray, isFirstRoute) {
 
-    var latLngArray = [];
-    for (x = 0; x < pointArray.length; x++) {
-        latLngArray.push(new google.maps.LatLng(pointArray[x].B, pointArray[x].k));
+    var strokeColor;
+
+    if (isFirstRoute) {
+        strokeColor = '#ff8888';
+    } else {
+        strokeColor = '#3366FF';
     }
 
     var routeOne = new google.maps.Polyline({
-        path: latLngArray,
+        path: pointArray,
         geodesic: true,
-        strokeColor: '#FF0000',
+        strokeColor: strokeColor,
         strokeOpacity: 1.0,
-        strokeWeight: 2
+        strokeWeight: 8
     });
 
-    routeOne.setMap(map);
+    routeOne.setMap(googleMap);
+
     // Unhide map_two
-    $(".map_two").show();
+    //$(".map_two").show();
 }
 
 
