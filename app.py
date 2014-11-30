@@ -10,6 +10,5 @@ def run_app():
 	return render_template("main.html", key=key)
 
 if __name__ == "__main__":
-	# change this to app.run for production
-	app.run(debug = True)
-    # app.run(host='0.0.0.0')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

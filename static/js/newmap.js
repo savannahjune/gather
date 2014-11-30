@@ -672,6 +672,15 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     // console.log("Duration of route one is " + durationArray[0]);
     // console.log("Duration of route two is " + durationArray[1]);
 
+    // if (durationArray[0] > 60 < 3600) {
+    //     var durationOne = Math.round(durationArray[0] / 60);
+    //     var infoWindowContentOne = "<div id=\"content\" style=\"width:70px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportOne +".svg\"></span><span>" + durationOne + " mins </span></div>";
+    // }
+    // if (durationArray[0] >= 3600) {
+    //     var durationOne = 
+    // }
+
+
     var durationOneMins = String(Math.round(durationArray[0] / 60));
     var durationTwoMins = String(Math.round(durationArray[1] / 60));
     // style=\"width:80px;\"
