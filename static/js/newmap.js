@@ -500,7 +500,7 @@ function displayPlaceInfo(placeID) {
         // this displays the name and makes it a link to the required Google website for the place
         
         var type = $("input:radio[name=business_option]:checked").val();
-        $("#placeIcon").html("<img class=\"place_icon\" src=\"static/assets/"+ type + ".png\">");
+        $("#placeIcon").html("<img class=\"place_icon\" src=\"static/assets/"+ type + "map.png\">");
         $("#placeName").html("<a href=\"" + response.website + "\">" + response.name + "</a>");
         var placeAddress = (response.formatted_address);
         $("#placeAddress").html(placeAddress);

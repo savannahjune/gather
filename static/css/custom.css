@@ -104,14 +104,18 @@ a:active {
 }
 
 .place_icon {
-	width:40px;
-	height:40px;
+	width:50px;
+	height:65px;
+	margin-right: 10px;
 }
 
 #placeName {
 	font-size: 30px;
 }
 
+#placeAddress {
+	margin-top: 15px;
+}
 .business {
 	height: 367px;
 }
