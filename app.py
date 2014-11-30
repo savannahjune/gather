@@ -11,4 +11,5 @@ def run_app():
 
 if __name__ == "__main__":
 	# change this to app.run for production
-    app.run(host='0.0.0.0')
+	app.run(debug = True)
+    # app.run(host='0.0.0.0')

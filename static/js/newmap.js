@@ -9,6 +9,8 @@ var polylineOne;
 var polylineTwo;
 var markerOne;
 var markerTwo;
+var markerLabelOne;
+var markerLabelTwo;
 var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
@@ -664,11 +666,47 @@ function displayMap(latLonArray) {
   */
 function displayMapWithTravelDuration(latLonArray, durationArray) {
     var deferred = Q.defer();
-    console.log(latLonArray[0]);
-    console.log(latLonArray[0][((latLonArray[0].length)-1)]);
+    // console.log(latLonArray[0]);
+    // console.log(latLonArray[0][((latLonArray[0].length)-1)]);
 
-    console.log("Duration of route one is " + durationArray[0]);
-    console.log("Duration of route two is " + durationArray[1]);
+    // console.log("Duration of route one is " + durationArray[0]);
+    // console.log("Duration of route two is " + durationArray[1]);
+
+    var durationOneMins = String(Math.round(durationArray[0] / 60));
+    var durationTwoMins = String(Math.round(durationArray[1] / 60));
+    // style=\"width:80px;\"
+
+    var infoWindowContentOne = "<div id=\"content\" style=\"width:70px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportOne +".svg\"></span><span>" + durationOneMins + " mins </span></div>";
+    var infoWindowContentTwo = "<div id=\"content\" style=\"width:70px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportTwo +".svg\"></span><span>" + durationTwoMins + " mins </span></div>";
+
+
+    if (markerLabelOne){
+        markerLabelOne.setMap(null);
+        markerLabelTwo.setMap(null);
+    }
+
+    var labelIndexOne = Math.round((latLonArray[0].length)/2);
+    console.log(labelIndexOne);
+    var labelIndexTwo = Math.round((latLonArray[1].length)/2);
+    console.log(labelIndexTwo);
+
+    //new google.maps.LatLng(latLonArray[0][labelIndexOne].lat(), 
+                             // latLonArray[0][labelIndexOne].lng());
+
+    markerLabelOne = new google.maps.InfoWindow({
+        position: latLonArray[0][labelIndexOne],
+        // icon: "/static/assets/" + methodTransportOne +".svg",
+        content: infoWindowContentOne,
+        });
+
+    markerLabelTwo = new google.maps.InfoWindow({
+        position: latLonArray[1][labelIndexTwo],
+        // icon: "/static/assets/" + methodTransportTwo +".svg",
+        content: infoWindowContentTwo,
+    });
+
+    markerLabelOne.setMap(googleMap);
+    markerLabelTwo.setMap(googleMap);
 
     mapPolyLine(latLonArray[0], true);
     mapPolyLine(latLonArray[1], false);
@@ -726,14 +764,12 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
         if (polylineOne) {
             polylineOne.setMap(null);   // Remove old polyline
             markerOne.setMap(null);
-            markerLabelOne.setMap(null);
         }
         strokeColor = '#ff8888';
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
             markerTwo.setMap(null);
-            markerLabelTwo.setMap(null);
         }
         strokeColor = '#3366FF';
     }
@@ -742,7 +778,6 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     var imageOriginTwo = "static/assets/markerTwo.svg";
     
     var markerOrigin;
-    var markerLabel;
 
     var route = new google.maps.Polyline({
         path: LatLngArray,
@@ -759,14 +794,6 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
             icon: imageOriginOne
         });
         markerOrigin = markerOne;
-        markerLabelOne = new google.maps.Marker({
-            position: LatLngArray[0][5],
-            icon: imageOriginOne,
-            // labelContent: durationArray[0],
-            // labelAnchor: new google.maps.Point(22, 0),
-            // labelClass: "labels", // the CSS class for the label
-        });
-        markerLabel = markerLabelOne;
     } else {
         polylineTwo = route;
         markerTwo = new google.maps.Marker({
@@ -774,20 +801,10 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
             icon: imageOriginTwo
         });
         markerOrigin = markerTwo;
-        markerLabelTwo = new google.maps.Marker({
-            position: LatLngArray[1][5],
-            icon: imageOriginOne,
-            // labelContent: durationArray[1],
-            // labelAnchor: new google.maps.Point(22, 0),
-            // labelClass: "labels", // the CSS class for the label
-        });
-        markerLabel = markerLabelTwo;
     }
 
     route.setMap(googleMap);
     markerOrigin.setMap(googleMap);
-    markerLabel.setMap(googleMap);
-
 }
 
 
