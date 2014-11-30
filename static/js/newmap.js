@@ -9,6 +9,7 @@ var polylineOne;
 var polylineTwo;
 var markerOne;
 var markerTwo;
+var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
@@ -644,10 +645,12 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
   */
 function displayMap(latLonArray) {
     var deferred = Q.defer();
+    console.log(latLonArray[0]);
+    console.log(latLonArray[0][((latLonArray[0].length)-1)]);
 
-    // Request a Google map in #map_two
     mapPolyLine(latLonArray[0], true);
     mapPolyLine(latLonArray[1], false);
+    mapGatheringPoint(latLonArray[0][((latLonArray[0].length)-1)]);
 
     // Calculate a bounds for the map view
     // given all the points
@@ -666,6 +669,33 @@ function displayMap(latLonArray) {
     return deferred.promise;
 }
 
+function mapGatheringPoint(gatheringPlaceLatLon) {
+    if (gatherMarker) {
+        gatherMarker.setMap(null);
+    }
+
+    var type = $("input:radio[name=business_option]:checked").val();
+
+    var gatherImage = {
+        url: "static/assets/"+ type +"map.png",
+        // This marker is 20 pixels wide by 32 pixels tall.
+        size: new google.maps.Size(40, 57),
+        // The origin for this image is 0,0.
+        // origin: new google.maps.Point(0,0),
+        // // The anchor for this image is the base of the flagpole at 0,32.
+        // anchor: new google.maps.Point(0, 32)
+    };
+
+
+    gatherMarker = new google.maps.Marker({
+        position: gatheringPlaceLatLon,
+        icon: gatherImage,
+    });
+
+    gatherMarker.setMap(googleMap);
+
+}
+
 function mapPolyLine(LatLngArray, isFirstRoute) {
 
     var strokeColor;
@@ -676,15 +706,12 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
             markerOne.setMap(null);
         }
         strokeColor = '#ff8888';
-        // Map icon for Address 1 at LatLngArray[0]
-        // Gather point icon is LatLngArray[LatLngArray.length-1]
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
             markerTwo.setMap(null);
         }
         strokeColor = '#3366FF';
-        // Map icon for Address 2 at LatLngArray[0]
     }
 
     var imageOriginOne = "static/assets/markerOne.svg";
@@ -719,9 +746,8 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     route.setMap(googleMap);
     marker.setMap(googleMap);
 
-    // Unhide map_two
-    //$(".map_two").show();
 }
+
 
 
 
