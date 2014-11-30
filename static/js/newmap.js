@@ -626,8 +626,8 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
             console.log(data);
             var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
-            console.log(latLonArray);
-            console.log(polyline);
+            // console.log(latLonArray);
+            // console.log(polyline);
             deferred.resolve(latLonArray);
         }
         else {
@@ -637,16 +637,38 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
     });
     return deferred.promise;
 }
-    /**
+
+function displayMap(latLonArray) {
+    var routeOneLatLonArray = latLonArray[0];
+    var gatheringLatLng = routeOneLatLonArray[routeOneLatLonArray.length - 1];
+    var gatheringPoint = [gatheringLatLng.lat(), gatheringLatLng.lng()];
+
+    return calculateDuration(initialPointOne, gatheringPoint, methodTransportOne)
+    .then(function(durationOneSeconds) {
+
+        return calculateDuration(initialPointTwo, gatheringPoint, methodTransportTwo)
+        .then(function(durationTwoSeconds){
+            return [durationOneSeconds, durationTwoSeconds];
+        });
+    })
+    .then(function(durationArray) {
+        return displayMapWithTravelDuration(latLonArray, durationArray);
+    });
+}
+/**
   *  Gets an array of lat lon coordinates from getRouteCoordinates
   *  
   *  
-  *  @param {latLonArray} <array> from directions service  API
+  *  @param {latLonArray} <array> of <array> of <LatLng> from directions service API.
+  *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route
   */
-function displayMap(latLonArray) {
+function displayMapWithTravelDuration(latLonArray, durationArray) {
     var deferred = Q.defer();
     console.log(latLonArray[0]);
     console.log(latLonArray[0][((latLonArray[0].length)-1)]);
+
+    console.log("Duration of route one is " + durationArray[0]);
+    console.log("Duration of route two is " + durationArray[1]);
 
     mapPolyLine(latLonArray[0], true);
     mapPolyLine(latLonArray[1], false);
@@ -704,12 +726,14 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
         if (polylineOne) {
             polylineOne.setMap(null);   // Remove old polyline
             markerOne.setMap(null);
+            markerLabelOne.setMap(null);
         }
         strokeColor = '#ff8888';
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
             markerTwo.setMap(null);
+            markerLabelTwo.setMap(null);
         }
         strokeColor = '#3366FF';
     }
@@ -717,7 +741,8 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     var imageOriginOne = "static/assets/markerOne.svg";
     var imageOriginTwo = "static/assets/markerTwo.svg";
     
-    var marker;
+    var markerOrigin;
+    var markerLabel;
 
     var route = new google.maps.Polyline({
         path: LatLngArray,
@@ -733,18 +758,35 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
             position: LatLngArray[0],
             icon: imageOriginOne
         });
-        marker = markerOne;
+        markerOrigin = markerOne;
+        markerLabelOne = new google.maps.Marker({
+            position: LatLngArray[0][5],
+            icon: imageOriginOne,
+            // labelContent: durationArray[0],
+            // labelAnchor: new google.maps.Point(22, 0),
+            // labelClass: "labels", // the CSS class for the label
+        });
+        markerLabel = markerLabelOne;
     } else {
         polylineTwo = route;
         markerTwo = new google.maps.Marker({
             position: LatLngArray[0],
             icon: imageOriginTwo
         });
-        marker = markerTwo;
+        markerOrigin = markerTwo;
+        markerLabelTwo = new google.maps.Marker({
+            position: LatLngArray[1][5],
+            icon: imageOriginOne,
+            // labelContent: durationArray[1],
+            // labelAnchor: new google.maps.Point(22, 0),
+            // labelClass: "labels", // the CSS class for the label
+        });
+        markerLabel = markerLabelTwo;
     }
 
     route.setMap(googleMap);
-    marker.setMap(googleMap);
+    markerOrigin.setMap(googleMap);
+    markerLabel.setMap(googleMap);
 
 }
 

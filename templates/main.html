@@ -44,8 +44,8 @@
 
           function initialize() {
             var mapOptions = {
-              zoom: 8,
-              center: new google.maps.LatLng(-34.397, 150.644),
+              zoom: 12,
+              center: new google.maps.LatLng(37.778909, -122.397849),
               styles: myStyle
             };
             googleMap = new google.maps.Map(document.getElementById('map-canvas'),
@@ -63,10 +63,7 @@
       <div class="row">
         <div class="logo col-md-4">
           <h1>Gather Map</h1>
-        </div> <!-- ends div for col-3 logo -->
-        <div class="loading col-mid-8">
-          <img class"footsteps" src="static/assets/walkingeast.gif" hidden>
-        </div>
+        </div> <!-- ends div for col-4 logo -->
       </div> <!-- ends div for row with logo -->
     
       <div class="row">
@@ -77,7 +74,7 @@
              <div class="col-md-12 single-address-group">
 
               <!-- this is the icon for location one marker red -->
-              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="static/assets/markerOne.svg">
+              <img class="pull-left" style="padding:0; margin-left:60px; margin-top:0px;" src="static/assets/markerOne.svg">
 
               <form role="form"> <!-- location one form -->
 
@@ -112,7 +109,7 @@
 
           <div class="row"> <!-- this row is for location_two -->
              <div class="col-md-12 single-address-group">
-              <img class="pull-left" style="padding:0; margin-left:50px; margin-top:0px;" src="static/assets/markerTwo.svg"> 
+              <img class="pull-left" style="padding:0; margin-left:60px; margin-top:0px;" src="static/assets/markerTwo.svg"> 
 
               <form role="form">
 
