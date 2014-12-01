@@ -602,8 +602,8 @@ function displayPlaceInfo(placeID) {
         // var placeTypes = response.types[], tells you what establishment types google attributes to that location
 
         deferred.resolve(placeAddress);
-        var methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
-        var methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
+        methodTransport = $("input:radio[name=transport_radio1]:checked").val().toLowerCase();
+        // methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val().toLowerCase();
 
         var addresses = getAddressesFromForm();
         var addressOne = addresses[0].split(' ').join('+');
@@ -612,13 +612,13 @@ function displayPlaceInfo(placeID) {
 
         // var methodTransportOneLower = methodTransportOne.toLowerCase();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            var directionLinkApp = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            var directionLinkApp = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransport;
             $(".share_links").html("<a href=\""+ directionLinkApp +"\">Open Directions in Google Maps</a>");
             $(".share_links").show();
         }
 
         else {
-            var directionLinkBrowser = "https://maps.google.com?saddr=Current+Location&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            var directionLinkBrowser = "https://maps.google.com?saddr=Current+Location&daddr=" + placeAddress + "&directionsmode=" + methodTransport;
             $(".share_links").html("<a href=\"" + directionLinkBrowser + "\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         }

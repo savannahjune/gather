@@ -20,7 +20,7 @@ Users can then ask for a different spot nearby, if they do not want to meet at t
 *	Promises (Q library)
 *	HTML/CSS
 *	Bootstrap
-*	Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby
+*	Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby, Directions
 
 ###### Acknowledgements:
 
