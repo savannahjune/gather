@@ -588,13 +588,11 @@ function displayPlaceInfo(placeID) {
 
         // else {
             var shareLinkOne = "comgooglemaps://?saddr=" + addressOne + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-            $(".share_links").html("<a href=\"comgooglemaps://?saddr=1626+Shattuck+Ave,+Berkeley,+CA,+United+States&daddr=5817+Shattuck+Ave,+Oakland,+CA+94609,+United+States&directionsmode=driving\">Fake Link</a>");
-            // $(".share_links").html("<a href=\""+ shareLinkOne + "\">Open Directions in Google Maps App</a>");
+            // var shareLinkTwo = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=driving";
+            // $(".share_links").html("<a href=\"comgooglemaps://?saddr=1626+Shattuck+Ave,+Berkeley,+CA,+United+States&daddr=5817+Shattuck+Ave,+Oakland,+CA+94609,+United+States&directionsmode=driving\">Fake Link</a>");
+            $(".share_links").html("<a href=\"" + shareLinkOne + "\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         // }
-
-        var shareLinkTwo = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-
        
         // console.log(shareLinkBoth);
         console.log(shareLinkOne);
