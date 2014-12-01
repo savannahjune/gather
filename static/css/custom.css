@@ -73,16 +73,12 @@ a:active {
 	padding: 16px;
 	background-color: #D4D4D5;
 	border: 2px solid #958D8F;
-    border-radius: 25px;
+    border-radius: 20px;
 }
 
-.chrome-subdued {
-	padding: 16px;
-	background-color: #D4D4D5;
-	border: 2px solid #D4D4D5;
-    border-radius: 25px;
+.chrome-map {
+	border-radius: 20px;
 }
-
 .single-address-group {
 	text-align: center;
 }
