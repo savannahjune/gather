@@ -28,5 +28,7 @@ All icons from the noun project.
 
 The tree is entitled 'Tree' by Mister Pixel from The Noun Project.
 
+The rain is entitled 'Train' by Jamison Wieser from The Noun Project
+
 Thanks!
 

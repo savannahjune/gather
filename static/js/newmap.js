@@ -346,29 +346,61 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
     // console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
-    var service = new google.maps.DistanceMatrixService();
-    // console.log("About to get Distance Matrix");
-
-    // console.log("Method transport in distance matrix calculation: ");
-    // console.log(methodTransport);
     
-    service.getDistanceMatrix(
-        {
-            origins: [pointOne],
-            destinations: [pointTwo],
+
+    if (methodTransport !== "TRANSIT") {
+        var service = new google.maps.DistanceMatrixService();
+        // console.log("About to get Distance Matrix");
+
+        console.log("Method transport in distance matrix calculation: ");
+        console.log(methodTransport);
+        
+        service.getDistanceMatrix(
+            {
+                origins: [pointOne],
+                destinations: [pointTwo],
+                travelMode: methodTransport,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false,
+                durationInTraffic: true,
+            }, function(response, status) {
+                // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
+                // value in this case is seconds, duration is in seconds
+                // console.log(response);
+                var duration = (response.rows[0].elements[0].duration.value);
+                // console.log("Got google duration " + duration);
+                deferred.resolve(duration);
+            });
+    }
+    else {
+        console.log("It's transit!");
+        console.log(methodTransport);
+
+        var directionsService = new google.maps.DirectionsService();
+
+        var request = {
+
+            origin: pointOne,
+            destination: pointTwo,
             travelMode: methodTransport,
-            unitSystem: google.maps.UnitSystem.METRIC,
-            avoidHighways: false,
-            avoidTolls: false,
-            durationInTraffic: true,
-        }, function(response, status) {
-            // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
-            // value in this case is seconds, duration is in seconds
-            // console.log(response);
-            var duration = (response.rows[0].elements[0].duration.value);
-            // console.log("Got google duration " + duration);
-            deferred.resolve(duration);
+
+        };
+
+        directionsService.route(request, function (data, status){
+            if (status == google.maps.DirectionsStatus.OK) {
+                console.log(data);
+                console.log(data.routes[0].legs[0].duration.value);
+                var duration = data.routes[0].legs[0].duration.value;
+                deferred.resolve(duration);
+            }
+            else {
+                console.log("Status in getRouteCoordinates: " + status);
+                deferred.reject(new Error(status));
+            }
         });
+    }
+
 
     // console.log("leaving calculateDuration");
     return deferred.promise;
