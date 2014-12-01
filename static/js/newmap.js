@@ -579,24 +579,18 @@ function displayPlaceInfo(placeID) {
         placeAddress = placeAddress.split(' ').join('+');
 
         // var methodTransportOneLower = methodTransportOne.toLowerCase();
-
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            var shareLinkBoth = "comgooglemaps://?saddr=" + addressOne + " &daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-            $(".share_links").html("<a href=\""+ shareLinkBoth +"\">Open Directions in Google Maps App</a>");
+            var directionLinkApp = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            $(".share_links").html("<a href=\""+ directionLinkApp +"\">Open Directions in Google Maps</a>");
             $(".share_links").show();
         }
 
-        // else {
-            var shareLinkOne = "comgooglemaps://?saddr=" + addressOne + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-            // var shareLinkTwo = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=driving";
-            // $(".share_links").html("<a href=\"comgooglemaps://?saddr=1626+Shattuck+Ave,+Berkeley,+CA,+United+States&daddr=5817+Shattuck+Ave,+Oakland,+CA+94609,+United+States&directionsmode=driving\">Fake Link</a>");
-            $(".share_links").html("<a href=\"" + shareLinkOne + "\">Open Directions in Google Maps App</a>");
+        else {
+            var directionLinkBrowser = "https://maps.google.com?saddr=Current+Location&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            $(".share_links").html("<a href=\"" + directionLinkBrowser + "\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
-        // }
+        }
        
-        // console.log(shareLinkBoth);
-        console.log(shareLinkOne);
-        // console.log(shareLink2);
     });
     
     return deferred.promise;
