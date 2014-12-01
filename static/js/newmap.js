@@ -588,7 +588,7 @@ function displayPlaceInfo(placeID) {
 
         // else {
             var shareLinkOne = "comgooglemaps://?saddr=" + addressOne + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-            $(".share_links").html("comgooglemaps://?saddr=Google+Inc,+8th+Avenue,+New+York,+NY&daddr=John+F.+Kennedy+International+Airport,+Van+Wyck+Expressway,+Jamaica,+New+York&directionsmode=transit");
+            $(".share_links").html("<a href=\"comgooglemaps://?saddr=Google+Inc,+8th+Avenue,+New+York,+NY&daddr=John+F.+Kennedy+International+Airport,+Van+Wyck+Expressway,+Jamaica,+New+York&directionsmode=transit\"></a>");
             // $(".share_links").html("<a href=\""+ shareLinkOne + "\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         // }
