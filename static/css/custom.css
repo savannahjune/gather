@@ -1,30 +1,37 @@
+/*sets height for entire document*/
+html, body, .container { 
+	height: 100%; 
+}
+
+/*makes sure there is no excess padding on columns*/
+.col-md-6, .col-md-5, .col-md-1, .col-md-12 {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+/*sets style for background of body and letter spacing for document*/
 body {
-	/*background-image: url('/static/assets/struckaxiom.png');*/
-	/*background-color: #CDEBE9;*/
 	background-color: #022330;
-	/*background-color: #00384C;*/
 	letter-spacing: 0.07em;
 }
 
+/*styling for gather map title*/
 h1 {
 	font-family: 'Raleway', sans-serif;
 	font-size: 40pt;
 	margin-left: 10px;
 	display: inline-block;
-	/*color: #2ECC71;*/
 	color: #E6905D;
 }
 
-h2 {
-	margin-top:0;
-}
-
+/*sets font for rest of document besides title*/
 .container {
 	font-size: 12pt;
 	font-family: 'Arimo', sans-serif;	
 }
 
-/*a:link, a:visited, a:hover, a:active {*/
+/*styling for links*/
+
 a:link, a:visited {
 	color: #E6905D;
 }
@@ -37,12 +44,17 @@ a:active {
 	color: #6AB5D6;
 }
 
-/*this adjusts what's in the adress inputs*/
+/*this adjusts what's in the address inputs*/
 
 #location_one, #location_two {
-	/*font-family: 'Raleway Thin', sans-serif;*/
 	font-size: 14px;
 	color: black;
+}
+
+/*alignment for the address forms*/
+
+.single-address-group {
+	text-align: center;
 }
 
 /*this adjust the color/shadow around the address inputs*/
@@ -53,112 +65,36 @@ a:active {
 	outline: 0 none;
 }
 
+/*these are the radio buttons for transport and business*/
+
 .radio-inline {
 	margin-right:20px;
 }
 
 .transport_icons_container {
-	/*background: #EAC9BA;*/
 	width: 100%;
 	margin-left: 10px;
 }
 
+/*these is the styling for the typeahead dropdown menu*/
+
 .tt-dropdown-menu {
-	background-color: #FFF;
-	border: 1px solid black;
-	text-align: left;
+    width: 428px;
+    padding: 8px 0;
+    background-color: #fff;
+    text-align: left;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
-.chrome {
-	padding: 16px;
-	background-color: #D4D4D5;
-	border: 2px solid #958D8F;
-    border-radius: 20px;
-}
-
-.chrome-map {
-	border-radius: 20px;
-}
-.single-address-group {
-	text-align: center;
-}
-
-.transport {
-    width: 35px;
-    height: 35px;
-}
-
-.business_icon {
-	width: 35px;
-	height: 35px;
-}
-
-#business_info {
-	padding-left: 30px;
-	padding-right: 30px;
-	font-size: 18px;
-}
-
-.place_icon {
-	width:45px;
-	height:55px;
-	margin-right: 10px;
-}
-
-#placeName {
-	font-size: 30px;
-}
-
-#placeAddress {
-	margin-top: 15px;
-}
-/*.business {
-	height: 367px;
-}*/
-label > input {
-	visibility: hidden;
-	position: absolute;
-}
-
-label > input + img {
-	border:2px solid transparent;
-	padding:2px;
-}
-
-label > input:hover + img {
-	border:3px black;
-}
-
-label > input:checked + img {
-	/*border: 2px solid #A6CF4F;*/
-	border: 3px solid #E6905D;
-	background-color: white;
-}
-
-#car_button, #walk_button, #bike_button {
-	width: 45px;
-	height: 45px;
-	background-color: transparent;
-	border: none;
-	margin:0 auto;
-	display: inline-block;
-}
+/*styling for typeahead in general*/
 
 .twitter-typeahead {
 	width: 70%;
 	font-size: 16px;
 	margin-left: 10px;
 	margin-right: 5px;
-}
-
-.tt-dropdown-menu {
-    width: 428px;
-    /*margin-top: 12px;*/
-    padding: 8px 0;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
 .tt-query {
@@ -180,8 +116,85 @@ label > input:checked + img {
     margin: 0;
 }
 
+/*styling for the chrome containers for the form and business info*/
+
+.chrome {
+	padding: 16px;
+	background-color: #D4D4D5;
+	border: 2px solid #958D8F;
+    border-radius: 20px;
+}
+
+/*adds rounded corners to the map*/
+
+.chrome-map {
+	border-radius: 20px;
+}
+
+/*sets width and height of transport icons*/
+
+.transport {
+    width: 35px;
+    height: 35px;
+}
+
+/*sets width and height of business icons*/
+
+.business_icon {
+	width: 35px;
+	height: 35px;
+}
+
+/*sets padding and font for text in business info*/
+
+#business_info {
+	padding-left: 30px;
+	padding-right: 30px;
+	font-size: 18px;
+}
+
+/*sets width and height of place icon in business info*/
+
+.place_icon {
+	width:45px;
+	height:55px;
+	margin-right: 10px;
+}
+
+/*sets the font size of place name and address in business info*/
+
+#placeName {
+	font-size: 30px;
+}
+
+#placeAddress {
+	margin-top: 15px;
+}
+
+/*styling for all radio buttons including interactions like hover and checked*/
+
+label > input {
+	visibility: hidden;
+	position: absolute;
+}
+
+label > input + img {
+	border:2px solid transparent;
+	padding:2px;
+}
+
+label > input:hover + img {
+	border:3px black;
+}
+
+label > input:checked + img {
+	border: 3px solid #E6905D;
+	background-color: white;
+}
+
+/*styling for buttons to override default bootstrap styling*/
+
 .btn {
-	/*background-color: #90FFB9;*/
 	background-color: #FDB383;
 	color: white;
 	height: 35px;
@@ -190,32 +203,20 @@ label > input:checked + img {
 }
 
 .btn:focus, .btn:active {
-    /*background-color: #90FFB9;*/
     background-color: #FDB383;
 	color: white;
 	height: 35px;
     outline: none;
-    /*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
 }
 
 .btn:hover {
 	background-color: #E6905D;
 	color: white;
-	/*border: #2ECC71 solid 3px;*/
     border: #E6905D solid 3px;
-
-}
-
-
-.col-md-6, .col-md-5, .col-md-1, .col-md-12 {
-	padding-left: 0;
-	padding-right: 0;
 }
 
 #map-canvas {
 	width:100%;
  	height:640px;
 }
-
-html, body, .container { height: 100% }
