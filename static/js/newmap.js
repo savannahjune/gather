@@ -1,4 +1,4 @@
-/** Global starting points. Accessed throughout recursive calls to findGatheringPoint **/
+/** Global starting points. Accessed throughout recursive calls to findGatheringPoint */
 var initialPointOne;
 var initialPointTwo;
 var addresses;
@@ -14,7 +14,7 @@ var markerLabelTwo;
 var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
-of allowed attempts makes the gathering point more accurate, but takes more time **/
+of allowed attempts makes the gathering point more accurate, but takes more time */
 var maxAttempts = 14;
 var numAttempts;
 
@@ -35,7 +35,6 @@ $(document).ready(function () {
     // this creates event listener for gather button
     $("#gather_button").on('click', function(evt) {
         numAttempts = 0;
-        // console.log('submitted form');
         evt.preventDefault();
         $("#gather_button").prop('disabled',true);
         $("#gather_button").text("Loading...");
@@ -81,7 +80,7 @@ $(document).ready(function () {
             if (latLonPointOne, latLonPointTwo) {
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
             } else {
-                console.log("Error with latlons");
+                console.log("Error with latlon creation");
             }
 
         })
@@ -168,13 +167,13 @@ function getAddressesFromForm() {
 }
 
 /**
-  *  Get Autocomplete suggestions. Uses Google Places AutocompleteService to search 
-  *  for known addresses that match the given query
-  *
-  *  @param {query} <string> the input to suggest autocomplete matches against. e.g: "123 Main St"
-  *  @param {cb} a callback to deliver the potential matches. Takes a single array argument of matches
-  *  @return {null|predictions} null or prediction from Google Maps Autocomplete
-  */
+ *  Get Autocomplete suggestions. Uses Google Places AutocompleteService to search 
+ *  for known addresses that match the given query
+ *
+ *  @param {query} <string> the input to suggest autocomplete matches against. e.g: "123 Main St"
+ *  @param {cb} a callback to deliver the potential matches. Takes a single array argument of matches
+ *  @return {null|predictions} null or prediction from Google Maps Autocomplete
+ */
 function getAutocompleteSuggestions(query, callback) {
     var service = new google.maps.places.AutocompleteService();
     service.getQueryPredictions({ input: query }, function(predictions, status) {
@@ -186,12 +185,12 @@ function getAutocompleteSuggestions(query, callback) {
 }
 
 /**
-  *  Takes an address and makes a coordinate out of it
-  *  
-  *
-  *  @param {target} <string> address to become a coordinate
-  *  @return {latlon} <array> array of coordinates(integers)
-  */
+ *  Takes an address and makes a coordinate out of it
+ *  
+ *
+ *  @param {target} <string> address to become a coordinate
+ *  @return {latlon} <array> array of coordinates(integers)
+ */
 function makeCoordinates(target) {
     var deferred = Q.defer();
 
@@ -217,17 +216,17 @@ function makeCoordinates(target) {
 }
 
 /**
-  *  Finds midpoint between any two places.
-  *  Uses simple math to find this midpoint rather than the great circle midpoint.
-  *  Reasons for not using great circle midpoint: it is only useful if the two points
-  *  are > 250 miles from each other, which is not what this app is intended for.
-  *  Also, the midpoint is reset in the gathering point function, due to traveling times
-  *  so the midpoint is only an initial starting place.
-  *
-  *  @param {pointOne} <object> this is the first place, must be in coordinate form for math
-  *  @param {pointTwo} <object> this is the second place, must be in coordinate form for math
-  *  @return {intialMid} <integer> this is the simple, geo midpoint 
-  */
+ *  Finds midpoint between any two places.
+ *  Uses simple math to find this midpoint rather than the great circle midpoint.
+ *  Reasons for not using great circle midpoint: it is only useful if the two points
+ *  are > 250 miles from each other, which is not what this app is intended for.
+ *  Also, the midpoint is reset in the gathering point function, due to traveling times
+ *  so the midpoint is only an initial starting place.
+ *
+ *  @param {pointOne} <object> this is the first place, must be in coordinate form for math
+ *  @param {pointTwo} <object> this is the second place, must be in coordinate form for math
+ *  @return {intialMid} <integer> this is the simple, geo midpoint 
+ */
 function findMidPoint(pointOne, pointTwo){
     var latOne = pointOne[0];
     var lonOne = pointOne[1];
@@ -242,15 +241,15 @@ function findMidPoint(pointOne, pointTwo){
 }
 
 /**
-  *  Finds best gathering point between two places, as far as time to reach a midpoint
-  *  
-  *  @param {pointOne} integer, must be in coordinate form for math, first location
-  *  @param {pointTwo} integer, must be in coordinate form for math, second location
-  *  @param {initialMid} integer, coordinate, initial midpoint that is redefined in this recursive function
-  *  @param {methodTransportOne} string, taken from form, method of transport for first user
-  *  @param {methodTransportTwo} string, taken from form, method of transport for second user
-  *  @return {gatheringPoint} most optimal place for two people to meet, spend equal amounts of time getting there
-  */
+ *  Finds best gathering point between two places, as far as time to reach a midpoint
+ *  
+ *  @param {pointOne} integer, must be in coordinate form for math, first location
+ *  @param {pointTwo} integer, must be in coordinate form for math, second location
+ *  @param {initialMid} integer, coordinate, initial midpoint that is redefined in this recursive function
+ *  @param {methodTransportOne} string, taken from form, method of transport for first user
+ *  @param {methodTransportTwo} string, taken from form, method of transport for second user
+ *  @return {gatheringPoint} most optimal place for two people to meet, spend equal amounts of time getting there
+ */
 
 function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, methodTransportTwo) {
     numAttempts++;
@@ -268,8 +267,8 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
     })
     .spread(function(durationOne, durationTwo) {
         // Pulls apart the two durations for comparison
-        console.log("Duration one: " + durationOne);
-        console.log("Duration two: " + durationTwo);
+        console.log("Duration of trip for first person: " + durationOne);
+        console.log("Duration of trip for second person: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
         var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
         if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
@@ -278,30 +277,25 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             }
             // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
-            console.log("Found the gathering point: " + initialMid);
             return deferred.promise;
 
         /**
-        * the else if and else below constitute the binary search tree
-        * that this algorithm uses to find optimal midpoint between two people
-        */
+         * the else if and else below constitute the binary search tree
+         * that this algorithm uses to find optimal midpoint between two people
+         */
         }
         else if (durationOne > durationTwo) {
             /** if duration one is greater, move initialMid to between initialMid and pointOne
-              * by passing it into findMidPoint
-              **/
-            console.log("Duration one was greater!");
+             * by passing it into findMidPoint
+             */
             newMidpoint = findMidPoint(pointOne, initialMid);
-            console.log("New midpoint between pointOne and initialMid: " + newMidpoint);
             return findGatheringPoint(pointOne, initialMid, newMidpoint, methodTransportOne, methodTransportTwo);
         }
         else {
             /** if duration two is greater, move initialMid to between initialMid and pointTwo
-              * by passing it into findMidPoint
-              **/
-            console.log("Duration two was greater!");
+             * by passing it into findMidPoint
+             */
             newMidpoint = findMidPoint(pointTwo, initialMid);
-            console.log("New midpoint between pointTwo and initialMid: " + newMidpoint);
             return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
         }
 
@@ -313,12 +307,12 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
 }
 
 /**
-  *  Finds duration of time between two places used in findGatheringPoint function
-  *
-  *  @param {pointOne} <integer> first place, must be in coordinate form for math
-  *  @param {pointTwo} <integer> second place, must be in coordinate form for math
-  *  @return {duration} <integer> time between two places
-  **/
+ *  Finds duration of time between two places used in findGatheringPoint function
+ *
+ *  @param {pointOne} <integer> first place, must be in coordinate form for math
+ *  @param {pointTwo} <integer> second place, must be in coordinate form for math
+ *  @return {duration} <integer> time between two places
+ */
 function calculateDuration(pointOne, pointTwo, methodTransport) {
     var deferred = Q.defer();
 
@@ -329,9 +323,6 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
     if (methodTransport !== "TRANSIT") {
         var service = new google.maps.DistanceMatrixService();
 
-        console.log("Method transport in distance matrix calculation: ");
-        console.log(methodTransport);
-        
         service.getDistanceMatrix(
             {
                 origins: [pointOne],
@@ -349,6 +340,11 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
             });
     }
     else {
+        /** Google maps Distance Matrix does not offer transit as a travel Mode
+         *
+         *
+         *
+         */
         var directionsService = new google.maps.DirectionsService();
 
         var request = {
@@ -361,13 +357,11 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 
         directionsService.route(request, function (data, status){
             if (status == google.maps.DirectionsStatus.OK) {
-                console.log(data);
-                console.log(data.routes[0].legs[0].duration.value);
                 var duration = data.routes[0].legs[0].duration.value;
                 deferred.resolve(duration);
             }
             else {
-                console.log("Status in getRouteCoordinates: " + status);
+                console.log("Error status in getRouteCoordinates: " + status);
                 deferred.reject(new Error(status));
             }
         });
@@ -377,12 +371,12 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 }
 
 /**
-  *  Finds business for people to meet at within a certain range of their equal time midpoint
-  *  
-  *
-  *  @param {gatheringPoint} <integer> this is the equal time midpoint from the findGatheringPoint function, coordinate
-  *  @return {placeID} <string> unique id for a business from google places api search
-  */
+ *  Finds business for people to meet at within a certain range of their equal time midpoint
+ *  
+ *
+ *  @param {gatheringPoint} <integer> this is the equal time midpoint from the findGatheringPoint function, coordinate
+ *  @return {placeID} <string> unique id for a business from google places api search
+ */
 
 
 function findBusiness(gatheringPoint) {
@@ -391,7 +385,6 @@ function findBusiness(gatheringPoint) {
     var deferred = Q.defer();
 
     var spotToSearch = new google.maps.LatLng(gatheringPoint[0], gatheringPoint[1]);
-    // console.log("Spot to search: " + spotToSearch);
 
     // gets type of business users wants from form on the page
 
@@ -408,17 +401,17 @@ function findBusiness(gatheringPoint) {
 
     var service = new google.maps.places.PlacesService(googleMap);
     /**
-    * Finds business options near gatheringPoint, and gets info about the business
-    * Users are allowed to request next business in the object when they press button
-    *
-    * Since this search needs to be done each time the button is pressed, and then
-    * the map must update as well, this function is kept here to retain its spot in 
-    * the promise chain and not made seperate as that would not allow for both the first time
-    * a business is found and each time the button is pressed
-    * @param {response} <object> JSON object with up to 20 businesses in the radius
-    * @param {status} <string> status of whether the function was successful
-    * @return {placeID} <string> this is then passed to displayPlaceInfo
-    */
+     * Finds business options near gatheringPoint, and gets info about the business
+     * Users are allowed to request next business in the object when they press button
+     *
+     * Since this search needs to be done each time the button is pressed, and then
+     * the map must update as well, this function is kept here to retain its spot in 
+     * the promise chain and not made seperate as that would not allow for both the first time
+     * a business is found and each time the button is pressed
+     * @param {response} <object> JSON object with up to 20 businesses in the radius
+     * @param {status} <string> status of whether the function was successful
+     * @return {placeID} <string> this is then passed to displayPlaceInfo
+     */
     service.nearbySearch(request, function businessOptions(response, status) {
         if (response[businessIndex]){
             var placeObj = (response[businessIndex]);
@@ -478,13 +471,13 @@ function findBusiness(gatheringPoint) {
 } /* end of findBusiness */
 
 /**
-  *  Finds specific info about a business using Google Places Details API
-  *  
-  *
-  *  @param {placeID} placeID from the current business found in the findBusiness function
-  *  @return {placeAddress, methodTransportOne, methodTransportTwo} <string> these are used by the display map function
-  *  to show directions between each starting point and the place address, according to each method of transport
-  */
+ *  Finds specific info about a business using Google Places Details API
+ *  
+ *
+ *  @param {placeID} placeID from the current business found in the findBusiness function
+ *  @return {placeAddress, methodTransportOne, methodTransportTwo} <string> these are used by the display map function
+ *  to show directions between each starting point and the place address, according to each method of transport
+ */
 
 function displayPlaceInfo(placeID) {
     var placeDetailsArray = [];
@@ -556,17 +549,17 @@ function displayPlaceInfo(placeID) {
         }
 
     /**  
-      *  other info from places API response that I am not displaying, may want to show later
-      *  var placePhotos = (response.photos); photos have photo_reference, height, width
-      *  
-      *  var placeReviews = response.views 
-      *  this is an array of up to five reviews
-      *  reviews have a type which indicates what aspect of the place is being reviewed response.reviews[index].aspects.type
-      *  reviews[].author_name, author url which links to google+ profile if available
-      *  reviews[].text, text/content & reviews[].time, time of review 
-      *  
-      *  var placeTypes = response.types[], tells you what establishment types google attributes to that location
-      */
+     *  other info from places API response that I am not displaying, may want to show later
+     *  var placePhotos = (response.photos); photos have photo_reference, height, width
+     *  
+     *  var placeReviews = response.views 
+     *  this is an array of up to five reviews
+     *  reviews have a type which indicates what aspect of the place is being reviewed response.reviews[index].aspects.type
+     *  reviews[].author_name, author url which links to google+ profile if available
+     *  reviews[].text, text/content & reviews[].time, time of review 
+     *  
+     *  var placeTypes = response.types[], tells you what establishment types google attributes to that location
+     */
 
         deferred.resolve(placeAddress);
         methodTransport = $("input:radio[name=transport_radio1]:checked").val().toLowerCase();
@@ -593,13 +586,13 @@ function displayPlaceInfo(placeID) {
 }
 
 /**
-  *  Gets two arrays of latlon coordinates for display on one unified map
-  *  
-  *  @param {placeAddress} <string> business address where two people are meeting
-  *  @param {originAddress} <string> address from form field
-  *  @param {methodTransport} <string> from radio button
-  *  @return {routeCoordinates} <array> from directions service  API
-  */
+ *  Gets two arrays of latlon coordinates for display on one unified map
+ *  
+ *  @param {placeAddress} <string> business address where two people are meeting
+ *  @param {originAddress} <string> address from form field
+ *  @param {methodTransport} <string> from radio button
+ *  @return {routeCoordinates} <array> from directions service  API
+ */
 
 function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
     var deferred = Q.defer();
@@ -621,7 +614,6 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
 
     directionsService.route(request, function (data, status){
         if (status == google.maps.DirectionsStatus.OK) {
-            console.log(data);
             var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
             deferred.resolve(latLonArray);
@@ -652,12 +644,12 @@ function displayMap(latLonArray) {
     });
 }
 /**
-  *  Gets an array of lat lon coordinates and durations from getRouteCoordinates
-  *  
-  *  @param {latLonArray} <array> of <array> of <LatLng> from directions service API.
-  *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route
-  *  @param {durationArray} <array> of durations from distance matrix API
-  */
+ *  Gets an array of lat lon coordinates and durations from getRouteCoordinates
+ *  
+ *  @param {latLonArray} <array> of <array> of <LatLng> from directions service API.
+ *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route
+ *  @param {durationArray} <array> of durations from distance matrix API
+ */
 function displayMapWithTravelDuration(latLonArray, durationArray) {
     var deferred = Q.defer();
 
@@ -683,9 +675,7 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     }
 
     var labelIndexOne = Math.round((latLonArray[0].length)/2);
-    console.log(labelIndexOne);
     var labelIndexTwo = Math.round((latLonArray[1].length)/2);
-    console.log(labelIndexTwo);
 
 
     markerLabelOne = new google.maps.InfoWindow({
@@ -708,8 +698,7 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     mapPolyLine(latLonArray[1], false);
     mapGatheringPoint(latLonArray[0][((latLonArray[0].length)-1)]);
 
-    // Calculate a bounds for the map view
-    // given all the points
+    // Calculates a bounds for the map view given all the points
     var allLatLng = latLonArray[0].concat(latLonArray[1]);
     var bounds = new google.maps.LatLngBounds();
 
@@ -726,12 +715,12 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
 
 
 /**
-  *  Gets a Google Maps Directions Service LatLong obj, 
-  *  uses it to place gathering point on map
-  *  
-  *  @param {gatheringPlaceLatLon} <obj> a <LatLng> from directions service API.                     
-  *  
-  */
+ *  Gets a Google Maps Directions Service LatLong obj, 
+ *  uses it to place gathering point on map
+ *  
+ *  @param {gatheringPlaceLatLon} <obj> a <LatLng> from directions service API.                     
+ *  
+ */
 
 function mapGatheringPoint(gatheringPlaceLatLon) {
     if (gatherMarker) {
@@ -756,13 +745,13 @@ function mapGatheringPoint(gatheringPlaceLatLon) {
 }
 
 /**
-  *  Gets an array of lat lon coordinates and isFirstRoute from displayMapWithTravelDuration function
-  * 
-  *  {latLonArray} <array> of <array> of <LatLng> from directions service API.
-  *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route                     
-  *  {isFirstRoute} <boolean> either true if this is mapping of the first route from location one to midpoint
-  *  or false if this is the mapping of the second route from location two to midpoint
-  */
+ *  Gets an array of lat lon coordinates and isFirstRoute from displayMapWithTravelDuration function
+ * 
+ *  {latLonArray} <array> of <array> of <LatLng> from directions service API.
+ *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route                     
+ *  {isFirstRoute} <boolean> either true if this is mapping of the first route from location one to midpoint
+ *  or false if this is the mapping of the second route from location two to midpoint
+ */
 
 function mapPolyLine(LatLngArray, isFirstRoute) {
 
