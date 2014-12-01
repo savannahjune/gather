@@ -40,9 +40,7 @@ $(document).ready(function () {
         $("#gather_button").prop('disabled',true);
         $("#gather_button").text("Loading...");
         methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
-        // console.log("Method transport one: " + methodTransportOne);
         methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
-        // console.log("Method transport two: " + methodTransportTwo);
         addresses = getAddressesFromForm();
         // points is an array of values from our form inputs
         // makes coordinates from addresses
@@ -79,10 +77,8 @@ $(document).ready(function () {
             */
             latLonPointOne = latlons[0];
             latLonPointTwo = latlons[1];
-            // console.log("Got both latLons " + latLonPointOne + " " + latLonPointTwo);
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
             if (latLonPointOne, latLonPointTwo) {
-                // console.log("Started find gathering point", initialMid);
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
             } else {
                 console.log("Error with latlons");
@@ -97,7 +93,6 @@ $(document).ready(function () {
             * @return {businessPlaceID} <string> returns Google Maps Place ID
             *
             */
-            console.log("Gathering Point: " + gatheringPoint);
             return findBusiness(gatheringPoint);
         })
         .then(function(businessPlaceID){
@@ -123,14 +118,20 @@ $(document).ready(function () {
 
         })
         .then(function(routeCoordinatesOne) {
-
+            /**
+            * takes routeCoordinatesOne from getRouteCoordinates and returns next function which 
+            * gets the next set of routeCoordinates
+            *
+            * @param {routeCoordinatesOne} <array> array of coordinates that make up a route
+            * @return 
+            */
             return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
             .then(function(routeCoordinatesTwo) {
                 return [routeCoordinatesOne, routeCoordinatesTwo];
             });
         })
         .then(function(routeCoordinatesArray) {
-             /**
+            /**
             * takes routeCoordinates, both sets from both origin points
             *
             * @param {routeCoordinates} <array> array of coordinates
@@ -160,13 +161,9 @@ $(document).ready(function () {
  */
 function getAddressesFromForm() {
     var points = [];
-    // console.log("Got here");
     var locationOne = $("#location_one").val();
-    // console.log(locationOne);
     var locationTwo = $("#location_two").val();
-    // console.log("searchForSpot: ", locationOne, locationTwo);
     points.push(locationOne, locationTwo);
-    // console.log(points);
     return points;
 }
 
@@ -182,13 +179,9 @@ function getAutocompleteSuggestions(query, callback) {
     var service = new google.maps.places.AutocompleteService();
     service.getQueryPredictions({ input: query }, function(predictions, status) {
         if (status != google.maps.places.PlacesServiceStatus.OK) {
-            // console.log("Autocomplete status: " + status);
             return;
         }
-        // console logs each prediction as you type
-        // console.log("Prediction: " + predictions);
         return callback(predictions);
-
     });
 }
 
@@ -209,9 +202,6 @@ function makeCoordinates(target) {
         if (status == google.maps.GeocoderStatus.OK) {
             latlon[0]=results[0].geometry.location.lat();
             latlon[1]=results[0].geometry.location.lng();
-
-            // console.log("Lat:" + latlon[0]);
-            // console.log("Lon:" + latlon[1]);
 
             deferred.resolve(latlon);
 
@@ -239,27 +229,17 @@ function makeCoordinates(target) {
   *  @return {intialMid} <integer> this is the simple, geo midpoint 
   */
 function findMidPoint(pointOne, pointTwo){
-    var lat_one = pointOne[0];
-    // console.log("Lat_one: " + lat_one);
-    var lon_one = pointOne[1];
-    var lat_two = pointTwo[0];
-    var lon_two = pointTwo[1];
-    var latitude_mid = ( (lat_one + lat_two) / 2);
-    // console.log("Latitude_mid: " + latitude_mid);
-    var longitude_mid = ( (lon_one + lon_two) / 2);
-    // console.log("Longitude_mid: " + longitude_mid);
-    var initialMid = [latitude_mid, longitude_mid];
-    // console.log("Mid_point: " + mid_point);
+    var latOne = pointOne[0];
+    var lonOne = pointOne[1];
+    var latTwo = pointTwo[0];
+    var lonTwo = pointTwo[1];
+    var latitudeMid = ( (latOne + latTwo) / 2);
+    var longitudeMid = ( (lonOne + lonTwo) / 2);
+
+    var initialMid = [latitudeMid, longitudeMid];
+
     return initialMid;
 }
-
- // this is the formula to find the great circle mid point. 
-    // useful if the origins are more than 250 miles apart
-    // var Bx = Math.cos(φ2) * Math.cos(λ2-λ1);
-    // var By = Math.cos(φ2) * Math.sin(λ2-λ1);
-    // var φ3 = Math.atan2(Math.sin(φ1) + Math.sin(φ2),
-    //                 Math.sqrt( (Math.cos(φ1)+Bx)*(Math.cos(φ1)+Bx) + By*By ) );
-    // var λ3 = λ1 + Math.atan2(By, Math.cos(φ1) + Bx);
 
 /**
   *  Finds best gathering point between two places, as far as time to reach a midpoint
@@ -342,15 +322,12 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
 function calculateDuration(pointOne, pointTwo, methodTransport) {
     var deferred = Q.defer();
 
-    // console.log("PointOne: " + pointOne);
-    // console.log("PointTwo: " + pointTwo);
     pointOne = new google.maps.LatLng(pointOne[0], pointOne[1]);
     pointTwo = new google.maps.LatLng(pointTwo[0], pointTwo[1]);
     
 
     if (methodTransport !== "TRANSIT") {
         var service = new google.maps.DistanceMatrixService();
-        // console.log("About to get Distance Matrix");
 
         console.log("Method transport in distance matrix calculation: ");
         console.log(methodTransport);
@@ -367,16 +344,11 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
             }, function(response, status) {
                 // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
                 // value in this case is seconds, duration is in seconds
-                // console.log(response);
                 var duration = (response.rows[0].elements[0].duration.value);
-                // console.log("Got google duration " + duration);
                 deferred.resolve(duration);
             });
     }
     else {
-        console.log("It's transit!");
-        console.log(methodTransport);
-
         var directionsService = new google.maps.DirectionsService();
 
         var request = {
@@ -401,8 +373,6 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
         });
     }
 
-
-    // console.log("leaving calculateDuration");
     return deferred.promise;
 }
 
@@ -453,8 +423,6 @@ function findBusiness(gatheringPoint) {
         if (response[businessIndex]){
             var placeObj = (response[businessIndex]);
             var placeID = (response[businessIndex].place_id);
-            // console.log("Place object: ");
-            // console.log(placeObj);
             var placeLat = (response[businessIndex].geometry.location.k);
             var placeLon = (response[businessIndex].geometry.location.B);
             var placeComplete = [placeLat, placeLon];
@@ -467,8 +435,7 @@ function findBusiness(gatheringPoint) {
                 $("#next_business").click(function(evt) {
                     evt.preventDefault();
                     businessIndex++;
-                    // console.log("businessIndex after users asks for another business: ");
-                    // console.log(businessIndex);
+
                     placeID = businessOptions(response, status);
                     displayPlaceInfo(placeID);
 
@@ -529,10 +496,8 @@ function displayPlaceInfo(placeID) {
     var service = new google.maps.places.PlacesService(googleMap);
     service.getDetails(request, function(response, status) {
         var placeInfo = response;
-        console.log(placeInfo);
         $(".business").show();
-        // this displays the name and makes it a link to the required Google website for the place
-        
+        // this displays the name and makes it a link to the required Google website for the place 
         var type = $("input:radio[name=business_option]:checked").val();
         $("#placeIcon").html("<img class=\"place_icon\" src=\"static/assets/"+ type + "map.png\">");
         $("#placeName").html("<a href=\"" + response.website + "\">" + response.name + "</a>");
@@ -590,27 +555,27 @@ function displayPlaceInfo(placeID) {
                 break;
         }
 
-        // other info from places that I have not yet used, but exists
-        // var placeIcon = (response.icon);
-        // var placePhotos = (response.photos);
-            // photos have photo_reference, height, width
-        // var placeReviews = response.views 
-            // this is an array of up to five reviews
-            // reviews have a type which indicates what aspect of the place is being reviewed response.reviews[index].aspects.type
-            // reviews also have reviews[].author_name , author url which links to googleplus profile if available
-            // reviews also have text/content, reviews[].text & time of review, reviews[].time
-        // var placeTypes = response.types[], tells you what establishment types google attributes to that location
+    /**  
+      *  other info from places API response that I am not displaying, may want to show later
+      *  var placePhotos = (response.photos); photos have photo_reference, height, width
+      *  
+      *  var placeReviews = response.views 
+      *  this is an array of up to five reviews
+      *  reviews have a type which indicates what aspect of the place is being reviewed response.reviews[index].aspects.type
+      *  reviews[].author_name, author url which links to google+ profile if available
+      *  reviews[].text, text/content & reviews[].time, time of review 
+      *  
+      *  var placeTypes = response.types[], tells you what establishment types google attributes to that location
+      */
 
         deferred.resolve(placeAddress);
         methodTransport = $("input:radio[name=transport_radio1]:checked").val().toLowerCase();
-        // methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val().toLowerCase();
 
         var addresses = getAddressesFromForm();
         var addressOne = addresses[0].split(' ').join('+');
         var addressTwo = addresses[1].split(' ').join('+');
         placeAddress = placeAddress.split(' ').join('+');
 
-        // var methodTransportOneLower = methodTransportOne.toLowerCase();
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var directionLinkApp = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransport;
             $(".share_links").html("<a href=\""+ directionLinkApp +"\">Open Directions in Google Maps</a>");
@@ -622,7 +587,6 @@ function displayPlaceInfo(placeID) {
             $(".share_links").html("<a href=\"" + directionLinkBrowser + "\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         }
-       
     });
     
     return deferred.promise;
@@ -660,8 +624,6 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
             console.log(data);
             var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
-            // console.log(latLonArray);
-            // console.log(polyline);
             deferred.resolve(latLonArray);
         }
         else {
@@ -698,11 +660,6 @@ function displayMap(latLonArray) {
   */
 function displayMapWithTravelDuration(latLonArray, durationArray) {
     var deferred = Q.defer();
-    // console.log(latLonArray[0]);
-    // console.log(latLonArray[0][((latLonArray[0].length)-1)]);
-
-    // console.log("Duration of route one is " + durationArray[0]);
-    // console.log("Duration of route two is " + durationArray[1]);
 
     // if (durationArray[0] > 60 < 3600) {
     //     var durationOne = Math.round(durationArray[0] / 60);
@@ -715,7 +672,6 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
 
     var durationOneMins = String(Math.round(durationArray[0] / 60));
     var durationTwoMins = String(Math.round(durationArray[1] / 60));
-    // style=\"width:80px;\"
 
     var infoWindowContentOne = "<div id=\"content\" style=\"width:80px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportOne +".svg\"></span><span>" + durationOneMins + " mins </span></div>";
     var infoWindowContentTwo = "<div id=\"content\" style=\"width:80px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportTwo +".svg\"></span><span>" + durationTwoMins + " mins </span></div>";
@@ -758,16 +714,24 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     var bounds = new google.maps.LatLngBounds();
 
     for (x = 0; x < allLatLng.length; x++) {
-        // var nextLatLng = new google.maps.LatLng(pointArray[x].B, pointArray[x].k);
         bounds = bounds.extend(allLatLng[x]);
     }
 
-     // Frame route within map
+    // Frame route within map
     googleMap.fitBounds(bounds);
 
     deferred.resolve();
     return deferred.promise;
 }
+
+
+/**
+  *  Gets a Google Maps Directions Service LatLong obj, 
+  *  uses it to place gathering point on map
+  *  
+  *  @param {gatheringPlaceLatLon} <obj> a <LatLng> from directions service API.                     
+  *  
+  */
 
 function mapGatheringPoint(gatheringPlaceLatLon) {
     if (gatherMarker) {
@@ -778,12 +742,7 @@ function mapGatheringPoint(gatheringPlaceLatLon) {
 
     var gatherImage = {
         url: "static/assets/"+ type +"map.png",
-        // This marker is 20 pixels wide by 32 pixels tall.
         size: new google.maps.Size(40, 57),
-        // The origin for this image is 0,0.
-        // origin: new google.maps.Point(0,0),
-        // // The anchor for this image is the base of the flagpole at 0,32.
-        // anchor: new google.maps.Point(0, 32)
     };
 
 
@@ -796,6 +755,15 @@ function mapGatheringPoint(gatheringPlaceLatLon) {
 
 }
 
+/**
+  *  Gets an array of lat lon coordinates and isFirstRoute from displayMapWithTravelDuration function
+  * 
+  *  {latLonArray} <array> of <array> of <LatLng> from directions service API.
+  *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route                     
+  *  {isFirstRoute} <boolean> either true if this is mapping of the first route from location one to midpoint
+  *  or false if this is the mapping of the second route from location two to midpoint
+  */
+
 function mapPolyLine(LatLngArray, isFirstRoute) {
 
     var strokeColor;
@@ -803,13 +771,13 @@ function mapPolyLine(LatLngArray, isFirstRoute) {
     if (isFirstRoute) {
         if (polylineOne) {
             polylineOne.setMap(null);   // Remove old polyline
-            markerOne.setMap(null);
+            markerOne.setMap(null);     // Remove old marker
         }
         strokeColor = '#ff8888';
     } else {
         if (polylineTwo) {
             polylineTwo.setMap(null);   // Remove old polyline
-            markerTwo.setMap(null);
+            markerTwo.setMap(null);     // Remove old marker
         }
         strokeColor = '#3366FF';
     }
