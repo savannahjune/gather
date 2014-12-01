@@ -15,10 +15,10 @@ var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.  Higher number
 of allowed attempts makes the gathering point more accurate, but takes more time **/
-const maxAttempts = 14;
+var maxAttempts = 14;
 var numAttempts;
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     /** this function provides google 
     autocomplete of addresses */
@@ -578,19 +578,19 @@ function displayPlaceInfo(placeID) {
         var addressTwo = addresses[1].split(' ').join('+');
         placeAddress = placeAddress.split(' ').join('+');
 
-        // shareLinkBoth = "comgooglemaps://?saddr=&daddr=" + placeAddress;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            var shareLinkBoth = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            $(".share_links").html('<a href='+ shareLinkBoth +">Open Directions in Google Maps App</a>");
+            $(".share_links").show();
+        }
 
-        // shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
-        // shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne;
+        var shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+        var shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
 
-        // $(".share_links").show();
-        // $(".share_links").html('<a href='+ shareLinkBoth +">Open Directions in Google Maps App</a>");
        
         // console.log(shareLinkBoth);
         // console.log(shareLink1);
         // console.log(shareLink2);
-
-        // displayMap(placeAddress, methodTransportOne, methodTransportTwo);
     });
     
     return deferred.promise;
@@ -658,11 +658,11 @@ function displayMap(latLonArray) {
     });
 }
 /**
-  *  Gets an array of lat lon coordinates from getRouteCoordinates
-  *  
+  *  Gets an array of lat lon coordinates and durations from getRouteCoordinates
   *  
   *  @param {latLonArray} <array> of <array> of <LatLng> from directions service API.
   *                       e.g: latLonArray[0] is an <array> of <LatLng> representing the first route
+  *  @param {durationArray} <array> of durations from distance matrix API
   */
 function displayMapWithTravelDuration(latLonArray, durationArray) {
     var deferred = Q.defer();
@@ -685,8 +685,8 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     var durationTwoMins = String(Math.round(durationArray[1] / 60));
     // style=\"width:80px;\"
 
-    var infoWindowContentOne = "<div id=\"content\" style=\"width:70px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportOne +".svg\"></span><span>" + durationOneMins + " mins </span></div>";
-    var infoWindowContentTwo = "<div id=\"content\" style=\"width:70px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportTwo +".svg\"></span><span>" + durationTwoMins + " mins </span></div>";
+    var infoWindowContentOne = "<div id=\"content\" style=\"width:80px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportOne +".svg\"></span><span>" + durationOneMins + " mins </span></div>";
+    var infoWindowContentTwo = "<div id=\"content\" style=\"width:80px;\"><span><img style=\"width: 20px; height: 20px; padding-right: 4px;\" src=\"static/assets/" + methodTransportTwo +".svg\"></span><span>" + durationTwoMins + " mins </span></div>";
 
 
     if (markerLabelOne){
@@ -699,20 +699,19 @@ function displayMapWithTravelDuration(latLonArray, durationArray) {
     var labelIndexTwo = Math.round((latLonArray[1].length)/2);
     console.log(labelIndexTwo);
 
-    //new google.maps.LatLng(latLonArray[0][labelIndexOne].lat(), 
-                             // latLonArray[0][labelIndexOne].lng());
 
     markerLabelOne = new google.maps.InfoWindow({
         position: latLonArray[0][labelIndexOne],
-        // icon: "/static/assets/" + methodTransportOne +".svg",
         content: infoWindowContentOne,
         });
 
     markerLabelTwo = new google.maps.InfoWindow({
         position: latLonArray[1][labelIndexTwo],
-        // icon: "/static/assets/" + methodTransportTwo +".svg",
         content: infoWindowContentTwo,
     });
+
+    markerLabelOne.setContent(infoWindowContentOne);
+    markerLabelTwo.setContent(infoWindowContentTwo);
 
     markerLabelOne.setMap(googleMap);
     markerLabelTwo.setMap(googleMap);
