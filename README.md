@@ -43,41 +43,34 @@ $ source env/bin/activate
 
 ###### File structure:
 
-static
---------------------
+<strong>static</strong>
 * assets: all images used in project
 * css: style formatting, personal is custom.css, all other files are bootstrap
 * fonts: fonts included in bootstrap
 * js
-	> bootstrap.js and bootstrap.min.js: javascript included in bootstrap
-	> jquery.autocomplete.js: used in address autocompletion
-	> main.js: main JS file
-	> oldmap.js: JS file that shows two maps instead of one
-	> typeahead.bundle.js: used for typeahead autocompletion
+	1) bootstrap.js and bootstrap.min.js: javascript included in bootstrap
+	2) jquery.autocomplete.js: used in address autocompletion
+	3) main.js: main JS file
+	4) oldmap.js: JS file that shows two maps instead of one
+	5) typeahead.bundle.js: used for typeahead autocompletion
 
 
-templates
---------------------
+<strong>templates</strong>
 * main.html: single page app, so a single HTML template for the app
 
-.gitignore
---------------------
+<strong>.gitignore</strong>
 * file used to ignore local virtual environment
 
-Procfile
---------------------
+<strong>Procfile</strong>
 * needed for heroku deployment
 
-READ.md
---------------------
+<strong>READ.md</strong>
 * what you're currently reading
 
-app.py
---------------------
+<strong>app.py</strong>
 * flask app python script
 
-requirements.txt
---------------------
+<strong>requirements.txt</strong>
 * list of required modules for installation
 
 
