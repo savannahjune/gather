@@ -1,10 +1,17 @@
-/** Global starting points. Accessed throughout recursive calls to findGatheringPoint */
+/** Global starting points in coordinate form. Accessed throughout recursive calls to findGatheringPoint */
 var initialPointOne;
 var initialPointTwo;
 var addresses;
+/** 
+ *  Address of the gathering point, does not change until user clicks gather again. Needed in many functions
+ *  so it is kept global to avoid passing variables between functions in the promise chain unnecessarilyso it is kept global to avoid passing variables between functions in the promise chain unnecessarily
+ *
+ */
 var gatheringPlaceAddress;
+/* Methods of transport do not change kept global for the same reason as the gatheringPlaceAddress*/
 var methodTransportOne;
 var methodTransportTwo;
+/* The following variables must be global in order to remove them from the map when a users clicks pick me another*/
 var polylineOne;
 var polylineTwo;
 var markerOne;
