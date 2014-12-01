@@ -79,7 +79,7 @@ $ source env/bin/activate
 
 <p>When a user first visits gathermap.com, they must first specify the two locations they and their friend are coming from. This input uses typeahead.js and google Places API to predict what the user's address.<p>
 
-<img src="static/gif/addressinput.gif" alt="Address Input">
+<img src="./static/gif/addressinput.gif" alt="Address Input">
 
 
 
