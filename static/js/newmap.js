@@ -579,7 +579,7 @@ function displayPlaceInfo(placeID) {
         placeAddress = placeAddress.split(' ').join('+');
 
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            var shareLinkBoth = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            var shareLinkBoth = "comgooglemaps://?saddr=" + addressOne +" &daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
             $(".share_links").html('<a href='+ shareLinkBoth +">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         }
