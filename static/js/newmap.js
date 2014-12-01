@@ -578,18 +578,25 @@ function displayPlaceInfo(placeID) {
         var addressTwo = addresses[1].split(' ').join('+');
         placeAddress = placeAddress.split(' ').join('+');
 
+        // var methodTransportOneLower = methodTransportOne.toLowerCase();
+
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            var shareLinkBoth = "comgooglemaps://?saddr=" + addressOne +" &daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-            $(".share_links").html('<a href='+ shareLinkBoth +">Open Directions in Google Maps App</a>");
+            var shareLinkBoth = "comgooglemaps://?saddr=" + addressOne + " &daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            $(".share_links").html("<a href=\""+ shareLinkBoth +"\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         }
 
-        var shareLink1 = "comgooglemaps://?saddr=" + addressOne  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
-        var shareLink2 = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+        // else {
+            var shareLinkOne = "comgooglemaps://?saddr=" + addressOne + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
+            $(".share_links").html("<a href=\""+ shareLinkOne + "\">Open Directions in Google Maps App</a>");
+            $(".share_links").show();
+        // }
+
+        var shareLinkTwo = "comgooglemaps://?saddr=" + addressTwo  + "&daddr=" + placeAddress + "&directionsmode=" + methodTransportOne.toLowerCase();
 
        
         // console.log(shareLinkBoth);
-        // console.log(shareLink1);
+        console.log(shareLinkOne);
         // console.log(shareLink2);
     });
     
