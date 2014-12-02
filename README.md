@@ -152,25 +152,169 @@ Here's the console showing the findGatheringPoint algorithm in action:
 
 <img src="static/assets/console.png" alt="findGatheringPoint Console">
 
+###### Displaying Place Info and Map:
+
 Once the gathering point is found, a call is made to the Google Maps Place Search API to find 
 a spot nearby that matches the type of location that user specified. (If that type of location is not found, the map displays the gatheringPoint and directions to it from each origin point, with the disclaimer that no exact location was found the in the area.) Once a spot is found, the Google Maps Place ID is passed to the displayPlaceInfo function, which displays info about the location on the right hand side of the screen.
 
-<img src="static/assets/gatherstarbucks.gif" alt="findGatheringPoint Console">
+<img src="static/assets/gatherstarbucks.gif" alt="First Gather Result">
 
 As the location info displays on the right side of the screen, the map below displays the route from each origin point to the business. This map is created by grabbing polylines for each route from the Google Directions API and then passing them to the map on screen, along with each origin point and the chosen gathering location.  
 
-You'll notice that in the example above, Starbucks was the first result displayed to users. If the users would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next busienss is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.
+###### Choosing Another Place:
+
+You'll notice that in the example above, Starbucks was the first result displayed to users. If the users would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next busienss is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.  The user can keep requesting new locations until the Google Places API runs out of responses, then the "Pick Me Another" button disappears and the users must start another gather query if they would like other results. 
+
+<img src="static/assets/pickmeanother.gif" alt="Pick Me Another">
+
+###### Promises:
+
+As you may have noticed, this project requires a lot of Google Maps API calls of all sorts, and these API calls are all asynchronous.  As the project developed, the main.js filed started to resemble <a href="http://callbackhell.com/">"callback hell"</a>. Thus, I decided to use Promises, specifically the <a href="https://github.com/kriskowal/q">Q library</a>.  
+
+There is a main promise chain that forms the backbone of main.js. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.).  
+<pre><code>
+$(document).ready(function () {
+
+    /** this function provides google 
+    autocomplete of addresses */
+
+    $(".typeahead").typeahead({
+        minLength: 2,
+        highlight: true,
+    },
+    {
+        source: getAutocompleteSuggestions,
+        displayKey: 'description',
+    });
+
+    // this creates event listener for gather button
+    $("#gather_button").on('click', function(evt) {
+        numAttempts = 0;
+        evt.preventDefault();
+        $("#gather_button").prop('disabled',true);
+        $("#gather_button").text("Loading...");
+        methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
+        methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
+        addresses = getAddressesFromForm();
+        // points is an array of values from our form inputs
+        // makes coordinates from addresses
+        makeCoordinates(addresses[0])
+        .then(function(latLonPointOne) {
+            /**
+            * this function converts coordinates to addresses
+            *
+            * @param {latLonPointOne} <integer> coordinate
+            * @return {addresses} <array> addresses, strings
+            *
+            */
+            initialPointOne = latLonPointOne;
+            return makeCoordinates(addresses[1])
+            .then(function(latLonPointTwo) {
+                /**
+                * this function converts coordinates to addresses
+                *
+                * @param {latLonPointTwo} <integer> coordinate
+                * @return {addresses} <array> addresses, strings
+                *
+                */
+                initialPointTwo = latLonPointTwo;
+                return [latLonPointOne, latLonPointTwo];
+            });
+        })
+        .then(function(latlons) {
+            /**
+            * this function takes latlons and finds 
+            * initial simple geographical midpoint between them
+            * 
+            * @param {latlons} <array> latitudes & longitudes
+            * @return {initialMid} <integer> coordinate of geo-midpoint
+            */
+            latLonPointOne = latlons[0];
+            latLonPointTwo = latlons[1];
+            var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
+            if (latLonPointOne, latLonPointTwo) {
+                return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
+            } else {
+                console.log("Error with latlon creation");
+            }
+
+        })
+        .then(function(gatheringPoint) {
+            /**
+            * this is the returned function from gathering point
+            *
+            * @param {gatheringPoint} <integer> coordinate between two points
+            * @return {businessPlaceID} <string> returns Google Maps Place ID
+            *
+            */
+            return findBusiness(gatheringPoint);
+        })
+        .then(function(businessPlaceID){
+            /**
+            * takes returned businessPlaceID to use in displayPlaceInfo function 
+            *
+            * @param {businessPlaceID} <string> returned Google Maps Place ID
+            * @return {businessPlaceID} <string> to be used in displayPlaceInfo function 
+            *
+            */
+            return displayPlaceInfo(businessPlaceID);
+        })
+        .then(function(placeAddress){
+            /**
+            * takes placeAddress from displayPlaceInfo in order to pass it to
+            * getRouteCoordinates
+            *
+            * @param {placeAddress} <string> address of a business
+            * @return {placeAddress} <string>
+            */
+            gatheringPlaceAddress = placeAddress;
+            return getRouteCoordinates(gatheringPlaceAddress, addresses[0], methodTransportOne);
+
+        })
+        .then(function(routeCoordinatesOne) {
+            /**
+            * takes routeCoordinatesOne from getRouteCoordinates and returns next function which 
+            * gets the next set of routeCoordinates
+            *
+            * @param {routeCoordinatesOne} <array> array of coordinates that make up a route
+            * @return 
+            */
+            return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
+            .then(function(routeCoordinatesTwo) {
+                return [routeCoordinatesOne, routeCoordinatesTwo];
+            });
+        })
+        .then(function(routeCoordinatesArray) {
+            /**
+            * takes routeCoordinates, both sets from both origin points
+            *
+            * @param {routeCoordinates} <array> array of coordinates
+            * @return {routeCoordatinesOne, calls getRouteCoordinates with placeAddress, addresses[1], methodTransportTwo}
+            */
+            return displayMap(routeCoordinatesArray);
+        })
+        .catch(function (error) {
+            /**
+            * catches errors in the main promises chain and console logs them
+            *
+            * @param {error} <string> description of error in the main promises chain
+            */
+            console.log("Main Chain Error: " + error);
+            $("#gather_button").prop('disabled',false);
+            $("#gather_button").text("Gather!");
+        });
+    });
+});
 
 
-
-- Explain promises
+</code></pre>
 
 
 ###### Acknowledgements:
 
 The tree icon is entitled 'Tree' by Mister Pixel from The Noun Project.
 
-The train icon is entitled 'Train' by Jamison Wieser from The Noun Project
+The train icon is entitled 'Train' by Jamison Wieser from The Noun Project.
 
 Thanks!
 
