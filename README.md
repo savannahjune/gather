@@ -21,7 +21,7 @@ Users can then ask for a different spot nearby, if they do not want to meet at t
 *	Promises (Q library)
 *	HTML/CSS
 *	Bootstrap
-*	Google Maps APIs: JS Embed, Distance Matrix, Places Autocomplete, Places Nearby, Directions
+*	Google Maps APIs: JS Embed, Distance Matrix, Autocomplete, Places Nearby, Directions
 
 ###### Getting started:
 
@@ -77,7 +77,7 @@ $ source env/bin/activate
 
 ###### Walk Through:
 
-<p>When a user first visits gathermap.com, they must first specify the two locations they and their friend are coming from. This input uses typeahead.js and google Places API to predict what the user's address.<p>
+<p>When a user first visits gathermap.com, they must first specify the two locations they and their friend are coming from. This input uses typeahead.js and Google Maps Autocomplete API to predict the user's address as they type. Then users specify which type of transportation they'll be using and their friend will be using to meet up.  Users can choose to drive, use public transit, walk, or bike. Finally, they click to choose which type of location they'd like to meet at: bar, restaurant, café, park, or library. Then they click "Gather!" and the app begins choosing a location for their meeting based on their inputs.<p>
 
 <img src="static/assets/addressinput.gif" alt="Address Input">
 
@@ -85,11 +85,9 @@ $ source env/bin/activate
 
 ###### Acknowledgements:
 
-All icons from the noun project.  
+The tree icon is entitled 'Tree' by Mister Pixel from The Noun Project.
 
-The tree is entitled 'Tree' by Mister Pixel from The Noun Project.
-
-The rain is entitled 'Train' by Jamison Wieser from The Noun Project
+The train icon is entitled 'Train' by Jamison Wieser from The Noun Project
 
 Thanks!
 
