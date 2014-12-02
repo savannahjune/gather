@@ -234,7 +234,7 @@ function makeCoordinates(target) {
  *  @param {pointTwo} <object> this is the second place, must be in coordinate form for math
  *  @return {intialMid} <integer> this is the simple, geo midpoint 
  */
-function findMidPoint(pointOne, pointTwo){
+function findMidPoint(pointOne, pointTwo) {
     var latOne = pointOne[0];
     var lonOne = pointOne[1];
     var latTwo = pointTwo[0];
@@ -362,7 +362,7 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 
         };
 
-        directionsService.route(request, function (data, status){
+        directionsService.route(request, function (data, status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 var duration = data.routes[0].legs[0].duration.value;
                 deferred.resolve(duration);
