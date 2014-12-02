@@ -153,8 +153,7 @@ Here's the console showing the findGatheringPoint algorithm in action:
 <img src="static/assets/console.png" alt="findGatheringPoint Console">
 
 Once the gathering point is found, a call is made to the Google Maps Place Search API to find 
-a spot nearby that matches the type of location that user specified. Then once a spot is found,
-the Google Maps Place ID is passed to the displayPlaceInfo function, which displays info about 
+a spot nearby that matches the type of location that user specified. (If a business is not found, the map displays the gatheringPoint and directions to it from each origin point, with the disclaimer that no business was found the in the area.) Once a spot is found, the Google Maps Place ID is passed to the displayPlaceInfo function, which displays info about 
 the business on the right hand side of the screen.
 
 - Explain how map is displayed
