@@ -410,7 +410,7 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
                     // checks if that method of transit is possible
                     // if it is not then there will be now duration
                     if (response.rows[0].elements[0].duration === undefined) {
-                        alert("Sorry your form of transportation is not available to your gathering point. Please choose another one.");
+                        alert("Sorry, your form of transportation is not available to your gathering point. Please choose another one.");
                         deferred.reject(new Error(status));
                     }
                     else {
@@ -544,9 +544,27 @@ function findBusiness(gatheringPoint) {
                 $(".next_spot").hide();
             }
             else {
-                alert("Sorry, there is no " + type + " near your gathering point.");
+                alert("Sorry, there is no " + type + " near your gathering point. Maybe try another type of meeting place, or look in a nearby neighborhood.");
                 $("#gather_button").prop('disabled',false);
                 $("#gather_button").text("Gather!");
+                    // maps gathering point with directions, just no business details as there is no business
+                    return getRouteCoordinates(gatheringPoint, addresses[0], methodTransportOne)
+                    .then(function(routeCoordinatesOne) {
+
+                        return getRouteCoordinates(gatheringPoint, addresses[1], methodTransportTwo)
+                        .then(function(routeCoordinatesTwo) {
+                            return [routeCoordinatesOne, routeCoordinatesTwo];
+                        });
+                    })
+                    .then(function(routeCoordinatesArray) {
+                       /**
+                        * takes routeCoordinates, both sets from both origin points
+                        *
+                        * @param {routeCoordinates} <array> array of coordinates
+                        * @return {routeCoordatinesOne, calls getRouteCoordinates with placeAddress, addresses[1], methodTransportTwo}
+                        */
+                        return displayMap(routeCoordinatesArray);
+                    });
             }
         }
     }); /* end of businessOptions */
@@ -680,7 +698,12 @@ function displayPlaceInfo(placeID) {
 function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
     var deferred = Q.defer();
     originAddress = originAddress.split(' ').join('+');
-    placeAddress = placeAddress.split(' ').join('+');
+    if (typeof(placeAddress) === 'string') {
+        placeAddress = placeAddress.split(' ').join('+');
+    }
+    else {
+        placeAddress =  new google.maps.LatLng(placeAddress[0], placeAddress[1]);
+    }
 
     $("#gather_button").prop('disabled',false);
     $("#gather_button").text("Gather!");
