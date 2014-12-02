@@ -4,12 +4,13 @@ gather map
 
 <h5>Web app that chooses a spot between two locations that is equi-time between them. </h5>
 
-Have you ever had trouble deciding where you and a friend should meet up for coffee when you are both coming from different locations? Or have you ever been in a new city and wondered where's the best spot for you to grab lunch with someone on the other side of the city? Worry no longer, because gather map has you covered. 
+Have you ever had trouble deciding where you and a friend should meet up for coffee when time is of the essence? Or have you ever been in an unfamiliar city and wondered where's the best spot for you to grab lunch with someone on the other side of the city? Worry no longer, because gather map has you covered. 
 
 Users can specify two origin locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
-Gather then returns the best spot for the two people to meet at, so that they both spend the same time getting there.  A map then displays directions from each origin address to the 'gathering point' business. 
-Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The business details and map with then reload with new information. 
+Gather then returns the best spot for the two people to meet at, so that they both spend the same time getting there. There is also a box with information about that business: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the 'gathering point' business and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
+
+Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The business info and map then reload with new information. 
 
 ###### Stack:
 
@@ -46,34 +47,34 @@ $ source env/bin/activate
 ###### File structure:
 
 <strong>static</strong>
-* assets: all images used in project
-* css: style formatting, personal is custom.css, all other files are bootstrap
-* fonts: fonts included in bootstrap
-* js
-	1) bootstrap.js and bootstrap.min.js: javascript included in bootstrap<br>
-	2) jquery.autocomplete.js: used in address autocompletion<br>
-	3) main.js: main JS file<br>
-	4) oldmap.js: JS file that shows two maps instead of one<br>
-	5) typeahead.bundle.js: used for typeahead autocompletion<br>
+- assets: all images used in project
+- css: style formatting, personal is custom.css, all other files are bootstrap
+- fonts: fonts included in bootstrap
+- js
+	- bootstrap.js and bootstrap.min.js: javascript included in bootstrap<br>
+	- jquery.autocomplete.js: used in address autocompletion<br>
+	- main.js: main JS file<br>
+	- oldmap.js: JS file that shows two maps instead of one<br>
+	- typeahead.bundle.js: used for typeahead autocompletion<br>
 
 
 <strong>templates</strong>
-* main.html: single page app, so a single HTML template for the app
+- main.html: single page app, so a single HTML template for the app
 
 <strong>.gitignore</strong>
-* file used to ignore local virtual environment
+- file used to ignore local virtual environment
 
 <strong>Procfile</strong>
-* needed for heroku deployment
+- needed for heroku deployment
 
 <strong>README.md</strong>
-* what you're currently reading
+- what you're currently reading
 
 <strong>app.py</strong>
-* flask app python script
+- flask app python script
 
 <strong>requirements.txt</strong>
-* list of required modules for installation
+- list of required modules for installation
 
 ###### Walk Through:
 
