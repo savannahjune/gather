@@ -22,7 +22,7 @@ var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.
     Higher number of allowed attempts makes the gathering point more accurate, but takes more time */
-var maxAttempts = 10;
+var maxAttempts = 14;
 var numAttempts;
 
 $(document).ready(function () {
@@ -278,19 +278,54 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         console.log("Duration of trip for second person: " + durationTwo);
         console.log("Difference in duration: " + Math.abs(durationOne - durationTwo));
         var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
-        if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+
+        // methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
+        // methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
+
+        /** Google sets a strict limit on how many Directions API requests are 
+         *  allowed in a certain amount of time so this if statement checks if transit is used
+         *  and if it is used, the amount of maxAttempts is lowered to stay within the Google Maps
+         *  Directions API threshold
+         */
+
+        if (methodTransportOne || methodTransportTwo === 'TRANSIT') {
+            maxAttempts = 4;
+            if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+                if (numAttempts >= maxAttempts) {
+                    console.log("Stopped findGatheringPoint after max attempts reached");
+                }
+                // if the coordinate meets all requirements, then use it as gathering point
+                deferred.resolve(initialMid);
+                return deferred.promise;
+            }
+            else if (durationOne > durationTwo) {
+                /** if duration one is greater, move initialMid to between initialMid and pointOne
+                 * by passing it into findMidPoint
+                 */
+                newMidpoint = findMidPoint(pointOne, initialMid);
+                return findGatheringPoint(pointOne, initialMid, newMidpoint, methodTransportOne, methodTransportTwo);
+            }
+            else {
+                /** if duration two is greater, move initialMid to between initialMid and pointTwo
+                 * by passing it into findMidPoint
+                 */
+                newMidpoint = findMidPoint(pointTwo, initialMid);
+                return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
+            }
+        }
+        else if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
                 console.log("Stopped findGatheringPoint after max attempts reached");
             }
             // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
             return deferred.promise;
-
-        /**
-         * the else if and else below constitute the binary search tree
-         * that this algorithm uses to find optimal midpoint between two people
-         */
-        }
+            }
+            /**
+             * the else if and else below constitute the binary search tree
+             * that this algorithm uses to find optimal midpoint between two people
+             */
+            
         else if (durationOne > durationTwo) {
             /** if duration one is greater, move initialMid to between initialMid and pointOne
              * by passing it into findMidPoint
@@ -305,7 +340,6 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             newMidpoint = findMidPoint(pointTwo, initialMid);
             return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
         }
-
     })
     .catch(function (error) {
         console.log("findGatheringPoint Error: " + error);
