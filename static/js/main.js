@@ -282,10 +282,11 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         // methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
         // methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
 
-        /** Google sets a strict limit on how many Directions API requests are 
-         *  allowed in a certain amount of time so this if statement checks if transit is used
-         *  and if it is used, the amount of maxAttempts is lowered to stay within the Google Maps
-         *  Directions API threshold
+        /**
+         *  Google sets a strict limit on how many Directions API requests are 
+         *  allowed in a certain amount of time so this if statement checks if transit is used as both 
+         *  methods of transit and if so, the amount of maxAttempts is lowered to four to stay 
+         *  within the Google Maps Directions API threshold
          */
 
         if (methodTransportOne === 'TRANSIT' && methodTransportTwo === 'TRANSIT') {
@@ -315,6 +316,13 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
                 return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
             }
         }
+        /**
+         * Google sets a strict limit on how many Directions API requests are 
+         *  allowed in a certain amount of time so this if statement checks if transit is used 
+         *  and if it is in at least once case, the amount of maxAttempts is lowered to seven 
+         *  to stay within the Google Maps Directions API threshold
+         */
+
         else if (methodTransportOne === 'TRANSIT' || methodTransportTwo === 'TRANSIT') {
             maxAttempts = 7;
             if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
@@ -438,6 +446,7 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 
         directionsService.route(request, function (data, status) {
             if (status == google.maps.DirectionsStatus.OK) {
+                // checks if transit is possible, if not duration is undefined
                 if (data.routes[0].legs[0].duration === undefined) {
                     alert("Sorry public transit is not available to your gathering point. Please choose another form of transportation.");
                     deferred.reject(new Error(status));
@@ -547,7 +556,7 @@ function findBusiness(gatheringPoint) {
                 alert("Sorry, there is no " + type + " near your gathering point. Maybe try another type of meeting place, or look in a nearby neighborhood.");
                 $("#gather_button").prop('disabled',false);
                 $("#gather_button").text("Gather!");
-                    // maps gathering point with directions, just no business details as there is no business
+                    // maps gatheringPoint with directions, just no business details as there is no business
                     return getRouteCoordinates(gatheringPoint, addresses[0], methodTransportOne)
                     .then(function(routeCoordinatesOne) {
 
