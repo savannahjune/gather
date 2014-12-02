@@ -288,13 +288,42 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
          *  Directions API threshold
          */
 
-        if (methodTransportOne || methodTransportTwo === 'TRANSIT') {
+        if (methodTransportOne === 'TRANSIT' && methodTransportTwo === 'TRANSIT') {
             maxAttempts = 4;
             if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
                 if (numAttempts >= maxAttempts) {
                     console.log("Stopped findGatheringPoint after max attempts reached");
                 }
                 // if the coordinate meets all requirements, then use it as gathering point
+                console.log("Both transit");
+                console.log(maxAttempts);
+                deferred.resolve(initialMid);
+                return deferred.promise;
+            }
+            else if (durationOne > durationTwo) {
+                /** if duration one is greater, move initialMid to between initialMid and pointOne
+                 * by passing it into findMidPoint
+                 */
+                newMidpoint = findMidPoint(pointOne, initialMid);
+                return findGatheringPoint(pointOne, initialMid, newMidpoint, methodTransportOne, methodTransportTwo);
+            }
+            else {
+                /** if duration two is greater, move initialMid to between initialMid and pointTwo
+                 * by passing it into findMidPoint
+                 */
+                newMidpoint = findMidPoint(pointTwo, initialMid);
+                return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
+            }
+        }
+        else if (methodTransportOne === 'TRANSIT' || methodTransportTwo === 'TRANSIT') {
+            maxAttempts = 7;
+            if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
+                if (numAttempts >= maxAttempts) {
+                    console.log("Stopped findGatheringPoint after max attempts reached");
+                }
+                // if the coordinate meets all requirements, then use it as gathering point
+                console.log("one tranist");
+                console.log(maxAttempts);
                 deferred.resolve(initialMid);
                 return deferred.promise;
             }
@@ -319,6 +348,8 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             }
             // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
+            console.log("no transit");
+            console.log(maxAttempts);
             return deferred.promise;
             }
             /**
@@ -612,13 +643,13 @@ function displayPlaceInfo(placeID) {
 
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var directionLinkApp = "comgooglemaps://?saddr=&daddr=" + placeAddress + "&directionsmode=" + methodTransport;
-            $(".share_links").html("<a href=\""+ directionLinkApp +"\">Open Directions in Google Maps</a>");
+            $(".share_links").html("<a href=\""+ directionLinkApp +"\">Open Directions in Google Maps App</a>");
             $(".share_links").show();
         }
 
         else {
             var directionLinkBrowser = "https://maps.google.com?saddr=Current+Location&daddr=" + placeAddress + "&directionsmode=" + methodTransport;
-            $(".share_links").html("<a href=\"" + directionLinkBrowser + "\">Open Directions in Google Maps App</a>");
+            $(".share_links").html("<a href=\"" + directionLinkBrowser + "\">Open Directions in Google Maps</a>");
             $(".share_links").show();
         }
     });
