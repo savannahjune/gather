@@ -405,10 +405,19 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
                 avoidTolls: false,
                 durationInTraffic: true,
             }, function(response, status) {
-                // TODO : Check status for success. Call deferred.reject(new Error("Some error message"));
-                // value in this case is seconds, duration is in seconds
-                var duration = (response.rows[0].elements[0].duration.value);
-                deferred.resolve(duration);
+                if (status == google.maps.DistanceMatrixStatus.OK) {
+                    // value in this case is seconds, duration is in seconds
+                    // checks if that method of transit is possible
+                    // if it is not then there will be now duration
+                    if (response.rows[0].elements[0].duration === undefined) {
+                        alert("Sorry your form of transportation is not available to your gathering point. Please choose another one.");
+                        deferred.reject(new Error(status));
+                    }
+                    else {
+                        var duration = (response.rows[0].elements[0].duration.value);
+                        deferred.resolve(duration);
+                    }
+                }
             });
     }
     else {
@@ -429,12 +438,14 @@ function calculateDuration(pointOne, pointTwo, methodTransport) {
 
         directionsService.route(request, function (data, status) {
             if (status == google.maps.DirectionsStatus.OK) {
-                var duration = data.routes[0].legs[0].duration.value;
-                deferred.resolve(duration);
-            }
-            else {
-                console.log("Error status in getRouteCoordinates: " + status);
-                deferred.reject(new Error(status));
+                if (data.routes[0].legs[0].duration === undefined) {
+                    alert("Sorry public transit is not available to your gathering point. Please choose another form of transportation.");
+                    deferred.reject(new Error(status));
+                }
+                else {
+                    var duration = data.routes[0].legs[0].duration.value;
+                    deferred.resolve(duration);
+                }
             }
         });
     }
