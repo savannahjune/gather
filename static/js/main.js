@@ -22,7 +22,7 @@ var gatherMarker;
 
 /** findGatheringPoint recursion counter. Places a upper limit on the number of iterations of our binary search.
     Higher number of allowed attempts makes the gathering point more accurate, but takes more time */
-var maxAttempts = 14;
+var maxAttempts = 10;
 var numAttempts;
 
 $(document).ready(function () {
@@ -449,7 +449,7 @@ function findBusiness(gatheringPoint) {
                         });
                     })
                     .then(function(routeCoordinatesArray) {
-                         /**
+                       /**
                         * takes routeCoordinates, both sets from both origin points
                         *
                         * @param {routeCoordinates} <array> array of coordinates

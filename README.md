@@ -79,7 +79,9 @@ $ source env/bin/activate
 
 ###### Finding the Gathering Point:
 
-<p>Using the geo-midpoint, initialMid, as a starting point, findGatheringPoint calls the calculateDuration function between each starting point and the initialMid taking into account the type of transportation that user is utilizing. Then it compares the travel time of person one, durationOne, to the travel time of person two, durationTwo.  Using a binary search, the initialMid is reset between either the first location and initialMid if the travel time for person one is greater than the travel time of person two, or between the initialMid and person two's location if their travel time is greater.  Sometimes the two durations are within the defined tolerance (5% difference allowed) right away, but if not this binary search continues until the durations are within the tolerance.</p>
+<p>Using the geographical midpoint, initialMid, as a starting point, findGatheringPoint calls the calculateDuration function between each starting point and the initialMid taking into account the type of transportation that user is utilizing. The calculateDuration function uses the Google Maps Distance Matrix API for walking, biking, and driving, as it can factor in traffic into its queries, but it does not allow for transit queries.  For transit, calculateDuration uses the Google Maps Directions API. 
+
+Next, it compares the travel time of person one (durationOne) to the travel time of person two (durationTwo).  Using a binary search, the initialMid is reset between either the first location and initialMid if the travel time for person one is greater than the travel time of person two, or between the initialMid and person two's location if their travel time is greater.  Sometimes the two durations are within the defined tolerance (5% difference allowed) right away, but if not this binary search continues until the durations are within the tolerance or more than ten attempts have been made. This is to maximize speed without sacrificing accuracy. Most queries require about five to seven attempts to reach the tolerance.</p>
 
 <pre><code>
 /**
@@ -145,6 +147,12 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
 
 }
 </code></pre>
+
+Here's the console showing the findGatheringPoint algorithm in action:
+
+<img src="static/assets/console.png" alt="findGatheringPoint Console">
+
+
 
 
 ###### Acknowledgements:
