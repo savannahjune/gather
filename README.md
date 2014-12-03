@@ -1,4 +1,4 @@
-<a href="http://gathermap.com/">Gather Map</a>
+<a href="http://gathermap.com/">Gather Map</a> by <a href="https://www.linkedin.com/in/savannahhenderson">Savannah Henderson</a>
 =========
 ###### Let's Meet in the Middle.
 
@@ -8,14 +8,13 @@ Have you ever had trouble deciding where you and a friend should meet up for cof
 
 Users can specify two origin locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
-Gather map then returns the best spot for the two people to meet at, so that they both spend the same time getting there. There is also a box with information about that business: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the 'gathering point' business and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
+Gather map then returns the best spot for the two people to meet at, so that they both spend the same time getting there. There is also a box with information about that location: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the 'gathering point' location and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
 
-Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The business info and map then reload with new information. 
+Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The location info and map then reload with new information. 
 
 ####Table of Contents
 - [Stack](#stack)
-- [Getting Started](#getting-started)
-- [File Structure](#file-structure)
+- [Try it Yourself](#getting-started)
 - [Walk Through](#walk-through)
   - [Finding the Gathering Point](#finding-the-gathering-point)
   - [Displaying Place Info and Map](#displaying-place-info-and-map)
@@ -36,7 +35,11 @@ Users can then ask for a different spot nearby, if they do not want to meet at t
 *	Bootstrap
 *	Google Maps APIs: JS Embed, Distance Matrix, Autocomplete, Places Nearby, Directions
 
-###### Getting started:
+###### Try it yourself:
+
+You can visit <a href="gathermap.com">gathermap.com</a> to use the app yourself, or download the code to your machine to run it locally.  
+
+To run the machine on your own machine:
 
 1) First, clone this directory to your computer.
 
@@ -55,31 +58,6 @@ $ source env/bin/activate
 </code></pre>
 
 4) Then run python app.py from the gather directory in terminal on your computer and you'll be ready to go!
-
-###### File structure:
-
-<strong>static</strong>
-- assets: all images used in project
-- css: style formatting, personal is custom.css, all other files are bootstrap
-- fonts: fonts included in bootstrap
-- js
-	- bootstrap.js and bootstrap.min.js: javascript included in bootstrap<br>
-	- jquery.autocomplete.js: used in address autocompletion<br>
-	- main.js: main JS file<br>
-	- oldmap.js: JS file that shows two maps instead of one<br>
-	- typeahead.bundle.js: used for typeahead autocompletion<br>
-
-<strong>templates</strong>: main.html: single page app, so a single HTML template for the app
-
-<strong>.gitignore</strong>: file used to ignore local virtual environment
-
-<strong>Procfile</strong>: needed for heroku deployment
-
-<strong>README.md</strong>: what you're currently reading
-
-<strong>app.py</strong>: flask app python script
-
-<strong>requirements.txt</strong>: list of required modules for installation
 
 ###### Walk Through:
 
@@ -171,11 +149,11 @@ a spot nearby that matches the type of location that user specified. (If that ty
 
 <img src="static/assets/gatherstarbucks.gif" alt="First Gather Result">
 
-As the location info displays on the right side of the screen, the map below displays the route from each origin point to the business. This map is created by grabbing polylines for each route from the Google Directions API and then passing them to the map on screen, along with each origin point and the chosen gathering location.  
+As the location info displays on the right side of the screen, the map below displays the route from each origin point to the chosen location. This map is created by grabbing polylines for each route from the Google Directions API and then passing them to the map on screen, along with each origin point and the chosen gathering location.  
 
 ###### Choosing Another Place:
 
-You'll notice that in the example above, Starbucks was the first result displayed to users. If the users would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next busienss is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.  The user can keep requesting new locations until the Google Places API runs out of responses, then the "Pick Me Another" button disappears and the users must start another gather query if they would like other results. 
+You'll notice that in the example above, Starbucks was the first result displayed to users. If the user would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next business is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.  The user can keep requesting new locations until the Google Places API runs out of responses, then the "Pick Me Another" button disappears and the user must start another gather query if they would like other results. 
 
 <img src="static/assets/pickmeanother.gif" alt="Pick Me Another">
 
