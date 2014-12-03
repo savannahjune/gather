@@ -296,8 +296,6 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
                     console.log("Stopped findGatheringPoint after max attempts reached");
                 }
                 // if the coordinate meets all requirements, then use it as gathering point
-                console.log("Both transit");
-                console.log(maxAttempts);
                 deferred.resolve(initialMid);
                 return deferred.promise;
             }
@@ -330,8 +328,6 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
                     console.log("Stopped findGatheringPoint after max attempts reached");
                 }
                 // if the coordinate meets all requirements, then use it as gathering point
-                console.log("one tranist");
-                console.log(maxAttempts);
                 deferred.resolve(initialMid);
                 return deferred.promise;
             }
@@ -356,8 +352,6 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             }
             // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
-            console.log("no transit");
-            console.log(maxAttempts);
             return deferred.promise;
             }
             /**
