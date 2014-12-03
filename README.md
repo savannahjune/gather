@@ -1,4 +1,4 @@
-Gather Map
+<a href="http://gathermap.com/">Gather Map</a>
 =========
 ###### Let's Meet in the Middle.
 
@@ -11,6 +11,18 @@ Users can specify two origin locations, transportation methods used, and desired
 Gather map then returns the best spot for the two people to meet at, so that they both spend the same time getting there. There is also a box with information about that business: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the 'gathering point' business and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
 
 Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The business info and map then reload with new information. 
+
+####Table of Contents
+- [Stack](#stack)
+- [Getting Started](#getting-started)
+- [File Structure](#file-structure)
+- [Walk Through](#walk-through)
+  - [Finding the Gathering Point](#finding-the-gathering-point)
+  - [Displaying Place Info and Map](#displaying-place-info-and-map)
+  - [Choosing Another Place](#choosing-another-place)
+- [Promises](#promises)
+- [About Me](#about-me)
+- [Acknowledgements](#acknowledgements)
 
 ###### Stack:
 
@@ -155,7 +167,7 @@ Here's the console showing the findGatheringPoint algorithm in action:
 ###### Displaying Place Info and Map:
 
 Once the gathering point is found, a call is made to the Google Maps Place Search API to find 
-a spot nearby that matches the type of location that user specified. (If that type of location is not found, the map displays the gatheringPoint and directions to it from each origin point, with the disclaimer that no exact location was found the in the area.) Once a spot is found, the Google Maps Place ID is passed to the displayPlaceInfo function, which displays info about the location on the right hand side of the screen.
+a spot nearby that matches the type of location that user specified. (If that type of location is not found, the map displays the gatheringPoint and directions to it from each origin point, with the disclaimer that no exact location was found the in the area.) Once a spot is found, the Google Maps Place ID is passed to the displayPlaceInfo function, which displays info about the location on the right hand side of the screen. There is a link to open detailed directions to the spot in the Google Maps website  or if they are on mobile, the link brings up the Google Maps app. 
 
 <img src="static/assets/gatherstarbucks.gif" alt="First Gather Result">
 
@@ -171,9 +183,8 @@ You'll notice that in the example above, Starbucks was the first result displaye
 
 As you may have noticed, this project requires a lot of Google Maps API calls of all sorts, and these API calls are all asynchronous.  As the project developed, the main.js filed started to resemble <a href="http://callbackhell.com/">"callback hell"</a>. Thus, I decided to use Promises, specifically the <a href="https://github.com/kriskowal/q">Q library</a>.  
 
-There is a main promise chain that forms the backbone of main.js. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.).  
-<pre><code>
-$(document).ready(function () {
+There is a main promise chain that forms the backbone of main.js. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.). It also creates a nice outline of the entire file.  
+<pre><code>$(document).ready(function () {
 
     /** this function provides google 
     autocomplete of addresses */
@@ -304,11 +315,11 @@ $(document).ready(function () {
             $("#gather_button").text("Gather!");
         });
     });
-});
+});</code></pre>
 
+###### About me:
 
-</code></pre>
-
+My name is Savannah Henderson and I am an engineering fellow at Hackbright Academy. Gather Map is my final project for that fellowship.  It brings together my love of efficiency, logistics, timeliness, and maps! Please email me at savannahjune@gmail.com if you have any questions about the project. 
 
 ###### Acknowledgements:
 
