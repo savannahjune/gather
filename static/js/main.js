@@ -725,6 +725,7 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
         if (status == google.maps.DirectionsStatus.OK) {
             var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
+            console.log(polyline);
             deferred.resolve(latLonArray);
         }
         else {
