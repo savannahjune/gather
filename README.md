@@ -90,42 +90,25 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
     var deferred = Q.defer();
 
     return calculateDuration(initialPointOne, initialMid, methodTransportOne)
-    // calculates duration between the first point and initial mid (reset in recursive function)
     .then(function(durationOne) {
         return calculateDuration(initialPointTwo, initialMid, methodTransportTwo)
-        // calculates duration between the first point and initial mid (reset in recursive function)
                .then(function(durationTwo) {
-                // after both durations have been found, returns them
                     return [durationOne, durationTwo];
                });
     })
     .spread(function(durationOne, durationTwo) {
-        // Pulls apart the two durations for comparison
         var tolerance = 0.05 * ((durationOne + durationTwo) / 2);
         if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
-                console.log("Stopped findGatheringPoint after max attempts reached");
             }
-            // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
             return deferred.promise;
-
-        /**
-         * the else if and else below constitute the binary search tree
-         * that this algorithm uses to find optimal midpoint between two people
-         */
         }
         else if (durationOne > durationTwo) {
-            /** if duration one is greater, move initialMid to between initialMid and pointOne
-             * by passing it into findMidPoint
-             */
             newMidpoint = findMidPoint(pointOne, initialMid);
             return findGatheringPoint(pointOne, initialMid, newMidpoint, methodTransportOne, methodTransportTwo);
         }
         else {
-            /** if duration two is greater, move initialMid to between initialMid and pointTwo
-             * by passing it into findMidPoint
-             */
             newMidpoint = findMidPoint(pointTwo, initialMid);
             return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
         }
@@ -163,10 +146,6 @@ As you may have noticed, this project requires a lot of Google Maps API calls of
 
 There is a main promise chain that forms the backbone of main.js. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.). It also creates a nice outline of the entire file.  
 <pre><code>$(document).ready(function () {
-
-    /** this function provides google 
-    autocomplete of addresses */
-
     $(".typeahead").typeahead({
         minLength: 2,
         highlight: true,
@@ -175,8 +154,6 @@ There is a main promise chain that forms the backbone of main.js. This main chai
         source: getAutocompleteSuggestions,
         displayKey: 'description',
     });
-
-    // this creates event listener for gather button
     $("#gather_button").on('click', function(evt) {
         numAttempts = 0;
         evt.preventDefault();
@@ -185,39 +162,16 @@ There is a main promise chain that forms the backbone of main.js. This main chai
         methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
         methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
         addresses = getAddressesFromForm();
-        // points is an array of values from our form inputs
-        // makes coordinates from addresses
         makeCoordinates(addresses[0])
         .then(function(latLonPointOne) {
-            /**
-            * this function converts coordinates to addresses
-            *
-            * @param {latLonPointOne} <integer> coordinate
-            * @return {addresses} <array> addresses, strings
-            *
-            */
             initialPointOne = latLonPointOne;
             return makeCoordinates(addresses[1])
             .then(function(latLonPointTwo) {
-                /**
-                * this function converts coordinates to addresses
-                *
-                * @param {latLonPointTwo} <integer> coordinate
-                * @return {addresses} <array> addresses, strings
-                *
-                */
                 initialPointTwo = latLonPointTwo;
                 return [latLonPointOne, latLonPointTwo];
             });
         })
         .then(function(latlons) {
-            /**
-            * this function takes latlons and finds 
-            * initial simple geographical midpoint between them
-            * 
-            * @param {latlons} <array> latitudes & longitudes
-            * @return {initialMid} <integer> coordinate of geo-midpoint
-            */
             latLonPointOne = latlons[0];
             latLonPointTwo = latlons[1];
             var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
@@ -226,68 +180,27 @@ There is a main promise chain that forms the backbone of main.js. This main chai
             } else {
                 console.log("Error with latlon creation");
             }
-
         })
         .then(function(gatheringPoint) {
-            /**
-            * this is the returned function from gathering point
-            *
-            * @param {gatheringPoint} <integer> coordinate between two points
-            * @return {businessPlaceID} <string> returns Google Maps Place ID
-            *
-            */
             return findBusiness(gatheringPoint);
         })
         .then(function(businessPlaceID){
-            /**
-            * takes returned businessPlaceID to use in displayPlaceInfo function 
-            *
-            * @param {businessPlaceID} <string> returned Google Maps Place ID
-            * @return {businessPlaceID} <string> to be used in displayPlaceInfo function 
-            *
-            */
             return displayPlaceInfo(businessPlaceID);
         })
         .then(function(placeAddress){
-            /**
-            * takes placeAddress from displayPlaceInfo in order to pass it to
-            * getRouteCoordinates
-            *
-            * @param {placeAddress} <string> address of a business
-            * @return {placeAddress} <string>
-            */
             gatheringPlaceAddress = placeAddress;
             return getRouteCoordinates(gatheringPlaceAddress, addresses[0], methodTransportOne);
-
         })
         .then(function(routeCoordinatesOne) {
-            /**
-            * takes routeCoordinatesOne from getRouteCoordinates and returns next function which 
-            * gets the next set of routeCoordinates
-            *
-            * @param {routeCoordinatesOne} <array> array of coordinates that make up a route
-            * @return 
-            */
             return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
             .then(function(routeCoordinatesTwo) {
                 return [routeCoordinatesOne, routeCoordinatesTwo];
             });
         })
         .then(function(routeCoordinatesArray) {
-            /**
-            * takes routeCoordinates, both sets from both origin points
-            *
-            * @param {routeCoordinates} <array> array of coordinates
-            * @return {routeCoordatinesOne, calls getRouteCoordinates with placeAddress, addresses[1], methodTransportTwo}
-            */
             return displayMap(routeCoordinatesArray);
         })
         .catch(function (error) {
-            /**
-            * catches errors in the main promises chain and console logs them
-            *
-            * @param {error} <string> description of error in the main promises chain
-            */
             console.log("Main Chain Error: " + error);
             $("#gather_button").prop('disabled',false);
             $("#gather_button").text("Gather!");
