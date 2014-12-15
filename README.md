@@ -71,7 +71,7 @@ $ source env/bin/activate
 
 <p>Using the geographical midpoint, initialMid, as a starting point, findGatheringPoint calls the calculateDuration function between each starting point and the initialMid taking into account the type of transportation that user is utilizing. The calculateDuration function uses the Google Maps Distance Matrix API for walking, biking, and driving, as it can factor in traffic into its queries, but it does not allow for transit queries.  For transit, calculateDuration uses the Google Maps Directions API. 
 
-Next, it compares the travel time of person one (durationOne) to the travel time of person two (durationTwo).  Using a binary search, the initialMid is reset between either the first location and initialMid if the travel time for person one is greater than the travel time of person two, or between the initialMid and person two's location if their travel time is greater.  Sometimes the two durations are within the defined tolerance (5% difference allowed) right away, but if not this binary search continues until the durations are within the tolerance or more than ten attempts have been made. This is to maximize speed without sacrificing accuracy. Most queries require about five to seven attempts to reach the tolerance.</p>
+Next, it compares the travel time of person one (durationOne) to the travel time of person two (durationTwo).  Using a binary search, the initialMid is reset between either the first location and initialMid if the travel time for person one is greater than the travel time of person two, or between the initialMid and person two's location if their travel time is greater.  Sometimes the two durations are within the defined tolerance (5% difference allowed) right away, but if not this binary search continues until the durations are within the tolerance or more than ten attempts have been made. This is to maximize speed without sacrificing accuracy. Most queries require about five to seven attempts to reach the tolerance. The code below shows this findGatheringPoint function, but some comments have been removed for brevity.  Please see lines 250-381 of the main.js file for more comments.</p>
 
 <pre><code>
 /**
@@ -112,14 +112,11 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             newMidpoint = findMidPoint(pointTwo, initialMid);
             return findGatheringPoint(initialMid, pointTwo, newMidpoint, methodTransportOne, methodTransportTwo);
         }
-
     })
     .catch(function (error) {
         console.log("findGatheringPoint Error: " + error);
     });
-
-}
-</code></pre>
+}</code></pre>
 
 Here's the console showing the findGatheringPoint algorithm in action:
 
@@ -144,69 +141,7 @@ You'll notice that in the example above, Starbucks was the first result displaye
 
 As you may have noticed, this project requires a lot of Google Maps API calls of all sorts, and these API calls are all asynchronous.  As the project developed, the main.js filed started to resemble <a href="http://callbackhell.com/">"callback hell"</a>. Thus, I decided to use Promises, specifically the <a href="https://github.com/kriskowal/q">Q library</a>.  
 
-There is a main promise chain that forms the backbone of main.js. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.). It also creates a nice outline of the entire file.  
-<pre><code>$(document).ready(function () {
-    $(".typeahead").typeahead({
-        minLength: 2,
-        highlight: true,
-    },
-    {
-        source: getAutocompleteSuggestions,
-        displayKey: 'description',
-    });
-    $("#gather_button").on('click', function(evt) {
-        numAttempts = 0;
-        evt.preventDefault();
-        $("#gather_button").prop('disabled',true);
-        $("#gather_button").text("Loading...");
-        methodTransportOne = $("input:radio[name=transport_radio1]:checked").val();
-        methodTransportTwo = $("input:radio[name=transport_radio2]:checked").val();
-        addresses = getAddressesFromForm();
-        makeCoordinates(addresses[0])
-        .then(function(latLonPointOne) {
-            initialPointOne = latLonPointOne;
-            return makeCoordinates(addresses[1])
-            .then(function(latLonPointTwo) {
-                initialPointTwo = latLonPointTwo;
-                return [latLonPointOne, latLonPointTwo];
-            });
-        })
-        .then(function(latlons) {
-            latLonPointOne = latlons[0];
-            latLonPointTwo = latlons[1];
-            var initialMid = findMidPoint(latLonPointOne, latLonPointTwo);
-            if (latLonPointOne, latLonPointTwo) {
-                return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
-            } else {
-                console.log("Error with latlon creation");
-            }
-        })
-        .then(function(gatheringPoint) {
-            return findBusiness(gatheringPoint);
-        })
-        .then(function(businessPlaceID){
-            return displayPlaceInfo(businessPlaceID);
-        })
-        .then(function(placeAddress){
-            gatheringPlaceAddress = placeAddress;
-            return getRouteCoordinates(gatheringPlaceAddress, addresses[0], methodTransportOne);
-        })
-        .then(function(routeCoordinatesOne) {
-            return getRouteCoordinates(gatheringPlaceAddress, addresses[1], methodTransportTwo)
-            .then(function(routeCoordinatesTwo) {
-                return [routeCoordinatesOne, routeCoordinatesTwo];
-            });
-        })
-        .then(function(routeCoordinatesArray) {
-            return displayMap(routeCoordinatesArray);
-        })
-        .catch(function (error) {
-            console.log("Main Chain Error: " + error);
-            $("#gather_button").prop('disabled',false);
-            $("#gather_button").text("Gather!");
-        });
-    });
-});</code></pre>
+There is a main promise chain that forms the backbone of my project. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.). It also creates a nice outline of the project's functions.  To see this main chain, check out lines 28-160 in the main.js file. 
 
 ###### About me:
 
