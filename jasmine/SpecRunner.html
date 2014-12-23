@@ -1,25 +1,58 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Jasmine Spec Runner v2.0.0</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gather Jasmine Tests</title>
 
-  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.0.0/jasmine_favicon.png">
-  <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.0/jasmine.css">
+    <link rel="shortcut icon" href="static/assets/restaurantmap.png">
+    <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.0/jasmine.css">
 
-  <script type="text/javascript" src="lib/jasmine-2.0.0/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-2.0.0/jasmine-html.js"></script>
-  <script type="text/javascript" src="lib/jasmine-2.0.0/boot.js"></script>
+    <script type="text/javascript" src="lib/jasmine-2.0.0/jasmine.js"></script>
+    <script type="text/javascript" src="lib/jasmine-2.0.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/jasmine-2.0.0/boot.js"></script>
 
-  <!-- include source files here... -->
-  <script type="text/javascript" src="src/Player.js"></script>
-  <script type="text/javascript" src="src/Song.js"></script>
+    <!-- include source files here... -->
 
-  <!-- include spec files here... -->
-  <script type="text/javascript" src="spec/SpecHelper.js"></script>
-  <script type="text/javascript" src="spec/PlayerSpec.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    
+    <!-- Include all compiled plugins (below), or include individual files as needed-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/q.js/1.0.1/q.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
 
-</head>
+    <!-- Gather JS Script -->
+    <script src="static/js/main.js"></script>
+
+    <!-- Javascript for AutoComplete -->
+    <script type="text/javascript" src="static/js/jquery.autocomplete.js"></script>
+    <script src="static/js/typeahead.bundle.js"></script>
+
+    <!-- Required for Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+
+    <!-- Creates the main Google Map on the page and styles it -->
+    <script>
+      var googleMap;
+      var myStyle = [{"featureType":"landscape","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":51},{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"road.arterial","stylers":[{"saturation":-100},{"lightness":30},{"visibility":"on"}]},{"featureType":"road.local","stylers":[{"saturation":-100},{"lightness":40},{"visibility":"on"}]},{"featureType":"transit","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"administrative.province","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"visibility":"on"},{"color": "#ffffff" }]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#022330"}]}]
+
+      function initialize() {
+        var mapOptions = {
+          zoom: 12,
+          center: new google.maps.LatLng(37.778909, -122.397849),
+          styles: myStyle
+        };
+        googleMap = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="spec/SpecHelper.js"></script>
+    <script type="text/javascript" src="spec/PlayerSpec.js"></script>
 
 <body>
 </body>
