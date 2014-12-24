@@ -2,13 +2,13 @@
 =========
 ###### Let's Meet in the Middle.
 
-<strong>Web app that chooses a spot between two locations that is equi-time between them.</strong>
+<strong>A web app that chooses isochronal meeting places between two locations taking into account methods of transportation.</strong>
 
 Have you ever had trouble deciding where you and a friend should meet up for coffee when time is of the essence? Or have you ever been in an unfamiliar city and wondered where's the best spot for you to grab lunch with someone on the other side of the city? Worry no longer, because gather map has you covered. 
 
 Users can specify two origin locations, transportation methods used, and desired type of location (bar, restaurant, café, etc).
 
-Gather map then returns the best spot for the two people to meet at, so that they both spend the same time getting there. There is also a box with information about that location: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the 'gathering point' location and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
+Gather map then returns the best spot for the two people to meet at, so that they both spend the same amount of time getting there. There is also a box with information about that location: phone number, address, hours, rating, and price level. A map then displays directions from each origin address to the meeting location and displays the estimated travel time for each user. There's also a link to open directions in either the Google Maps app (if the user is on a mobile device) or on maps.google.com.
 
 Users can then ask for a different spot nearby, if they do not want to meet at that particular establishment. The location info and map then reload with new information. 
 
@@ -61,11 +61,11 @@ $ source env/bin/activate
 
 ###### Walk Through:
 
-<p>When a user first visits gathermap.com, they must first specify the two locations they and their friend are coming from. This input uses typeahead.js and Google Maps Autocomplete API to predict the user's address as they type. Then users specify which type of transportation they'll be using and their friend will be using to meet up.  Users can choose to drive, use public transit, walk, or bike. Finally, they click to choose which type of location they'd like to meet at: bar, restaurant, café, park, or library. Then they click "Gather!" and the app begins choosing a location for their meeting based on their inputs.</p>
+<p>When a user first visits gathermap.com, they must first specify the two locations they and their friend are coming from. This input uses typeahead.js and Google Maps Autocomplete API to predict the user's address as they type. This is important, since it makes sure that the user chooses addresses that exist. Then users specify which type of transportation they and their friend will be using to meet up (they can each use a different method if they so choose).  Users can choose to drive, use public transit, walk, or bike. Next, they click to choose which type of location they'd like to meet at: bar, restaurant, café, park, or library. Finally, they click "Gather!" and the app begins choosing a location for their meeting based on their inputs.</p>
 
 <img src="static/assets/addressinput.gif" alt="Address Input">
 
-<p>Next, gather map grabs the addresses from the form and geocodes them into latitude and longitude coordinates using the Google Maps Geocoder API. Then these coordinates are passed to a function that finds the geographical midpoint between the two coordinates. Then the app is ready to find the gathering point between these two locations. </p>
+<p>'Behind the scenes', gather map grabs the addresses from the form and geocodes them into latitude and longitude coordinates using the Google Maps Geocoder Javascript API. Then these coordinates are passed to a function that finds the geographical midpoint between the two coordinates. Then the app is ready to find the gathering point between these two locations. (See lines 28-86 of main.js for function calls in main promise chain, as well as lines 161-248 of main.js for the modularized functions called in the main promise chain for these operations.) </p>
 
 ###### Finding the Gathering Point:
 
@@ -129,7 +129,7 @@ a spot nearby that matches the type of location that user specified. (If that ty
 
 <img src="static/assets/gatherstarbucks.gif" alt="First Gather Result">
 
-As the location info displays on the right side of the screen, the map below displays the route from each origin point to the chosen location. This map is created by grabbing polylines for each route from the Google Directions API and then passing them to the map on screen, along with each origin point and the chosen gathering location.  
+As the location info displays on the right side of the screen, the map below displays the route from each origin point to the chosen location. The Google Maps Embed API does not allow for multiple origin points, which is why polylines are used rather than simply passing the origin points and desitination points to Google Maps Embed. These polylines for each route are generated by a call to the Google Directions API and then passed to the map in main.html, along with each origin point and the chosen gathering location. This allows for a unified map, which is a lot easier for users to comprehend than two Google Maps Embed maps. 
 
 ###### Choosing Another Place:
 
@@ -139,7 +139,7 @@ You'll notice that in the example above, Starbucks was the first result displaye
 
 ###### Promises:
 
-As you may have noticed, this project requires a lot of Google Maps API calls of all sorts, and these API calls are all asynchronous.  As the project developed, the main.js filed started to resemble <a href="http://callbackhell.com/">"callback hell"</a>. Thus, I decided to use Promises, specifically the <a href="https://github.com/kriskowal/q">Q library</a>.  
+As you may have noticed, this project requires a lot of Google Maps API calls of all sorts, and these API calls are all asynchronous.  As the project developed, the main.js filed started to resemble <a href="http://callbackhell.com/">"callback hell"</a>. Thus, I decided to use Promises, specifically the <a href="https://github.com/kriskowal/q">Q library</a>. I chose the Q library for its excellent documentation and ample support from the open-source community.  
 
 There is a main promise chain that forms the backbone of my project. This main chain ensures that no function begins before the previous function has returned a usable value (object, array, string, integer, etc.). It also creates a nice outline of the project's functions.  To see this main chain, check out lines 28-160 in the main.js file. 
 
