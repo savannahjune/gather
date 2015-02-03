@@ -133,7 +133,7 @@ As the location info displays on the right side of the screen, the map below dis
 
 ###### Choosing Another Place:
 
-You'll notice that in the example above, Starbucks was the first result displayed to users. If the user would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next business is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.  The user can keep requesting new locations until the Google Places API runs out of responses, then the "Pick Me Another" button disappears and the user must start another gather query if they would like other results. 
+You'll notice that in the example above, Starbucks was the first result displayed to users. If the user would prefer not to go to Starbucks, they can simply click "Pick Me Another" and the next result is displayed on the screen, by accessing the next item in the nearby businesses array. The placeID of the next business is then sent to the displayPlaceInfo to update the location's info and the map refreshes as well with new polylines and a new gathering point.  The user can keep requesting new locations until the Google Places API runs out of responses, then the "Pick Me Another" button disappears and the user must start another gather query if they would like other results.  
 
 <img src="static/assets/pickmeanother.gif" alt="Pick Me Another">
 
