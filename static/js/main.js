@@ -87,7 +87,7 @@ $(document).ready(function () {
             if (latLonPointOne, latLonPointTwo) {
                 return findGatheringPoint(initialPointOne, initialPointTwo, initialMid, methodTransportOne, methodTransportTwo);
             } else {
-                console.log("Error with latlon creation");
+                console.warn("Error with latlon creation");
             }
 
         })
@@ -151,7 +151,7 @@ $(document).ready(function () {
             *
             * @param {error} <string> description of error in the main promises chain
             */
-            console.log("Main Chain Error: " + error);
+            console.warn("Main Chain Error: " + error);
             $("#gather_button").prop('disabled',false);
             $("#gather_button").text("Gather!");
         });
@@ -212,7 +212,7 @@ function makeCoordinates(target) {
             deferred.resolve(latlon);
 
         } else {
-            console.log("Geocode was not successful for the following reason: " + status);
+            console.warn("Geocode was not successful for the following reason: " + status);
             deferred.reject(new Error(status));
             $("#gather_button").prop('disabled',false);
             $("#gather_button").text("Gather!");
@@ -293,7 +293,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             maxAttempts = 4;
             if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
                 if (numAttempts >= maxAttempts) {
-                    console.log("Stopped findGatheringPoint after max attempts reached");
+                    console.warn("Stopped findGatheringPoint after max attempts reached");
                 }
                 // if the coordinate meets all requirements, then use it as gathering point
                 deferred.resolve(initialMid);
@@ -325,7 +325,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
             maxAttempts = 7;
             if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
                 if (numAttempts >= maxAttempts) {
-                    console.log("Stopped findGatheringPoint after max attempts reached");
+                    console.warn("Stopped findGatheringPoint after max attempts reached");
                 }
                 // if the coordinate meets all requirements, then use it as gathering point
                 deferred.resolve(initialMid);
@@ -348,7 +348,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         }
         else if ((Math.abs(durationOne - durationTwo) <= tolerance) || numAttempts >= maxAttempts) {
             if (numAttempts >= maxAttempts) {
-                console.log("Stopped findGatheringPoint after max attempts reached");
+                console.warn("Stopped findGatheringPoint after max attempts reached");
             }
             // if the coordinate meets all requirements, then use it as gathering point
             deferred.resolve(initialMid);
@@ -375,7 +375,7 @@ function findGatheringPoint(pointOne, pointTwo, initialMid, methodTransportOne, 
         }
     })
     .catch(function (error) {
-        console.log("findGatheringPoint Error: " + error);
+        console.warn("findGatheringPoint Error: " + error);
     });
 
 }
@@ -725,11 +725,10 @@ function getRouteCoordinates(placeAddress, originAddress, methodTransport) {
         if (status == google.maps.DirectionsStatus.OK) {
             var latLonArray = data.routes[0].overview_path;
             var polyline = data.routes[0].overview_polyline;
-            console.log(polyline);
             deferred.resolve(latLonArray);
         }
         else {
-            console.log("Status in getRouteCoordinates: " + status);
+            console.warn("Status in getRouteCoordinates: " + status);
             deferred.reject(new Error(status));
         }
     });
